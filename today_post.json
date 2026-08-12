@@ -6,12 +6,12 @@
         "maxmillions": 0,
         "recommended": [
             3,
-            11,
-            19,
+            23,
+            25,
             38,
             41,
-            47,
-            50
+            48,
+            51
         ],
         "hot_numbers": [
             3,
@@ -37,18 +37,18 @@
         "gold_ball": "$10 Million",
         "classic_jackpot": "$5 Million",
         "recommended": [
-            4,
-            6,
-            15,
-            21,
-            31,
-            44
+            10,
+            23,
+            26,
+            28,
+            34,
+            49
         ],
         "extra_digits": [
-            4,
-            4,
-            3,
-            1
+            5,
+            9,
+            5,
+            2
         ],
         "hot_numbers": [
             6,
