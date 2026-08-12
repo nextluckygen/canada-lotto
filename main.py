@@ -16,20 +16,21 @@ def generate_lotto_max_numbers():
     
     return sorted(selected_hot + selected_cold + selected_random)
 
+# 오늘 날짜 (2026-08-11 기준)
 today_str = datetime.now().strftime("%Y-%m-%d")
 recommended_nums = generate_lotto_max_numbers()
 
 lotto_post = {
     "date": today_str,
     "title": f"Lotto Max Winning Odds & Analysis ({today_str})",
-    "jackpot": "$90 Million",
+    "jackpot": "$30 Million",
     "hot_numbers": [3, 11, 19, 23, 35, 41, 48, 52],
     "cold_numbers": [2, 7, 14, 29, 38, 50, 51],
     "recommended_combination": recommended_nums,
     "content": f"""
 # Lotto Max Analysis & Today's Pick ({today_str})
 
-Estimated Jackpot for the upcoming draw is **$90 Million**.
+Estimated Jackpot for today's draw is **$30 Million**.
 
 ## Statistical Highlights
 - **Hot Numbers (Frequently Drawn)**: 3, 11, 19, 23, 35, 41, 48, 52
