@@ -3,24 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canada Official Lotto Helper | Max & 6/49</title>
+    <title>Canada Official Lotto Portal | Max & 6/49</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .lotto-ball {
-            width: 46px;
-            height: 46px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             color: white;
             box-shadow: inset -2px -2px 6px rgba(0, 0, 0, 0.25), 0 4px 8px rgba(0,0,0,0.15);
-            transition: all 0.2s ease-in-out;
         }
-        .lotto-ball:hover { transform: translateY(-3px) scale(1.05); }
+        .extra-ball {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            background: #0f172a;
+            color: #f59e0b;
+        }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-900 font-sans">
@@ -32,12 +41,9 @@
                 <div class="bg-amber-400 text-slate-900 font-black px-3 py-1 rounded-lg text-lg tracking-widest shadow">CANADA LOTTO</div>
                 <div>
                     <h1 class="text-xl sm:text-2xl font-bold tracking-tight">Official Helper Portal</h1>
-                    <p class="text-xs text-teal-100">Live Jackpot Tracking & Dual AI Generator (Max & 6/49)</p>
+                    <p class="text-xs text-teal-100">Live Breakdown: Maxmillions, Gold Ball & Extra</p>
                 </div>
             </div>
-            <span class="bg-white/20 backdrop-blur-md text-white text-xs font-semibold px-3 py-1.5 rounded-full border border-white/30">
-                🍁 Lotto Max & 6/49 Live
-            </span>
         </div>
     </header>
 
@@ -46,7 +52,7 @@
         
         <!-- Game Switcher Tabs -->
         <div class="flex justify-center gap-3 mb-6">
-            <button id="tab-max" onclick="switchGame('max')" class="px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-emerald-600 text-white ring-2 ring-emerald-600">
+            <button id="tab-max" onclick="switchGame('max')" class="px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-emerald-600 text-white">
                 💚 LOTTO MAX (1-52)
             </button>
             <button id="tab-649" onclick="switchGame('649')" class="px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-white text-slate-600 hover:bg-slate-100">
@@ -54,55 +60,64 @@
             </button>
         </div>
 
-        <!-- Interactive Jackpot & Lucky Ball Section -->
-        <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden mb-8">
-            <div id="jackpot-banner" class="bg-gradient-to-r from-slate-900 to-indigo-950 p-6 text-center text-white relative">
-                <span id="game-badge" class="inline-block bg-amber-400 text-slate-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-widest mb-3">
-                    LOTTO MAX EST. TOP PRIZE
-                </span>
-                <h2 id="jackpot-amount" class="text-4xl sm:text-5xl font-black tracking-tight text-amber-300">
-                    Loading Jackpot...
-                </h2>
-                <p id="draw-schedule" class="text-xs text-slate-300 mt-2">Draw Schedule: Tuesday & Friday 10:30 PM EST</p>
-            </div>
-
-            <div class="p-6 sm:p-8 text-center">
-                <h3 id="generator-title" class="text-lg font-bold text-slate-800 mb-1">AI Statistical Line Pick</h3>
-                <p id="generator-desc" class="text-xs text-slate-500 mb-6">Generated using Hot/Cold pattern balance across numbers 1 to 52</p>
-
-                <!-- Lotto Balls Container -->
-                <div id="balls-container" class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 min-h-[52px]"></div>
-
-                <button onclick="generateNewNumbers()" class="bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white font-extrabold py-3.5 px-8 rounded-2xl shadow-lg shadow-emerald-500/20 transition-all duration-200 text-base">
-                    🎲 Quick Pick New Line
-                </button>
+        <!-- Lotto Max View Card -->
+        <div id="view-max" class="space-y-6">
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
+                <div class="bg-slate-900 p-6 text-center text-white">
+                    <span class="bg-amber-400 text-slate-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-widest block w-max mx-auto mb-2">Lotto Max Main Jackpot</span>
+                    <h2 id="max-jackpot" class="text-4xl sm:text-5xl font-black text-amber-300">EST. $30 Million</h2>
+                    <div id="maxmillion-badge" class="mt-3 hidden">
+                        <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-bold px-3 py-1 rounded-lg">
+                            ✨ Plus <span id="maxmillion-count">0</span> Maxmillions Draws ($1M each)
+                        </span>
+                    </div>
+                </div>
+                <div class="p-6 text-center">
+                    <h3 class="text-lg font-bold text-slate-800 mb-1">Today's AI Recommended Combination</h3>
+                    <p class="text-xs text-slate-500 mb-6">7 Numbers balanced with Hot & Cold stats</p>
+                    <div id="max-balls" class="flex flex-wrap justify-center gap-2 mb-6"></div>
+                    <button onclick="generateNewNumbers('max')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3 px-8 rounded-2xl shadow-lg">🎲 Quick Pick Lotto Max</button>
+                </div>
             </div>
         </div>
 
-        <!-- AI Engine Explanation Card -->
-        <div class="bg-teal-50 border border-teal-200/80 rounded-2xl p-6 mb-8 shadow-sm">
-            <div class="flex items-center gap-3 mb-2">
-                <span class="text-2xl">🤖</span>
-                <h4 class="text-base font-bold text-teal-950">Dual AI Analytical Engine</h4>
-            </div>
-            <p class="text-xs sm:text-sm text-teal-900 leading-relaxed">
-                This utility pulls official data ranges for <strong>Lotto Max (1 to 52)</strong> and <strong>Lotto 6/49 (1 to 49)</strong>. It mixes high-frequency <strong>Hot Pool</strong> picks and long-overdue <strong>Cold Pool</strong> numbers to optimize statistical distribution for each draw.
-            </p>
-        </div>
+        <!-- Lotto 6/49 View Card -->
+        <div id="view-649" class="space-y-6 hidden">
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
+                <div class="bg-slate-900 p-6 text-center text-white">
+                    <span class="bg-blue-400 text-slate-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-widest block w-max mx-auto mb-2">Lotto 6/49 Draw Breakdown</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
+                        <div class="bg-white/10 p-3 rounded-2xl backdrop-blur">
+                            <span class="text-xs text-slate-300 block">Gold Ball Jackpot</span>
+                            <span id="goldball-amount" class="text-2xl font-black text-amber-300">$10 Million</span>
+                        </div>
+                        <div class="bg-white/10 p-3 rounded-2xl backdrop-blur">
+                            <span class="text-xs text-slate-300 block">Classic Jackpot</span>
+                            <span id="classic-amount" class="text-2xl font-black text-blue-300">$5 Million</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6 text-center">
+                    <h3 class="text-lg font-bold text-slate-800 mb-1">Today's AI Recommended Combination</h3>
+                    <p class="text-xs text-slate-500 mb-4">6 Numbers balanced with Hot & Cold stats</p>
+                    <div id="l649-balls" class="flex flex-wrap justify-center gap-2 mb-6"></div>
+                    
+                    <!-- Extra Number Display -->
+                    <div class="bg-slate-100 p-4 rounded-2xl border border-slate-200 mb-6 max-w-sm mx-auto">
+                        <span class="text-xs font-bold text-slate-600 uppercase block mb-2">Optional Extra Pick (4 Digits)</span>
+                        <div id="extra-digits" class="flex justify-center gap-2"></div>
+                    </div>
 
-        <!-- Daily Rich Post Content -->
-        <div class="bg-white rounded-3xl shadow-lg p-6 sm:p-8 border border-slate-100">
-            <h3 id="post-title" class="text-xl font-bold text-slate-900 mb-4 border-b pb-3">Daily Analysis Report</h3>
-            <div id="post-content" class="text-slate-700 leading-relaxed text-sm sm:text-base">
-                Loading live report...
+                    <button onclick="generateNewNumbers('649')" class="bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3 px-8 rounded-2xl shadow-lg">🎲 Quick Pick Lotto 6/49</button>
+                </div>
             </div>
         </div>
 
     </main>
 
     <script>
-        let currentGame = 'max'; // 'max' or '649'
         let lottoData = null;
+        let currentGame = 'max';
 
         function getBallColor(num) {
             if (num <= 10) return 'bg-red-500';
@@ -112,8 +127,8 @@
             return 'bg-purple-600';
         }
 
-        function renderBalls(numbers) {
-            const container = document.getElementById('balls-container');
+        function renderBalls(containerId, numbers) {
+            const container = document.getElementById(containerId);
             container.innerHTML = '';
             numbers.forEach(num => {
                 const ball = document.createElement('div');
@@ -123,68 +138,71 @@
             });
         }
 
-        function generateNewNumbers() {
-            const maxRange = currentGame === 'max' ? 52 : 49;
-            const count = currentGame === 'max' ? 7 : 6;
-            const numbers = new Set();
-            while (numbers.size < count) {
-                numbers.add(Math.floor(Math.random() * maxRange) + 1);
-            }
-            renderBalls(Array.from(numbers).sort((a, b) => a - b));
-        }
-
-        function updateUI() {
-            if (!lottoData) return;
-
-            const isMax = currentGame === 'max';
-            const gameData = isMax ? lottoData.lotto_max : lottoData.lotto_649;
-
-            // Update Tab UI
-            document.getElementById('tab-max').className = isMax 
-                ? "px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-emerald-600 text-white ring-2 ring-emerald-600"
-                : "px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-white text-slate-600 hover:bg-slate-100";
-
-            document.getElementById('tab-649').className = !isMax 
-                ? "px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-blue-600 text-white ring-2 ring-blue-600"
-                : "px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-white text-slate-600 hover:bg-slate-100";
-
-            // Update Banner
-            document.getElementById('game-badge').innerText = isMax ? "LOTTO MAX EST. TOP PRIZE" : "LOTTO 6/49 EST. TOP PRIZE";
-            document.getElementById('jackpot-amount').innerText = "EST. " + (gameData ? gameData.jackpot : "$30 Million");
-            document.getElementById('draw-schedule').innerText = isMax 
-                ? "Draw Schedule: Tuesday & Friday 10:30 PM EST" 
-                : "Draw Schedule: Wednesday & Saturday 10:30 PM EST";
-
-            // Generator Text
-            document.getElementById('generator-desc').innerText = isMax 
-                ? "Generated using Hot/Cold pattern balance across numbers 1 to 52 (7 Balls)"
-                : "Generated using Hot/Cold pattern balance across numbers 1 to 49 (6 Balls)";
-
-            if (gameData && gameData.recommended) {
-                renderBalls(gameData.recommended);
-            } else {
-                generateNewNumbers();
-            }
+        function renderExtra(digits) {
+            const container = document.getElementById('extra-digits');
+            container.innerHTML = '';
+            digits.forEach(d => {
+                const box = document.createElement('div');
+                box.className = 'extra-ball';
+                box.innerText = d;
+                container.appendChild(box);
+            });
         }
 
         function switchGame(game) {
             currentGame = game;
-            updateUI();
+            const isMax = game === 'max';
+            
+            document.getElementById('view-max').classList.toggle('hidden', !isMax);
+            document.getElementById('view-649').classList.toggle('hidden', isMax);
+
+            document.getElementById('tab-max').className = isMax 
+                ? "px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-emerald-600 text-white"
+                : "px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-white text-slate-600 hover:bg-slate-100";
+
+            document.getElementById('tab-649').className = !isMax 
+                ? "px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-blue-600 text-white"
+                : "px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-white text-slate-600 hover:bg-slate-100";
+        }
+
+        function generateNewNumbers(game) {
+            if (game === 'max') {
+                const numbers = new Set();
+                while (numbers.size < 7) numbers.add(Math.floor(Math.random() * 52) + 1);
+                renderBalls('max-balls', Array.from(numbers).sort((a, b) => a - b));
+            } else {
+                const numbers = new Set();
+                while (numbers.size < 6) numbers.add(Math.floor(Math.random() * 49) + 1);
+                renderBalls('l649-balls', Array.from(numbers).sort((a, b) => a - b));
+                
+                const extra = [Math.floor(Math.random()*10), Math.floor(Math.random()*10), Math.floor(Math.random()*10), Math.floor(Math.random()*10)];
+                renderExtra(extra);
+            }
         }
 
         async function fetchData() {
             try {
                 const response = await fetch('today_post.json?' + new Date().getTime());
-                const data = await response.json();
-                lottoData = data;
+                lottoData = await response.json();
 
-                document.getElementById('post-title').innerText = data.title;
-                document.getElementById('post-content').innerHTML = data.content;
+                // Lotto Max Update
+                document.getElementById('max-jackpot').innerText = "EST. " + lottoData.lotto_max.jackpot;
+                if (lottoData.lotto_max.maxmillions > 0) {
+                    document.getElementById('maxmillion-badge').classList.remove('hidden');
+                    document.getElementById('maxmillion-count').innerText = lottoData.lotto_max.maxmillions;
+                }
+                renderBalls('max-balls', lottoData.lotto_max.recommended);
 
-                updateUI();
-            } catch (error) {
-                console.error("Error loading JSON data:", error);
-                generateNewNumbers();
+                // Lotto 6/49 Update
+                document.getElementById('goldball-amount').innerText = lottoData.lotto_649.gold_ball;
+                document.getElementById('classic-amount').innerText = lottoData.lotto_649.classic_jackpot;
+                renderBalls('l649-balls', lottoData.lotto_649.recommended);
+                renderExtra(lottoData.lotto_649.extra_digits);
+
+            } catch (e) {
+                console.error("Data load error", e);
+                generateNewNumbers('max');
+                generateNewNumbers('649');
             }
         }
 
