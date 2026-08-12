@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lotto Max Official Style Assistant & AI Generator</title>
+    <title>Canada Official Lotto Helper | Max & 6/49</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -25,18 +25,18 @@
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-900 font-sans">
 
-    <!-- Header Navigation Bar (Official Canadian Lotto Vibe) -->
+    <!-- Header Navigation -->
     <header class="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-700 text-white shadow-lg">
         <div class="max-w-4xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-3">
-                <div class="bg-amber-400 text-slate-900 font-black px-3 py-1 rounded-lg text-lg tracking-widest shadow">LOTTO MAX</div>
+                <div class="bg-amber-400 text-slate-900 font-black px-3 py-1 rounded-lg text-lg tracking-widest shadow">CANADA LOTTO</div>
                 <div>
-                    <h1 class="text-xl sm:text-2xl font-bold tracking-tight">Canada Official Helper</h1>
-                    <p class="text-xs text-teal-100">Live Jackpot Tracking & AI Strategy (1–52)</p>
+                    <h1 class="text-xl sm:text-2xl font-bold tracking-tight">Official Helper Portal</h1>
+                    <p class="text-xs text-teal-100">Live Jackpot Tracking & Dual AI Generator (Max & 6/49)</p>
                 </div>
             </div>
             <span class="bg-white/20 backdrop-blur-md text-white text-xs font-semibold px-3 py-1.5 rounded-full border border-white/30">
-                🍁 Official Style Portal
+                🍁 Lotto Max & 6/49 Live
             </span>
         </div>
     </header>
@@ -44,21 +44,31 @@
     <!-- Main Container -->
     <main class="max-w-3xl mx-auto px-4 py-8">
         
+        <!-- Game Switcher Tabs -->
+        <div class="flex justify-center gap-3 mb-6">
+            <button id="tab-max" onclick="switchGame('max')" class="px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-emerald-600 text-white ring-2 ring-emerald-600">
+                💚 LOTTO MAX (1-52)
+            </button>
+            <button id="tab-649" onclick="switchGame('649')" class="px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-white text-slate-600 hover:bg-slate-100">
+                💙 LOTTO 6/49 (1-49)
+            </button>
+        </div>
+
         <!-- Interactive Jackpot & Lucky Ball Section -->
         <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden mb-8">
-            <div class="bg-gradient-to-r from-slate-900 to-indigo-950 p-6 text-center text-white relative">
-                <span class="inline-block bg-amber-400 text-slate-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-widest mb-3">
-                    Est. Top Prize
+            <div id="jackpot-banner" class="bg-gradient-to-r from-slate-900 to-indigo-950 p-6 text-center text-white relative">
+                <span id="game-badge" class="inline-block bg-amber-400 text-slate-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-widest mb-3">
+                    LOTTO MAX EST. TOP PRIZE
                 </span>
                 <h2 id="jackpot-amount" class="text-4xl sm:text-5xl font-black tracking-tight text-amber-300">
-                    EST. $30 Million
+                    Loading Jackpot...
                 </h2>
-                <p class="text-xs text-slate-300 mt-2">Next Draw Date: Tuesday / Friday 10:30 PM EST</p>
+                <p id="draw-schedule" class="text-xs text-slate-300 mt-2">Draw Schedule: Tuesday & Friday 10:30 PM EST</p>
             </div>
 
             <div class="p-6 sm:p-8 text-center">
-                <h3 class="text-lg font-bold text-slate-800 mb-1">AI Statistical Line Pick</h3>
-                <p class="text-xs text-slate-500 mb-6">Generated using Hot/Cold pattern balance across numbers 1 to 52</p>
+                <h3 id="generator-title" class="text-lg font-bold text-slate-800 mb-1">AI Statistical Line Pick</h3>
+                <p id="generator-desc" class="text-xs text-slate-500 mb-6">Generated using Hot/Cold pattern balance across numbers 1 to 52</p>
 
                 <!-- Lotto Balls Container -->
                 <div id="balls-container" class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 min-h-[52px]"></div>
@@ -73,10 +83,10 @@
         <div class="bg-teal-50 border border-teal-200/80 rounded-2xl p-6 mb-8 shadow-sm">
             <div class="flex items-center gap-3 mb-2">
                 <span class="text-2xl">🤖</span>
-                <h4 class="text-base font-bold text-teal-950">AI Analytical Engine & Formula</h4>
+                <h4 class="text-base font-bold text-teal-950">Dual AI Analytical Engine</h4>
             </div>
             <p class="text-xs sm:text-sm text-teal-900 leading-relaxed">
-                This utility pulls official data ranges from <strong>Lotto Max Canada (1 to 52)</strong>. It mixes high-frequency <strong>Hot Pool</strong> picks and long-overdue <strong>Cold Pool</strong> numbers to optimize statistical distribution for each draw.
+                This utility pulls official data ranges for <strong>Lotto Max (1 to 52)</strong> and <strong>Lotto 6/49 (1 to 49)</strong>. It mixes high-frequency <strong>Hot Pool</strong> picks and long-overdue <strong>Cold Pool</strong> numbers to optimize statistical distribution for each draw.
             </p>
         </div>
 
@@ -91,7 +101,9 @@
     </main>
 
     <script>
-        // Official style ball color mapping
+        let currentGame = 'max'; // 'max' or '649'
+        let lottoData = null;
+
         function getBallColor(num) {
             if (num <= 10) return 'bg-red-500';
             if (num <= 20) return 'bg-blue-600';
@@ -112,27 +124,64 @@
         }
 
         function generateNewNumbers() {
+            const maxRange = currentGame === 'max' ? 52 : 49;
+            const count = currentGame === 'max' ? 7 : 6;
             const numbers = new Set();
-            while (numbers.size < 7) {
-                numbers.add(Math.floor(Math.random() * 52) + 1);
+            while (numbers.size < count) {
+                numbers.add(Math.floor(Math.random() * maxRange) + 1);
             }
             renderBalls(Array.from(numbers).sort((a, b) => a - b));
+        }
+
+        function updateUI() {
+            if (!lottoData) return;
+
+            const isMax = currentGame === 'max';
+            const gameData = isMax ? lottoData.lotto_max : lottoData.lotto_649;
+
+            // Update Tab UI
+            document.getElementById('tab-max').className = isMax 
+                ? "px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-emerald-600 text-white ring-2 ring-emerald-600"
+                : "px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-white text-slate-600 hover:bg-slate-100";
+
+            document.getElementById('tab-649').className = !isMax 
+                ? "px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-blue-600 text-white ring-2 ring-blue-600"
+                : "px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-white text-slate-600 hover:bg-slate-100";
+
+            // Update Banner
+            document.getElementById('game-badge').innerText = isMax ? "LOTTO MAX EST. TOP PRIZE" : "LOTTO 6/49 EST. TOP PRIZE";
+            document.getElementById('jackpot-amount').innerText = "EST. " + (gameData ? gameData.jackpot : "$30 Million");
+            document.getElementById('draw-schedule').innerText = isMax 
+                ? "Draw Schedule: Tuesday & Friday 10:30 PM EST" 
+                : "Draw Schedule: Wednesday & Saturday 10:30 PM EST";
+
+            // Generator Text
+            document.getElementById('generator-desc').innerText = isMax 
+                ? "Generated using Hot/Cold pattern balance across numbers 1 to 52 (7 Balls)"
+                : "Generated using Hot/Cold pattern balance across numbers 1 to 49 (6 Balls)";
+
+            if (gameData && gameData.recommended) {
+                renderBalls(gameData.recommended);
+            } else {
+                generateNewNumbers();
+            }
+        }
+
+        function switchGame(game) {
+            currentGame = game;
+            updateUI();
         }
 
         async function fetchData() {
             try {
                 const response = await fetch('today_post.json?' + new Date().getTime());
                 const data = await response.json();
+                lottoData = data;
 
-                document.getElementById('jackpot-amount').innerText = "EST. " + data.jackpot;
                 document.getElementById('post-title').innerText = data.title;
                 document.getElementById('post-content').innerHTML = data.content;
 
-                if (data.recommended_combination) {
-                    renderBalls(data.recommended_combination);
-                } else {
-                    generateNewNumbers();
-                }
+                updateUI();
             } catch (error) {
                 console.error("Error loading JSON data:", error);
                 generateNewNumbers();
