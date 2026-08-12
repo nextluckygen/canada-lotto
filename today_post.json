@@ -4,15 +4,15 @@
     "lotto_max": {
         "jackpot": "$40 Million",
         "maxmillions": 0,
-        "winner_province": "No Jackpot Winner (Rolled Over)",
+        "winner_province": "No Jackpot Winner (Rolled Over to $40M)",
         "recommended": [
-            3,
             11,
             14,
-            17,
+            19,
+            23,
             29,
-            35,
-            51
+            41,
+            47
         ],
         "hot_numbers": [
             3,
@@ -37,14 +37,14 @@
     "lotto_649": {
         "gold_ball": "$10 Million",
         "classic_jackpot": "$5 Million",
-        "winner_province": "Guaranteed Draw Active",
+        "winner_province": "Guaranteed Gold Ball Draw Active",
         "recommended": [
-            4,
             6,
-            12,
+            11,
             15,
+            23,
             31,
-            33
+            34
         ],
         "hot_numbers": [
             6,
