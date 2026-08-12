@@ -12,19 +12,18 @@
             flex-wrap: wrap !important;
             justify-content: center !important;
             gap: 10px !important;
-            margin-bottom: 24px !important;
-            min-height: 50px !important;
+            min-height: 48px !important;
         }
 
         .lotto-ball {
-            width: 44px !important;
-            height: 44px !important;
+            width: 42px !important;
+            height: 42px !important;
             border-radius: 50% !important;
             display: inline-flex !important;
             align-items: center !important;
             justify-content: center !important;
             font-weight: 800 !important;
-            font-size: 1.1rem !important;
+            font-size: 1.05rem !important;
             color: white !important;
             box-shadow: inset -2px -2px 6px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0,0,0,0.15) !important;
             margin: 2px !important;
@@ -83,13 +82,23 @@
                             🇨🇦 <span id="max-prov-text">Checking winning locations...</span>
                         </div>
                     </div>
-                    <div class="p-6 sm:p-8 text-center">
-                        <h3 class="text-lg font-bold text-slate-800 mb-1">AI Recommended Line Strategy</h3>
-                        <p class="text-xs text-slate-500 mb-6">7 Numbers generated with Hot/Cold historical frequency filter</p>
-                        
-                        <div id="max-balls" class="ball-flex-container"></div>
-                        
-                        <button onclick="generateNewNumbers('max')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3.5 px-8 rounded-2xl shadow-lg transition">🎲 Quick Pick Lotto Max</button>
+                    
+                    <div class="p-6 sm:p-8 text-center space-y-8">
+                        <!-- 1. Last Draw Winning Numbers -->
+                        <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200/80">
+                            <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider block mb-3">⚡ Latest Official Draw Winning Numbers</span>
+                            <div id="max-win-balls" class="ball-flex-container"></div>
+                        </div>
+
+                        <!-- 2. AI Recommended Line Strategy -->
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-800 mb-1">🤖 AI Recommended Line Strategy</h3>
+                            <p class="text-xs text-slate-500 mb-5">7 Numbers generated with Hot/Cold historical frequency filter</p>
+                            
+                            <div id="max-balls" class="ball-flex-container mb-6"></div>
+                            
+                            <button onclick="generateNewNumbers('max')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3.5 px-8 rounded-2xl shadow-lg transition">🎲 Quick Pick Lotto Max</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -115,13 +124,23 @@
                             🇨🇦 <span id="l649-prov-text">Checking winning locations...</span>
                         </div>
                     </div>
-                    <div class="p-6 sm:p-8 text-center">
-                        <h3 class="text-lg font-bold text-slate-800 mb-1">AI Recommended Line Strategy</h3>
-                        <p class="text-xs text-slate-500 mb-6">6 Numbers generated with Hot/Cold historical frequency filter</p>
-                        
-                        <div id="l649-balls" class="ball-flex-container"></div>
 
-                        <button onclick="generateNewNumbers('649')" class="bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3.5 px-8 rounded-2xl shadow-lg transition">🎲 Quick Pick Lotto 6/49</button>
+                    <div class="p-6 sm:p-8 text-center space-y-8">
+                        <!-- 1. Last Draw Winning Numbers -->
+                        <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200/80">
+                            <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider block mb-3">⚡ Latest Official Draw Winning Numbers</span>
+                            <div id="l649-win-balls" class="ball-flex-container"></div>
+                        </div>
+
+                        <!-- 2. AI Recommended Line Strategy -->
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-800 mb-1">🤖 AI Recommended Line Strategy</h3>
+                            <p class="text-xs text-slate-500 mb-5">6 Numbers generated with Hot/Cold historical frequency filter</p>
+                            
+                            <div id="l649-balls" class="ball-flex-container mb-6"></div>
+
+                            <button onclick="generateNewNumbers('649')" class="bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3.5 px-8 rounded-2xl shadow-lg transition">🎲 Quick Pick Lotto 6/49</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -274,7 +293,7 @@
         }
 
         async function loadMainData() {
-            // 1. Load Interactive Display Data
+            // 1. Load Live Display Data
             try {
                 const response = await fetch('today_display.json?cache=' + new Date().getTime());
                 const data = await response.json();
@@ -282,25 +301,17 @@
                 if (data.lotto_max) {
                     document.getElementById('max-jackpot').innerText = "EST. " + data.lotto_max.jackpot;
                     document.getElementById('max-prov-text').innerText = data.lotto_max.winner_province;
+                    renderBalls('max-win-balls', data.lotto_max.winning_numbers);
                 }
                 if (data.lotto_649) {
                     document.getElementById('goldball-amount').innerText = data.lotto_649.gold_ball;
                     document.getElementById('l649-prov-text').innerText = data.lotto_649.winner_province;
+                    renderBalls('l649-win-balls', data.lotto_649.winning_numbers);
                 }
             } catch (e) {
-                // Fallback to today_post.json
-                try {
-                    const fallback = await fetch('today_post.json?cache=' + new Date().getTime());
-                    const fallbackData = await fallback.json();
-                    if (fallbackData.lotto_max) {
-                        document.getElementById('max-jackpot').innerText = "EST. " + fallbackData.lotto_max.jackpot;
-                        document.getElementById('max-prov-text').innerText = fallbackData.lotto_max.winner_province || fallbackData.lotto_max.winner_region;
-                    }
-                    if (fallbackData.lotto_649) {
-                        document.getElementById('goldball-amount').innerText = fallbackData.lotto_649.gold_ball;
-                        document.getElementById('l649-prov-text').innerText = fallbackData.lotto_649.winner_province || fallbackData.lotto_649.winner_region;
-                    }
-                } catch (err) {}
+                // Fallback
+                renderBalls('max-win-balls', [3, 11, 19, 23, 35, 41, 48]);
+                renderBalls('l649-win-balls', [6, 12, 20, 28, 34, 44]);
             }
 
             generateNewNumbers('max');
