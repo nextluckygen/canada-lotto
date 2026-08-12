@@ -92,12 +92,12 @@
 
                         <!-- 2. AI Recommended Line Strategy -->
                         <div>
-                            <h3 class="text-lg font-bold text-slate-800 mb-1">🤖 AI Recommended Line Strategy</h3>
+                            <h3 class="text-lg font-bold text-slate-800 mb-1">🤖 AI Recommended Line Strategy For Next Draw</h3>
                             <p class="text-xs text-slate-500 mb-5">7 Numbers generated with Hot/Cold historical frequency filter</p>
                             
                             <div id="max-balls" class="ball-flex-container mb-6"></div>
                             
-                            <button onclick="generateNewNumbers('max')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3.5 px-8 rounded-2xl shadow-lg transition">🎲 Quick Pick Lotto Max</button>
+                            <button onclick="generateNewNumbers('max')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3.5 px-8 rounded-2xl shadow-lg transition">🎲 Generate Different Numbers</button>
                         </div>
                     </div>
                 </div>
@@ -134,12 +134,12 @@
 
                         <!-- 2. AI Recommended Line Strategy -->
                         <div>
-                            <h3 class="text-lg font-bold text-slate-800 mb-1">🤖 AI Recommended Line Strategy</h3>
+                            <h3 class="text-lg font-bold text-slate-800 mb-1">🤖 AI Recommended Line Strategy For Next Draw</h3>
                             <p class="text-xs text-slate-500 mb-5">6 Numbers generated with Hot/Cold historical frequency filter</p>
                             
                             <div id="l649-balls" class="ball-flex-container mb-6"></div>
 
-                            <button onclick="generateNewNumbers('649')" class="bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3.5 px-8 rounded-2xl shadow-lg transition">🎲 Quick Pick Lotto 6/49</button>
+                            <button onclick="generateNewNumbers('649')" class="bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3.5 px-8 rounded-2xl shadow-lg transition">🎲 Generate Different Numbers</button>
                         </div>
                     </div>
                 </div>
@@ -293,7 +293,6 @@
         }
 
         async function loadMainData() {
-            // 1. Load Live Display Data
             try {
                 const response = await fetch('today_display.json?cache=' + new Date().getTime());
                 const data = await response.json();
@@ -309,7 +308,6 @@
                     renderBalls('l649-win-balls', data.lotto_649.winning_numbers);
                 }
             } catch (e) {
-                // Fallback
                 renderBalls('max-win-balls', [3, 11, 19, 23, 35, 41, 48]);
                 renderBalls('l649-win-balls', [6, 12, 20, 28, 34, 44]);
             }
@@ -317,7 +315,6 @@
             generateNewNumbers('max');
             generateNewNumbers('649');
 
-            // 2. Load Blog Posts List
             const container = document.getElementById('posts-container');
             try {
                 const response = await fetch('posts_index.json?cache=' + new Date().getTime());
