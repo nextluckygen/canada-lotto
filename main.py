@@ -6,13 +6,13 @@ from datetime import datetime
 import zoneinfo
 
 def get_live_jackpots():
-    """Lotto Max 및 Lotto 6/49 상세 잭팟 정보 수집"""
+    """Lotto Max 및 Lotto 6/49 잭팟 수집"""
     max_url = "https://www.wclc.com/winning-numbers/lotto-max.htm"
     l649_url = "https://www.wclc.com/winning-numbers/lotto-649.htm"
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
     
     max_jackpot = "$30 Million"
-    max_millions_count = 0  # 50M 초과 시 추가 추첨 개수
+    max_millions_count = 0
     
     l649_goldball = "$10 Million"
     l649_classic = "$5 Million"
@@ -26,7 +26,6 @@ def get_live_jackpots():
             if m:
                 val = int(m.group(1))
                 max_jackpot = f"${val} Million"
-                # $50M 초과 시 Maxmillion 개수 산정 (예: 70M이면 30개)
                 if val > 50:
                     max_millions_count = val - 40
     except Exception as e:
@@ -59,7 +58,7 @@ def generate_lotto_max():
     return sorted(selected_hot + selected_cold + selected_random)
 
 def generate_lotto_649():
-    """Lotto 6/49: 1~49 중 6개 조합 및 Extra 4자리"""
+    """Lotto 6/49: 1~49 중 6개 조합"""
     hot_pool = [6, 12, 20, 28, 34, 44]
     cold_pool = [4, 15, 23, 31, 40, 49]
     all_numbers = list(range(1, 50))
@@ -69,8 +68,7 @@ def generate_lotto_649():
     remaining = [n for n in all_numbers if n not in selected_hot and n not in selected_cold]
     selected_random = random.sample(remaining, 2)
     
-    extra_digits = [random.randint(0, 9) for _ in range(4)]
-    return sorted(selected_hot + selected_cold + selected_random), extra_digits
+    return sorted(selected_hot + selected_cold + selected_random)
 
 # 현지 날짜 계산 (PST)
 try:
@@ -81,7 +79,7 @@ except Exception:
 
 max_jp, max_mil_cnt, l649_gb, l649_classic = get_live_jackpots()
 max_nums = generate_lotto_max()
-l649_nums, l649_extra = generate_lotto_649()
+l649_nums = generate_lotto_649()
 
 lotto_data = {
     "date": today_date,
@@ -97,7 +95,6 @@ lotto_data = {
         "gold_ball": l649_gb,
         "classic_jackpot": l649_classic,
         "recommended": l649_nums,
-        "extra_digits": l649_extra,
         "hot_numbers": [6, 12, 20, 28, 34, 44],
         "cold_numbers": [4, 15, 23, 31, 40, 49]
     }
@@ -106,4 +103,4 @@ lotto_data = {
 with open("today_post.json", "w", encoding="utf-8") as f:
     json.dump(lotto_data, f, indent=4, ensure_ascii=False)
 
-print(f"Updated detailed dual lotto data for {today_date} successfully.")
+print(f"Updated dual lotto data for {today_date} successfully.")
