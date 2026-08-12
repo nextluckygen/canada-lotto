@@ -5,12 +5,15 @@ import re
 from datetime import datetime, timezone, timedelta
 
 def get_live_jackpots():
-    """Lotto Max 및 Lotto 6/49 잭팟 실시간 파싱"""
+    """Lotto Max 및 Lotto 6/49 잭팟 실시간 크롤링"""
     max_url = "https://www.wclc.com/winning-numbers/lotto-max.htm"
     l649_url = "https://www.wclc.com/winning-numbers/lotto-649.htm"
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    }
     
-    max_jackpot = "$30 Million"
+    # 기본값 설정 ($40 Million 반영)
+    max_jackpot = "$40 Million"
     max_millions_count = 0
     l649_goldball = "$10 Million"
     l649_classic = "$5 Million"
@@ -20,29 +23,31 @@ def get_live_jackpots():
         req = urllib.request.Request(max_url, headers=headers)
         with urllib.request.urlopen(req, timeout=10) as resp:
             html = resp.read().decode('utf-8', errors='ignore')
-            # Million 단어 앞의 잭팟 숫자 탐색 ($40 Million 등)
-            matches = re.findall(r'\$(\d+)\s*Million', html, re.IGNORECASE)
+            # HTML 내 모든 $XX Million 패턴 수집
+            matches = re.findall(r'\$\s*(\d+)\s*Million', html, re.IGNORECASE)
             if matches:
-                # 텍스트 내에서 가장 큰 잭팟 숫자를 추출
                 vals = [int(v) for v in matches]
                 max_val = max(vals)
-                max_jackpot = f"${max_val} Million"
-                if max_val > 50:
-                    max_millions_count = max_val - 40
+                if max_val >= 10:  # 유효한 잭팟 금액일 경우에만 업데이트
+                    max_jackpot = f"${max_val} Million"
+                    if max_val > 50:
+                        max_millions_count = max_val - 40
     except Exception as e:
-        print(f"Lotto Max fetch error: {e}")
+        print(f"Lotto Max fetch warning: {e}")
 
     # Lotto 6/49 파싱
     try:
         req = urllib.request.Request(l649_url, headers=headers)
         with urllib.request.urlopen(req, timeout=10) as resp:
             html = resp.read().decode('utf-8', errors='ignore')
-            matches = re.findall(r'\$(\d+)\s*Million', html, re.IGNORECASE)
+            matches = re.findall(r'\$\s*(\d+)\s*Million', html, re.IGNORECASE)
             if matches:
                 vals = [int(v) for v in matches]
-                l649_goldball = f"${max(vals)} Million"
+                valid_vals = [v for v in vals if v >= 5]
+                if valid_vals:
+                    l649_goldball = f"${max(valid_vals)} Million"
     except Exception as e:
-        print(f"Lotto 6/49 fetch error: {e}")
+        print(f"Lotto 6/49 fetch warning: {e}")
 
     return max_jackpot, max_millions_count, l649_goldball, l649_classic
 
@@ -100,4 +105,4 @@ lotto_data = {
 with open("today_post.json", "w", encoding="utf-8") as f:
     json.dump(lotto_data, f, indent=4, ensure_ascii=False)
 
-print(f"Updated dual lotto data for {today_date} successfully. Jackpot: {max_jp}")
+print(f"Updated dual lotto data for {today_date} successfully. Current Jackpot: {max_jp}")
