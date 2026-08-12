@@ -6,13 +6,13 @@ from datetime import datetime
 import zoneinfo
 
 def get_live_jackpots():
-    """Lotto Max 및 Lotto 6/49 실시간 잭팟 수집"""
+    """Lotto Max 및 Lotto 6/49 정확한 잭팟 수집"""
     max_url = "https://www.wclc.com/winning-numbers/lotto-max.htm"
     l649_url = "https://www.wclc.com/winning-numbers/lotto-649.htm"
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
     
     max_jackpot = "$30 Million"
-    l649_jackpot = "$5 Million Gold Ball"
+    l649_jackpot = "$10 Million"  # 수요일 6/49 Gold Ball 잭팟 기본값 보정
 
     # Lotto Max 잭팟 파싱
     try:
@@ -25,14 +25,17 @@ def get_live_jackpots():
     except Exception as e:
         print(f"Lotto Max fetch error: {e}")
 
-    # Lotto 6/49 잭팟 파싱
+    # Lotto 6/49 잭팟 파싱 (Gold Ball Jackpot 우선 파싱)
     try:
         req = urllib.request.Request(l649_url, headers=headers)
         with urllib.request.urlopen(req, timeout=5) as resp:
             html = resp.read().decode('utf-8', errors='ignore')
-            m = re.search(r'\$(\d+)\s*Million', html, re.IGNORECASE)
-            if m:
-                l649_jackpot = f"${m.group(1)} Million"
+            # Gold Ball 잭팟 또는 최우선 $XX Million 탐색
+            matches = re.findall(r'\$(\d+)\s*Million', html, re.IGNORECASE)
+            if matches:
+                # 파싱된 금액 중 가장 높은 Jackpot 금액 선택
+                highest_val = max([int(val) for val in matches])
+                l649_jackpot = f"${highest_val} Million Gold Ball"
     except Exception as e:
         print(f"Lotto 6/49 fetch error: {e}")
 
