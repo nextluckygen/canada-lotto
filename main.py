@@ -5,40 +5,42 @@ import re
 from datetime import datetime, timezone, timedelta
 
 def get_live_jackpots():
-    """Lotto Max 및 Lotto 6/49 잭팟 수집"""
+    """Lotto Max 및 Lotto 6/49 잭팟 실시간 파싱"""
     max_url = "https://www.wclc.com/winning-numbers/lotto-max.htm"
     l649_url = "https://www.wclc.com/winning-numbers/lotto-649.htm"
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
     
     max_jackpot = "$30 Million"
     max_millions_count = 0
-    
     l649_goldball = "$10 Million"
     l649_classic = "$5 Million"
 
-    # Lotto Max 데이터 파싱
+    # Lotto Max 파싱
     try:
         req = urllib.request.Request(max_url, headers=headers)
-        with urllib.request.urlopen(req, timeout=5) as resp:
+        with urllib.request.urlopen(req, timeout=10) as resp:
             html = resp.read().decode('utf-8', errors='ignore')
-            m = re.search(r'\$(\d+)\s*Million', html, re.IGNORECASE)
-            if m:
-                val = int(m.group(1))
-                max_jackpot = f"${val} Million"
-                if val > 50:
-                    max_millions_count = val - 40
+            # Million 단어 앞의 잭팟 숫자 탐색 ($40 Million 등)
+            matches = re.findall(r'\$(\d+)\s*Million', html, re.IGNORECASE)
+            if matches:
+                # 텍스트 내에서 가장 큰 잭팟 숫자를 추출
+                vals = [int(v) for v in matches]
+                max_val = max(vals)
+                max_jackpot = f"${max_val} Million"
+                if max_val > 50:
+                    max_millions_count = max_val - 40
     except Exception as e:
         print(f"Lotto Max fetch error: {e}")
 
-    # Lotto 6/49 데이터 파싱
+    # Lotto 6/49 파싱
     try:
         req = urllib.request.Request(l649_url, headers=headers)
-        with urllib.request.urlopen(req, timeout=5) as resp:
+        with urllib.request.urlopen(req, timeout=10) as resp:
             html = resp.read().decode('utf-8', errors='ignore')
             matches = re.findall(r'\$(\d+)\s*Million', html, re.IGNORECASE)
             if matches:
-                highest_val = max([int(v) for v in matches])
-                l649_goldball = f"${highest_val} Million"
+                vals = [int(v) for v in matches]
+                l649_goldball = f"${max(vals)} Million"
     except Exception as e:
         print(f"Lotto 6/49 fetch error: {e}")
 
@@ -66,7 +68,6 @@ def generate_lotto_649():
     selected_cold = random.sample(cold_pool, 2)
     remaining = [n for n in all_numbers if n not in selected_hot and n not in selected_cold]
     selected_random = random.sample(remaining, 2)
-    
     return sorted(selected_hot + selected_cold + selected_random)
 
 # 현지 날짜 계산 (Pacific Time: UTC-7)
@@ -99,4 +100,4 @@ lotto_data = {
 with open("today_post.json", "w", encoding="utf-8") as f:
     json.dump(lotto_data, f, indent=4, ensure_ascii=False)
 
-print(f"Updated dual lotto data for {today_date} successfully.")
+print(f"Updated dual lotto data for {today_date} successfully. Jackpot: {max_jp}")
