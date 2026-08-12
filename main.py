@@ -2,8 +2,7 @@ import json
 import random
 import urllib.request
 import re
-from datetime import datetime
-import zoneinfo
+from datetime import datetime, timezone, timedelta
 
 def get_live_jackpots():
     """Lotto Max 및 Lotto 6/49 잭팟 수집"""
@@ -70,12 +69,9 @@ def generate_lotto_649():
     
     return sorted(selected_hot + selected_cold + selected_random)
 
-# 현지 날짜 계산 (PST)
-try:
-    pst_tz = zoneinfo.ZoneInfo("America/Vancouver")
-    today_date = datetime.now(pst_tz).strftime("%Y-%m-%d")
-except Exception:
-    today_date = datetime.now().strftime("%Y-%m-%d")
+# 현지 날짜 계산 (Pacific Time: UTC-7)
+pst_offset = timedelta(hours=-7)
+today_date = (datetime.now(timezone.utc) + pst_offset).strftime("%Y-%m-%d")
 
 max_jp, max_mil_cnt, l649_gb, l649_classic = get_live_jackpots()
 max_nums = generate_lotto_max()
