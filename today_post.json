@@ -1,6 +1,6 @@
 {
-    "date": "2026-08-12",
-    "title": "Lotto Max Winning Odds & Analysis (2026-08-12)",
+    "date": "2026-08-11",
+    "title": "Lotto Max Winning Odds & Analysis (2026-08-11)",
     "jackpot": "$30 Million",
     "hot_numbers": [
         3,
@@ -22,13 +22,13 @@
         51
     ],
     "recommended_combination": [
-        18,
+        4,
+        7,
         19,
+        25,
         35,
         38,
-        39,
-        50,
-        52
+        48
     ],
-    "content": "\n# Lotto Max Analysis & Today's Pick (2026-08-12)\n\nEstimated Jackpot for today's draw is **$30 Million**.\n\n## Statistical Highlights\n- **Hot Numbers (Frequently Drawn)**: 3, 11, 19, 23, 35, 41, 48, 52\n- **Cold Numbers (Overdue)**: 2, 7, 14, 29, 38, 50, 51\n\n## Today's AI Recommended Combination (1-52)\n**18, 19, 35, 38, 39, 50, 52**\n\nPick your lucky numbers with our statistical filters today!\n"
+    "content": "\n<div class=\"space-y-5\">\n    <!-- Top Prize Alert Banner -->\n    <div class=\"bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-200 p-5 rounded-2xl flex items-center justify-between shadow-sm\">\n        <div>\n            <span class=\"text-xs font-extrabold text-teal-700 uppercase tracking-wider block mb-1\">🎯 Live Draw Jackpot</span>\n            <p class=\"text-xl sm:text-2xl font-black text-slate-900\">Estimated Top Prize: <span class=\"text-emerald-600\">$30 Million</span></p>\n        </div>\n        <span class=\"text-3xl sm:text-4xl\">💰</span>\n    </div>\n\n    <!-- Hot & Cold Stats Grid -->\n    <div class=\"grid grid-cols-1 sm:grid-cols-2 gap-4\">\n        <div class=\"bg-slate-50 p-4 rounded-2xl border border-slate-200\">\n            <h4 class=\"font-bold text-red-600 text-sm flex items-center gap-1.5 mb-2\">\n                🔥 Hot Numbers (Frequently Drawn)\n            </h4>\n            <div class=\"flex flex-wrap gap-1.5\">\n                <span class=\"px-2.5 py-1 bg-red-500 text-white font-black rounded-lg text-xs\">3</span>\n                <span class=\"px-2.5 py-1 bg-red-500 text-white font-black rounded-lg text-xs\">11</span>\n                <span class=\"px-2.5 py-1 bg-red-500 text-white font-black rounded-lg text-xs\">19</span>\n                <span class=\"px-2.5 py-1 bg-red-500 text-white font-black rounded-lg text-xs\">23</span>\n                <span class=\"px-2.5 py-1 bg-red-500 text-white font-black rounded-lg text-xs\">35</span>\n                <span class=\"px-2.5 py-1 bg-red-500 text-white font-black rounded-lg text-xs\">41</span>\n                <span class=\"px-2.5 py-1 bg-red-500 text-white font-black rounded-lg text-xs\">48</span>\n                <span class=\"px-2.5 py-1 bg-red-500 text-white font-black rounded-lg text-xs\">52</span>\n            </div>\n        </div>\n\n        <div class=\"bg-slate-50 p-4 rounded-2xl border border-slate-200\">\n            <h4 class=\"font-bold text-blue-600 text-sm flex items-center gap-1.5 mb-2\">\n                ❄️ Cold Numbers (Overdue)\n            </h4>\n            <div class=\"flex flex-wrap gap-1.5\">\n                <span class=\"px-2.5 py-1 bg-blue-600 text-white font-black rounded-lg text-xs\">2</span>\n                <span class=\"px-2.5 py-1 bg-blue-600 text-white font-black rounded-lg text-xs\">7</span>\n                <span class=\"px-2.5 py-1 bg-blue-600 text-white font-black rounded-lg text-xs\">14</span>\n                <span class=\"px-2.5 py-1 bg-blue-600 text-white font-black rounded-lg text-xs\">29</span>\n                <span class=\"px-2.5 py-1 bg-blue-600 text-white font-black rounded-lg text-xs\">38</span>\n                <span class=\"px-2.5 py-1 bg-blue-600 text-white font-black rounded-lg text-xs\">50</span>\n                <span class=\"px-2.5 py-1 bg-blue-600 text-white font-black rounded-lg text-xs\">51</span>\n            </div>\n        </div>\n    </div>\n\n    <!-- Recommended Line Highlight Box -->\n    <div class=\"bg-slate-900 text-white p-5 rounded-2xl shadow-md border border-slate-800\">\n        <h4 class=\"text-xs font-bold text-amber-400 uppercase tracking-widest mb-1\">Today's AI Selected Combination</h4>\n        <p class=\"text-xl font-extrabold tracking-wider text-emerald-300\">\n            4, 7, 19, 25, 35, 38, 48\n        </p>\n        <p class=\"text-xs text-slate-400 mt-2\">\n            Optimized with 40% Hot, 30% Cold, and 30% Random Distribution across matrix 1–52.\n        </p>\n    </div>\n</div>\n"
 }
