@@ -2,29 +2,29 @@ name: Daily Lotto Post Generator
 
 on:
   schedule:
-    - cron: '0 0 * * *'
-  workflow_dispatch:
+    # 캐나다 서부 PST 오전 9시 (UTC 16:00) 매일 자동 실행
+    - cron: '0 16 * * *'
+  workflow_dispatch:      # 수동 버튼 실행 허용
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Check out repository
-      uses: actions/checkout@v3
+      - name: Check out repository
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
-    - name: Run main.py
-      run: python main.py
+      - name: Run Script
+        run: python main.py
 
-    - name: Commit and push generated json file
-      run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git add today_post.json
-        git commit -m "Auto: Update daily lotto post" || exit 0
-        git push
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add today_post.json
+          git commit -m "Auto update daily lotto post" || exit 0
+          git push
