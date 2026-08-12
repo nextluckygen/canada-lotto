@@ -113,6 +113,14 @@
             </div>
         </div>
 
+        <!-- Daily Status Report Box -->
+        <div class="bg-white rounded-3xl shadow-lg p-6 sm:p-8 border border-slate-100 mt-8">
+            <h3 id="report-date" class="text-xl font-bold text-slate-900 mb-2 border-b pb-3">Daily Analysis Report</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+                Live statistical analysis system active. Numbers are automatically updated on Canadian draw days using historic frequency models.
+            </p>
+        </div>
+
     </main>
 
     <script>
@@ -129,6 +137,7 @@
 
         function renderBalls(containerId, numbers) {
             const container = document.getElementById(containerId);
+            if (!container) return;
             container.innerHTML = '';
             numbers.forEach(num => {
                 const ball = document.createElement('div');
@@ -140,6 +149,7 @@
 
         function renderExtra(digits) {
             const container = document.getElementById('extra-digits');
+            if (!container) return;
             container.innerHTML = '';
             digits.forEach(d => {
                 const box = document.createElement('div');
@@ -185,22 +195,32 @@
                 const response = await fetch('today_post.json?' + new Date().getTime());
                 lottoData = await response.json();
 
-                // Lotto Max Update
-                document.getElementById('max-jackpot').innerText = "EST. " + lottoData.lotto_max.jackpot;
-                if (lottoData.lotto_max.maxmillions > 0) {
-                    document.getElementById('maxmillion-badge').classList.remove('hidden');
-                    document.getElementById('maxmillion-count').innerText = lottoData.lotto_max.maxmillions;
+                if (lottoData.date) {
+                    document.getElementById('report-date').innerText = "Daily Analysis Report (" + lottoData.date + ")";
                 }
-                renderBalls('max-balls', lottoData.lotto_max.recommended);
 
-                // Lotto 6/49 Update
-                document.getElementById('goldball-amount').innerText = lottoData.lotto_649.gold_ball;
-                document.getElementById('classic-amount').innerText = lottoData.lotto_649.classic_jackpot;
-                renderBalls('l649-balls', lottoData.lotto_649.recommended);
-                renderExtra(lottoData.lotto_649.extra_digits);
+                // Lotto Max 업데이트
+                if (lottoData.lotto_max) {
+                    document.getElementById('max-jackpot').innerText = "EST. " + lottoData.lotto_max.jackpot;
+                    if (lottoData.lotto_max.maxmillions > 0) {
+                        document.getElementById('maxmillion-badge').classList.remove('hidden');
+                        document.getElementById('maxmillion-count').innerText = lottoData.lotto_max.maxmillions;
+                    }
+                    renderBalls('max-balls', lottoData.lotto_max.recommended);
+                }
+
+                // Lotto 6/49 업데이트
+                if (lottoData.lotto_649) {
+                    document.getElementById('goldball-amount').innerText = lottoData.lotto_649.gold_ball;
+                    document.getElementById('classic-amount').innerText = lottoData.lotto_649.classic_jackpot;
+                    renderBalls('l649-balls', lottoData.lotto_649.recommended);
+                    if (lottoData.lotto_649.extra_digits) {
+                        renderExtra(lottoData.lotto_649.extra_digits);
+                    }
+                }
 
             } catch (e) {
-                console.error("Data load error", e);
+                console.error("JSON fetch error:", e);
                 generateNewNumbers('max');
                 generateNewNumbers('649');
             }
