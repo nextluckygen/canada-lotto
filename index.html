@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canada Lotto Max Helper & Daily Analysis</title>
+    <!-- Tailwind CSS (디자인 프레임워크) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .lotto-ball {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen text-gray-800">
+
+    <!-- 헤더 영역 -->
+    <header class="bg-emerald-700 text-white p-6 shadow-md text-center">
+        <h1 class="text-3xl font-extrabold">🍁 Canada Lotto Max Helper</h1>
+        <p class="text-sm mt-1 text-emerald-100">Daily Statistical Analysis & AI Number Generator (1-52)</p>
+    </header>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="max-w-3xl mx-auto p-4 mt-6">
+        
+        <!-- 잭팟 및 오늘 추천 번호 카운터 -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border border-emerald-100 text-center">
+            <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full uppercase">Jackpot Alert</span>
+            <h2 id="jackpot-amount" class="text-3xl font-extrabold text-emerald-800 mt-2">Loading...</h2>
+            
+            <hr class="my-4">
+
+            <h3 class="text-lg font-bold text-gray-700 mb-3">Today's Recommended Combination</h3>
+            <div id="balls-container" class="flex flex-wrap justify-center gap-2 mb-4">
+                <!-- 로또 공이 들어갈 자리 -->
+            </div>
+            
+            <button onclick="fetchData()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded-lg shadow transition">
+                🔄 Refresh Combination
+            </button>
+        </div>
+
+        <!-- 오늘 발행된 포스트 내용 -->
+        <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+            <h3 id="post-title" class="text-2xl font-bold text-gray-800 mb-4">Daily Analysis</h3>
+            <div id="post-content" class="prose max-w-none text-gray-600 whitespace-pre-line leading-relaxed">
+                Loading daily analysis post...
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 자바스크립트: today_post.json 데이터를 불러와 화면에 뿌려주는 역할 -->
+    <script>
+        // 공 색상 반환 함수 (1-10: 빨강, 11-20: 파랑, 21-30: 초록, 31-40: 주황, 41-52: 보라)
+        function getBallColor(num) {
+            if (num <= 10) return 'bg-red-500';
+            if (num <= 20) return 'bg-blue-500';
+            if (num <= 30) return 'bg-green-500';
+            if (num <= 40) return 'bg-orange-500';
+            return 'bg-purple-600';
+        }
+
+        async function fetchData() {
+            try {
+                // github에서 자동 생성된 오늘 데이터(json) 읽기
+                const response = await fetch('today_post.json?' + new Date().getTime());
+                const data = await response.json();
+
+                document.getElementById('jackpot-amount').innerText = "EST. " + data.jackpot;
+                document.getElementById('post-title').innerText = data.title;
+                document.getElementById('post-content').innerText = data.content;
+
+                // 번호 공 생성
+                const ballsContainer = document.getElementById('balls-container');
+                ballsContainer.innerHTML = '';
+                
+                data.recommended_combination.forEach(num => {
+                    const ball = document.createElement('div');
+                    ball.className = `lotto-ball ${getBallColor(num)}`;
+                    ball.innerText = num;
+                    ballsContainer.appendChild(ball);
+                });
+            } catch (error) {
+                console.error("Data load error:", error);
+            }
+        }
+
+        // 페이지 로드 시 실행
+        fetchData();
+    </script>
+</body>
+</html>
