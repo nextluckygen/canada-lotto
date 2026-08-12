@@ -7,28 +7,46 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .lotto-ball {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 1.1rem;
-            color: white;
-            box-shadow: inset -2px -2px 6px rgba(0, 0, 0, 0.25), 0 4px 8px rgba(0,0,0,0.15);
+        .ball-flex-container {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            justify-content: center !important;
+            gap: 10px !important;
+            margin-bottom: 24px !important;
+            min-height: 50px !important;
         }
+
+        .lotto-ball {
+            width: 44px !important;
+            height: 44px !important;
+            border-radius: 50% !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-weight: 800 !important;
+            font-size: 1.1rem !important;
+            color: white !important;
+            box-shadow: inset -2px -2px 6px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0,0,0,0.15) !important;
+            margin: 2px !important;
+        }
+
+        .bg-ball-red { background-color: #ef4444 !important; }
+        .bg-ball-blue { background-color: #2563eb !important; }
+        .bg-ball-teal { background-color: #14b8a6 !important; }
+        .bg-ball-amber { background-color: #f59e0b !important; }
+        .bg-ball-purple { background-color: #9333ea !important; }
+
         .extra-ball {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            background: #0f172a;
-            color: #f59e0b;
+            width: 38px !important;
+            height: 38px !important;
+            border-radius: 8px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-weight: 800 !important;
+            background-color: #0f172a !important;
+            color: #f59e0b !important;
+            margin: 2px !important;
         }
     </style>
 </head>
@@ -41,7 +59,7 @@
                 <div class="bg-amber-400 text-slate-900 font-black px-3 py-1 rounded-lg text-lg tracking-widest shadow">CANADA LOTTO</div>
                 <div>
                     <h1 class="text-xl sm:text-2xl font-bold tracking-tight">Official Helper Portal</h1>
-                    <p class="text-xs text-teal-100">Live Breakdown: Maxmillions, Gold Ball & Extra</p>
+                    <p class="text-xs text-teal-100">AI Statistical Analysis & Pattern Generator</p>
                 </div>
             </div>
         </div>
@@ -73,9 +91,11 @@
                     </div>
                 </div>
                 <div class="p-6 text-center">
-                    <h3 class="text-lg font-bold text-slate-800 mb-1">Today's AI Recommended Combination</h3>
-                    <p class="text-xs text-slate-500 mb-6">7 Numbers balanced with Hot & Cold stats</p>
-                    <div id="max-balls" class="flex flex-wrap justify-center gap-2 mb-6"></div>
+                    <h3 class="text-lg font-bold text-slate-800 mb-1">AI Recommended Line Strategy</h3>
+                    <p class="text-xs text-slate-500 mb-6">7 Numbers generated with Hot/Cold historical frequency filter</p>
+                    
+                    <div id="max-balls" class="ball-flex-container"></div>
+                    
                     <button onclick="generateNewNumbers('max')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3 px-8 rounded-2xl shadow-lg">🎲 Quick Pick Lotto Max</button>
                 </div>
             </div>
@@ -98,9 +118,10 @@
                     </div>
                 </div>
                 <div class="p-6 text-center">
-                    <h3 class="text-lg font-bold text-slate-800 mb-1">Today's AI Recommended Combination</h3>
-                    <p class="text-xs text-slate-500 mb-4">6 Numbers balanced with Hot & Cold stats</p>
-                    <div id="l649-balls" class="flex flex-wrap justify-center gap-2 mb-6"></div>
+                    <h3 class="text-lg font-bold text-slate-800 mb-1">AI Recommended Line Strategy</h3>
+                    <p class="text-xs text-slate-500 mb-4">6 Numbers generated with Hot/Cold historical frequency filter</p>
+                    
+                    <div id="l649-balls" class="ball-flex-container"></div>
                     
                     <!-- Extra Number Display -->
                     <div class="bg-slate-100 p-4 rounded-2xl border border-slate-200 mb-6 max-w-sm mx-auto">
@@ -113,12 +134,28 @@
             </div>
         </div>
 
-        <!-- Daily Status Report Box -->
-        <div class="bg-white rounded-3xl shadow-lg p-6 sm:p-8 border border-slate-100 mt-8">
-            <h3 id="report-date" class="text-xl font-bold text-slate-900 mb-2 border-b pb-3">Daily Analysis Report</h3>
-            <p class="text-sm text-slate-600 leading-relaxed">
-                Live statistical analysis system active. Numbers are automatically updated on Canadian draw days using historic frequency models.
-            </p>
+        <!-- Official Legal Disclaimer & Service Info Card -->
+        <div class="bg-white rounded-3xl shadow-md p-6 sm:p-8 border border-slate-200 mt-8 space-y-4">
+            <div class="flex items-center gap-2 border-b pb-3">
+                <span class="text-xl">⚖️</span>
+                <h3 class="text-base font-bold text-slate-900 uppercase tracking-wide">Important Disclaimer & Terms of Use</h3>
+            </div>
+            
+            <div class="text-xs sm:text-sm text-slate-600 leading-relaxed space-y-3">
+                <p>
+                    <strong>1. Statistical Analysis Tool Only:</strong> Numbers generated on this portal are calculated using an automated AI statistical algorithm based on historical draw frequency (Hot and Cold number patterns). They do <strong>NOT</strong> guarantee winning outcomes or predict future draws.
+                </p>
+                <p>
+                    <strong>2. No Guaranteed Results:</strong> Lottery draws are completely random events governed by official lottery corporations. Predicting future winning numbers with 100% certainty is impossible. Please play responsibly for entertainment purposes only.
+                </p>
+                <p>
+                    <strong>3. Independent Portal:</strong> This website is an independent analytical tool and is not affiliated with, endorsed by, or sponsored by the Ontario Lottery and Gaming Corporation (OLG), Western Canada Lottery Corporation (WCLC), Interprovincial Lottery Corporation (ILC), or any government entity.
+                </p>
+            </div>
+
+            <div class="pt-2 text-center text-xs text-slate-400 border-t border-slate-100">
+                © 2026 Canada Official Lotto Helper. All rights reserved.
+            </div>
         </div>
 
     </main>
@@ -127,12 +164,12 @@
         let lottoData = null;
         let currentGame = 'max';
 
-        function getBallColor(num) {
-            if (num <= 10) return 'bg-red-500';
-            if (num <= 20) return 'bg-blue-600';
-            if (num <= 30) return 'bg-teal-500';
-            if (num <= 40) return 'bg-amber-500';
-            return 'bg-purple-600';
+        function getBallColorClass(num) {
+            if (num <= 10) return 'bg-ball-red';
+            if (num <= 20) return 'bg-ball-blue';
+            if (num <= 30) return 'bg-ball-teal';
+            if (num <= 40) return 'bg-ball-amber';
+            return 'bg-ball-purple';
         }
 
         function renderBalls(containerId, numbers) {
@@ -141,7 +178,7 @@
             container.innerHTML = '';
             numbers.forEach(num => {
                 const ball = document.createElement('div');
-                ball.className = `lotto-ball ${getBallColor(num)}`;
+                ball.className = `lotto-ball ${getBallColorClass(num)}`;
                 ball.innerText = num;
                 container.appendChild(ball);
             });
@@ -194,10 +231,6 @@
             try {
                 const response = await fetch('today_post.json?' + new Date().getTime());
                 lottoData = await response.json();
-
-                if (lottoData.date) {
-                    document.getElementById('report-date').innerText = "Daily Analysis Report (" + lottoData.date + ")";
-                }
 
                 // Lotto Max 업데이트
                 if (lottoData.lotto_max) {
