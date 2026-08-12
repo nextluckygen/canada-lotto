@@ -35,19 +35,6 @@
         .bg-ball-teal { background-color: #14b8a6 !important; }
         .bg-ball-amber { background-color: #f59e0b !important; }
         .bg-ball-purple { background-color: #9333ea !important; }
-
-        .extra-ball {
-            width: 38px !important;
-            height: 38px !important;
-            border-radius: 8px !important;
-            display: inline-flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            font-weight: 800 !important;
-            background-color: #0f172a !important;
-            color: #f59e0b !important;
-            margin: 2px !important;
-        }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-900 font-sans">
@@ -119,15 +106,9 @@
                 </div>
                 <div class="p-6 text-center">
                     <h3 class="text-lg font-bold text-slate-800 mb-1">AI Recommended Line Strategy</h3>
-                    <p class="text-xs text-slate-500 mb-4">6 Numbers generated with Hot/Cold historical frequency filter</p>
+                    <p class="text-xs text-slate-500 mb-6">6 Numbers generated with Hot/Cold historical frequency filter</p>
                     
                     <div id="l649-balls" class="ball-flex-container"></div>
-                    
-                    <!-- Extra Number Display -->
-                    <div class="bg-slate-100 p-4 rounded-2xl border border-slate-200 mb-6 max-w-sm mx-auto">
-                        <span class="text-xs font-bold text-slate-600 uppercase block mb-2">Optional Extra Pick (4 Digits)</span>
-                        <div id="extra-digits" class="flex justify-center gap-2"></div>
-                    </div>
 
                     <button onclick="generateNewNumbers('649')" class="bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3 px-8 rounded-2xl shadow-lg">🎲 Quick Pick Lotto 6/49</button>
                 </div>
@@ -184,18 +165,6 @@
             });
         }
 
-        function renderExtra(digits) {
-            const container = document.getElementById('extra-digits');
-            if (!container) return;
-            container.innerHTML = '';
-            digits.forEach(d => {
-                const box = document.createElement('div');
-                box.className = 'extra-ball';
-                box.innerText = d;
-                container.appendChild(box);
-            });
-        }
-
         function switchGame(game) {
             currentGame = game;
             const isMax = game === 'max';
@@ -221,9 +190,6 @@
                 const numbers = new Set();
                 while (numbers.size < 6) numbers.add(Math.floor(Math.random() * 49) + 1);
                 renderBalls('l649-balls', Array.from(numbers).sort((a, b) => a - b));
-                
-                const extra = [Math.floor(Math.random()*10), Math.floor(Math.random()*10), Math.floor(Math.random()*10), Math.floor(Math.random()*10)];
-                renderExtra(extra);
             }
         }
 
@@ -247,9 +213,6 @@
                     document.getElementById('goldball-amount').innerText = lottoData.lotto_649.gold_ball;
                     document.getElementById('classic-amount').innerText = lottoData.lotto_649.classic_jackpot;
                     renderBalls('l649-balls', lottoData.lotto_649.recommended);
-                    if (lottoData.lotto_649.extra_digits) {
-                        renderExtra(lottoData.lotto_649.extra_digits);
-                    }
                 }
 
             } catch (e) {
