@@ -1,0 +1,29 @@
+name: Daily Lotto Post Generator
+
+on:
+  schedule:
+    # 매일 한국 시간 기준 아침 9시 (UTC 00:00)에 자동 실행
+    - cron: '0 0 * * *'
+  workflow_dispatch: # 직접 버튼을 눌러 테스트 실행할 수 있는 옵션
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/python-3.10
+
+    - name: Run main.py
+      run: python main.py
+
+    - name: Commit and push generated json file
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add today_post.json
+        git commit -m "Auto: Update daily lotto post" || exit 0
+        git push
