@@ -7,12 +7,12 @@
         "winner_province": "No Jackpot Winner (Rolled Over)",
         "recommended": [
             3,
-            9,
+            11,
             14,
-            23,
+            17,
             29,
-            38,
-            52
+            35,
+            51
         ],
         "hot_numbers": [
             3,
@@ -39,12 +39,12 @@
         "classic_jackpot": "$5 Million",
         "winner_province": "Guaranteed Draw Active",
         "recommended": [
+            4,
             6,
             12,
             15,
-            19,
-            20,
-            31
+            31,
+            33
         ],
         "hot_numbers": [
             6,
