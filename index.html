@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canada Official Lotto Portal | Max & 6/49</title>
+    <title>Canada Lotto Helper | AI Draw Analysis & Recommendations</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .ball-flex-container {
@@ -11,19 +11,19 @@
             flex-wrap: wrap !important;
             justify-content: center !important;
             gap: 10px !important;
-            margin-bottom: 24px !important;
-            min-height: 50px !important;
+            margin-bottom: 20px !important;
+            min-height: 48px !important;
         }
 
         .lotto-ball {
-            width: 44px !important;
-            height: 44px !important;
+            width: 42px !important;
+            height: 42px !important;
             border-radius: 50% !important;
             display: inline-flex !important;
             align-items: center !important;
             justify-content: center !important;
             font-weight: 800 !important;
-            font-size: 1.1rem !important;
+            font-size: 1rem !important;
             color: white !important;
             box-shadow: inset -2px -2px 6px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0,0,0,0.15) !important;
             margin: 2px !important;
@@ -36,117 +36,116 @@
         .bg-ball-purple { background-color: #9333ea !important; }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen text-slate-900 font-sans">
+<body class="bg-slate-100 min-h-screen text-slate-900 font-sans">
 
-    <header class="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-700 text-white shadow-lg">
-        <div class="max-w-4xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div class="flex items-center gap-3">
-                <div class="bg-amber-400 text-slate-900 font-black px-3 py-1 rounded-lg text-lg tracking-widest shadow">CANADA LOTTO</div>
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-emerald-700 via-teal-700 to-cyan-800 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-5 flex items-center justify-between">
+            <a href="#" onclick="showBlogList(); return false;" class="flex items-center gap-3">
+                <div class="bg-amber-400 text-slate-950 font-black px-3 py-1 rounded-lg text-sm tracking-widest shadow">CANADA LOTTO</div>
                 <div>
-                    <h1 class="text-xl sm:text-2xl font-bold tracking-tight">Official Helper Portal</h1>
-                    <p class="text-xs text-teal-100">AI Statistical Analysis & Pattern Generator</p>
+                    <h1 class="text-lg sm:text-xl font-bold tracking-tight">Official Helper Blog</h1>
+                    <p class="text-xs text-teal-100 hidden sm:block">AI Statistical Analysis & Daily Draw Reports</p>
                 </div>
-            </div>
+            </a>
+            <button onclick="showBlogList()" class="text-xs font-bold bg-white/10 hover:bg-white/20 px-3.5 py-2 rounded-xl transition border border-white/20">
+                📚 All Posts
+            </button>
         </div>
     </header>
 
+    <!-- Main Container -->
     <main class="max-w-3xl mx-auto px-4 py-8">
         
-        <div class="flex justify-center gap-3 mb-6">
-            <button id="tab-max" onclick="switchGame('max')" class="px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-emerald-600 text-white">
-                💚 LOTTO MAX (1-52)
-            </button>
-            <button id="tab-649" onclick="switchGame('649')" class="px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-white text-slate-600 hover:bg-slate-100">
-                💙 LOTTO 6/49 (1-49)
-            </button>
-        </div>
-
-        <!-- Lotto Max -->
-        <div id="view-max" class="space-y-6">
-            <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
-                <div class="bg-slate-900 p-6 text-center text-white">
-                    <span class="bg-amber-400 text-slate-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-widest block w-max mx-auto mb-2">Lotto Max Main Jackpot</span>
-                    <h2 id="max-jackpot" class="text-4xl sm:text-5xl font-black text-amber-300">EST. $40 Million</h2>
-                    
-                    <div class="mt-4 bg-slate-800/80 border border-slate-700/80 p-2.5 rounded-xl max-w-md mx-auto text-xs text-amber-200/90 font-medium">
-                        🇨🇦 <span id="max-province-text">No Jackpot Winner (Rolled Over to $40M)</span>
-                    </div>
-
-                    <div id="maxmillion-badge" class="mt-3 hidden">
-                        <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-bold px-3 py-1 rounded-lg">
-                            ✨ Plus <span id="maxmillion-count">0</span> Maxmillions Draws ($1M each)
-                        </span>
-                    </div>
-                </div>
-                <div class="p-6 text-center">
-                    <h3 class="text-lg font-bold text-slate-800 mb-1">AI Recommended Line Strategy</h3>
-                    <p class="text-xs text-slate-500 mb-6">7 Numbers generated with Hot/Cold historical frequency filter</p>
-                    
-                    <div id="max-balls" class="ball-flex-container"></div>
-                    
-                    <button onclick="generateNewNumbers('max')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3 px-8 rounded-2xl shadow-lg">🎲 Quick Pick Lotto Max</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Lotto 6/49 -->
-        <div id="view-649" class="space-y-6 hidden">
-            <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
-                <div class="bg-slate-900 p-6 text-center text-white">
-                    <span class="bg-blue-400 text-slate-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-widest block w-max mx-auto mb-2">Lotto 6/49 Draw Breakdown</span>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
-                        <div class="bg-white/10 p-3 rounded-2xl backdrop-blur">
-                            <span class="text-xs text-slate-300 block">Gold Ball Jackpot</span>
-                            <span id="goldball-amount" class="text-2xl font-black text-amber-300">$10 Million</span>
-                        </div>
-                        <div class="bg-white/10 p-3 rounded-2xl backdrop-blur">
-                            <span class="text-xs text-slate-300 block">Classic Jackpot</span>
-                            <span id="classic-amount" class="text-2xl font-black text-blue-300">$5 Million</span>
-                        </div>
-                    </div>
-
-                    <div class="mt-4 bg-slate-800/80 border border-slate-700/80 p-2.5 rounded-xl max-w-md mx-auto text-xs text-blue-200/90 font-medium">
-                        🇨🇦 <span id="l649-province-text">Guaranteed Gold Ball Draw Active</span>
-                    </div>
-                </div>
-                <div class="p-6 text-center">
-                    <h3 class="text-lg font-bold text-slate-800 mb-1">AI Recommended Line Strategy</h3>
-                    <p class="text-xs text-slate-500 mb-6">6 Numbers generated with Hot/Cold historical frequency filter</p>
-                    
-                    <div id="l649-balls" class="ball-flex-container"></div>
-
-                    <button onclick="generateNewNumbers('649')" class="bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3 px-8 rounded-2xl shadow-lg">🎲 Quick Pick Lotto 6/49</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-3xl shadow-md p-6 sm:p-8 border border-slate-200 mt-8 space-y-4">
-            <div class="flex items-center gap-2 border-b pb-3">
-                <span class="text-xl">⚖️</span>
-                <h3 class="text-base font-bold text-slate-900 uppercase tracking-wide">Important Disclaimer & Terms of Use</h3>
+        <!-- View 1: Blog Posts List -->
+        <div id="view-list" class="space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+                <h2 class="text-xl font-black text-slate-800">Latest Draw Reports & AI Posts</h2>
+                <span class="text-xs text-slate-500 font-medium">Updated Daily</span>
             </div>
             
-            <div class="text-xs sm:text-sm text-slate-600 leading-relaxed space-y-3">
-                <p>
-                    <strong>1. Statistical Analysis Tool Only:</strong> Numbers generated on this portal are calculated using an automated AI statistical algorithm based on historical draw frequency (Hot and Cold number patterns). They do <strong>NOT</strong> guarantee winning outcomes or predict future draws.
-                </p>
-                <p>
-                    <strong>2. No Guaranteed Results:</strong> Lottery draws are completely random events governed by official lottery corporations. Predicting future winning numbers with 100% certainty is impossible. Please play responsibly for entertainment purposes only.
-                </p>
-                <p>
-                    <strong>3. Independent Portal:</strong> This website is an independent analytical tool and is not affiliated with, endorsed by, or sponsored by any Canadian lottery corporation, government entity, or the Interprovincial Lottery Corporation (ILC).
-                </p>
+            <div id="posts-container" class="space-y-4">
+                <div class="p-8 text-center text-slate-400 text-sm">Loading latest lottery posts...</div>
             </div>
+        </div>
 
-            <div class="pt-2 text-center text-xs text-slate-400 border-t border-slate-100">
-                © 2026 canadalottohelper.ca. All rights reserved.
-            </div>
+        <!-- View 2: Single Post Detail View -->
+        <div id="view-post" class="space-y-6 hidden">
+            <button onclick="showBlogList()" class="text-xs font-bold text-teal-700 hover:text-teal-800 flex items-center gap-1 mb-2">
+                ← Back to Post List
+            </button>
+
+            <article class="bg-white rounded-3xl shadow-xl border border-slate-200/80 overflow-hidden">
+                <!-- Post Title Box -->
+                <div class="bg-slate-900 p-6 sm:p-8 text-white border-b border-slate-800">
+                    <span id="post-date-badge" class="bg-amber-400 text-slate-950 text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest inline-block mb-3">Today's Report</span>
+                    <h2 id="post-title" class="text-2xl sm:text-3xl font-black leading-snug">Loading Post Title...</h2>
+                </div>
+
+                <!-- Post Article Body -->
+                <div class="p-6 sm:p-8 space-y-8">
+                    
+                    <!-- Section 1: Lotto Max Breakdown -->
+                    <div class="bg-emerald-50/50 rounded-2xl p-6 border border-emerald-100">
+                        <div class="flex items-center justify-between border-b border-emerald-200/60 pb-3 mb-4">
+                            <h3 class="text-lg font-black text-emerald-950 flex items-center gap-2">
+                                <span>💚</span> Lotto Max Draw Breakdown
+                            </h3>
+                            <span id="post-max-jp" class="text-base font-black text-emerald-700">EST. $40M</span>
+                        </div>
+                        
+                        <div class="space-y-3 text-sm text-slate-700 mb-6">
+                            <div class="bg-white p-3 rounded-xl border border-emerald-100 text-xs text-emerald-900 font-medium">
+                                📍 <strong>Major Winning Regions:</strong> <span id="post-max-prov">Checking...</span>
+                            </div>
+                        </div>
+
+                        <div class="text-center pt-2">
+                            <h4 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3">AI Recommended Line Strategy (7 Balls)</h4>
+                            <div id="post-max-balls" class="ball-flex-container"></div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Lotto 6/49 Breakdown -->
+                    <div class="bg-blue-50/50 rounded-2xl p-6 border border-blue-100">
+                        <div class="flex items-center justify-between border-b border-blue-200/60 pb-3 mb-4">
+                            <h3 class="text-lg font-black text-blue-950 flex items-center gap-2">
+                                <span>💙</span> Lotto 6/49 Draw Breakdown
+                            </h3>
+                            <span id="post-649-jp" class="text-base font-black text-blue-700">$10M Gold Ball</span>
+                        </div>
+
+                        <div class="space-y-3 text-sm text-slate-700 mb-6">
+                            <div class="bg-white p-3 rounded-xl border border-blue-100 text-xs text-blue-900 font-medium">
+                                📍 <strong>Major Winning Regions:</strong> <span id="post-649-prov">Checking...</span>
+                            </div>
+                        </div>
+
+                        <div class="text-center pt-2">
+                            <h4 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3">AI Recommended Line Strategy (6 Balls)</h4>
+                            <div id="post-649-balls" class="ball-flex-container"></div>
+                        </div>
+                    </div>
+
+                    <button onclick="showBlogList()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-2xl text-xs transition">
+                        ← Return to All Posts
+                    </button>
+                </div>
+            </article>
+        </div>
+
+        <!-- Official Disclaimer -->
+        <div class="bg-white rounded-3xl shadow-md p-6 border border-slate-200 mt-8 space-y-3">
+            <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wide border-b pb-2">⚖️ Disclaimer & Terms of Use</h3>
+            <p class="text-xs text-slate-500 leading-relaxed">
+                Numbers generated on this blog are calculated using an automated statistical algorithm based on historical frequency. They do NOT guarantee winning outcomes. Please play responsibly for entertainment purposes only.
+            </p>
         </div>
 
     </main>
 
     <script>
-        let lottoData = null;
+        let postsIndex = [];
 
         function getBallColorClass(num) {
             if (num <= 10) return 'bg-ball-red';
@@ -168,76 +167,96 @@
             });
         }
 
-        function switchGame(game) {
-            const isMax = game === 'max';
-            document.getElementById('view-max').classList.toggle('hidden', !isMax);
-            document.getElementById('view-649').classList.toggle('hidden', isMax);
-
-            document.getElementById('tab-max').className = isMax 
-                ? "px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-emerald-600 text-white"
-                : "px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-white text-slate-600 hover:bg-slate-100";
-
-            document.getElementById('tab-649').className = !isMax 
-                ? "px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-blue-600 text-white"
-                : "px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-white text-slate-600 hover:bg-slate-100";
+        function showBlogList() {
+            document.getElementById('view-list').classList.remove('hidden');
+            document.getElementById('view-post').classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function generateNewNumbers(game) {
-            if (game === 'max') {
-                const numbers = new Set();
-                while (numbers.size < 7) numbers.add(Math.floor(Math.random() * 52) + 1);
-                renderBalls('max-balls', Array.from(numbers).sort((a, b) => a - b));
-            } else {
-                const numbers = new Set();
-                while (numbers.size < 6) numbers.add(Math.floor(Math.random() * 49) + 1);
-                renderBalls('l649-balls', Array.from(numbers).sort((a, b) => a - b));
+        async function openPost(postId) {
+            try {
+                const response = await fetch(`posts/${postId}.json?cache=` + new Date().getTime());
+                let post = await response.json();
+                renderPostDetail(post);
+            } catch (e) {
+                // Fallback to today_post.json
+                try {
+                    const fallbackResp = await fetch('today_post.json?cache=' + new Date().getTime());
+                    let fallbackPost = await fallbackResp.json();
+                    renderPostDetail(fallbackPost);
+                } catch (err) {
+                    alert("Failed to load post content.");
+                }
             }
         }
 
-        async function fetchData() {
+        function renderPostDetail(post) {
+            document.getElementById('post-title').innerText = post.title;
+            document.getElementById('post-date-badge').innerText = post.display_date || post.date;
+
+            if (post.lotto_max) {
+                document.getElementById('post-max-jp').innerText = "EST. " + post.lotto_max.jackpot;
+                document.getElementById('post-max-prov').innerText = post.lotto_max.winner_province || "No Jackpot Winner";
+                renderBalls('post-max-balls', post.lotto_max.recommended || []);
+            }
+
+            if (post.lotto_649) {
+                document.getElementById('post-649-jp').innerText = (post.lotto_649.gold_ball || "$10M") + " Gold Ball";
+                document.getElementById('post-649-prov').innerText = post.lotto_649.winner_province || "Guaranteed Draw Active";
+                renderBalls('post-649-balls', post.lotto_649.recommended || []);
+            }
+
+            document.getElementById('view-list').classList.add('hidden');
+            document.getElementById('view-post').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        async function loadBlogList() {
+            const container = document.getElementById('posts-container');
             try {
-                const response = await fetch('today_post.json?cache_bust=' + new Date().getTime());
-                if (!response.ok) throw new Error("JSON response failed");
-                
-                lottoData = await response.json();
+                const response = await fetch('posts_index.json?cache=' + new Date().getTime());
+                postsIndex = await response.json();
 
-                if (lottoData.lotto_max) {
-                    if (lottoData.lotto_max.jackpot) {
-                        document.getElementById('max-jackpot').innerText = "EST. " + lottoData.lotto_max.jackpot;
-                    }
-                    const maxProvText = lottoData.lotto_max.winner_province || lottoData.lotto_max.winner_region;
-                    if (maxProvText) {
-                        document.getElementById('max-province-text').innerText = maxProvText;
-                    }
-                    if (lottoData.lotto_max.recommended) {
-                        renderBalls('max-balls', lottoData.lotto_max.recommended);
-                    }
-                }
+                if (!postsIndex || postsIndex.length === 0) throw new Error("Empty index");
 
-                if (lottoData.lotto_649) {
-                    if (lottoData.lotto_649.gold_ball) {
-                        document.getElementById('goldball-amount').innerText = lottoData.lotto_649.gold_ball;
-                    }
-                    if (lottoData.lotto_649.classic_jackpot) {
-                        document.getElementById('classic-amount').innerText = lottoData.lotto_649.classic_jackpot;
-                    }
-                    const l649ProvText = lottoData.lotto_649.winner_province || lottoData.lotto_649.winner_region;
-                    if (l649ProvText) {
-                        document.getElementById('l649-province-text').innerText = l649ProvText;
-                    }
-                    if (lottoData.lotto_649.recommended) {
-                        renderBalls('l649-balls', lottoData.lotto_649.recommended);
-                    }
-                }
+                container.innerHTML = '';
+                postsIndex.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = "bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition cursor-pointer";
+                    card.onclick = () => openPost(item.id);
+                    card.innerHTML = `
+                        <div class="flex items-center justify-between text-xs text-slate-400 font-medium mb-2">
+                            <span class="bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-md font-bold">📅 ${item.display_date || item.date}</span>
+                            <span class="text-teal-600 font-bold hover:underline">Read Post →</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-2 hover:text-teal-700 transition">${item.title}</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed line-clamp-2">${item.summary}</p>
+                    `;
+                    container.appendChild(card);
+                });
 
             } catch (e) {
-                console.error("Data load fallback triggered:", e);
-                generateNewNumbers('max');
-                generateNewNumbers('649');
+                // If index doesn't exist yet, load today_post.json as first post
+                try {
+                    const response = await fetch('today_post.json?cache=' + new Date().getTime());
+                    const todayPost = await response.json();
+                    container.innerHTML = `
+                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition cursor-pointer" onclick="openPost('${todayPost.date}')">
+                            <div class="flex items-center justify-between text-xs text-slate-400 font-medium mb-2">
+                                <span class="bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-md font-bold">📅 ${todayPost.date}</span>
+                                <span class="text-teal-600 font-bold hover:underline">Read Post →</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-800 mb-2">${todayPost.title}</h3>
+                            <p class="text-xs text-slate-500 leading-relaxed">Click to view today's complete Lotto Max & 6/49 draw analysis report and AI lines.</p>
+                        </div>
+                    `;
+                } catch (err) {
+                    container.innerHTML = `<div class="p-8 text-center text-slate-400 text-sm">No posts published yet. Run GitHub workflow to generate your first blog post.</div>`;
+                }
             }
         }
 
-        fetchData();
+        loadBlogList();
     </script>
 </body>
 </html>
