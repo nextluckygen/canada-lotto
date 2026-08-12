@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Canada Official Lotto Portal | Max & 6/49</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .ball-flex-container {
@@ -39,7 +38,6 @@
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-900 font-sans">
 
-    <!-- Header Navigation -->
     <header class="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-700 text-white shadow-lg">
         <div class="max-w-4xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-3">
@@ -52,10 +50,8 @@
         </div>
     </header>
 
-    <!-- Main Container -->
     <main class="max-w-3xl mx-auto px-4 py-8">
         
-        <!-- Game Switcher Tabs -->
         <div class="flex justify-center gap-3 mb-6">
             <button id="tab-max" onclick="switchGame('max')" class="px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-emerald-600 text-white">
                 💚 LOTTO MAX (1-52)
@@ -65,12 +61,17 @@
             </button>
         </div>
 
-        <!-- Lotto Max View Card -->
+        <!-- Lotto Max -->
         <div id="view-max" class="space-y-6">
             <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
                 <div class="bg-slate-900 p-6 text-center text-white">
                     <span class="bg-amber-400 text-slate-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-widest block w-max mx-auto mb-2">Lotto Max Main Jackpot</span>
-                    <h2 id="max-jackpot" class="text-4xl sm:text-5xl font-black text-amber-300">EST. $30 Million</h2>
+                    <h2 id="max-jackpot" class="text-4xl sm:text-5xl font-black text-amber-300">EST. $40 Million</h2>
+                    
+                    <div class="mt-4 bg-slate-800/80 border border-slate-700/80 p-2.5 rounded-xl max-w-md mx-auto text-xs text-amber-200/90 font-medium">
+                        🇨🇦 <span id="max-province-text">No Jackpot Winner (Rolled Over to $40M)</span>
+                    </div>
+
                     <div id="maxmillion-badge" class="mt-3 hidden">
                         <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-bold px-3 py-1 rounded-lg">
                             ✨ Plus <span id="maxmillion-count">0</span> Maxmillions Draws ($1M each)
@@ -88,7 +89,7 @@
             </div>
         </div>
 
-        <!-- Lotto 6/49 View Card -->
+        <!-- Lotto 6/49 -->
         <div id="view-649" class="space-y-6 hidden">
             <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
                 <div class="bg-slate-900 p-6 text-center text-white">
@@ -103,6 +104,10 @@
                             <span id="classic-amount" class="text-2xl font-black text-blue-300">$5 Million</span>
                         </div>
                     </div>
+
+                    <div class="mt-4 bg-slate-800/80 border border-slate-700/80 p-2.5 rounded-xl max-w-md mx-auto text-xs text-blue-200/90 font-medium">
+                        🇨🇦 <span id="l649-province-text">Guaranteed Gold Ball Draw Active</span>
+                    </div>
                 </div>
                 <div class="p-6 text-center">
                     <h3 class="text-lg font-bold text-slate-800 mb-1">AI Recommended Line Strategy</h3>
@@ -115,7 +120,6 @@
             </div>
         </div>
 
-        <!-- Official Legal Disclaimer & Service Info Card -->
         <div class="bg-white rounded-3xl shadow-md p-6 sm:p-8 border border-slate-200 mt-8 space-y-4">
             <div class="flex items-center gap-2 border-b pb-3">
                 <span class="text-xl">⚖️</span>
@@ -143,7 +147,6 @@
 
     <script>
         let lottoData = null;
-        let currentGame = 'max';
 
         function getBallColorClass(num) {
             if (num <= 10) return 'bg-ball-red';
@@ -166,9 +169,7 @@
         }
 
         function switchGame(game) {
-            currentGame = game;
             const isMax = game === 'max';
-            
             document.getElementById('view-max').classList.toggle('hidden', !isMax);
             document.getElementById('view-649').classList.toggle('hidden', isMax);
 
@@ -195,28 +196,42 @@
 
         async function fetchData() {
             try {
-                const response = await fetch('today_post.json?' + new Date().getTime());
+                const response = await fetch('today_post.json?cache_bust=' + new Date().getTime());
+                if (!response.ok) throw new Error("JSON response failed");
+                
                 lottoData = await response.json();
 
-                // Lotto Max 업데이트
                 if (lottoData.lotto_max) {
-                    document.getElementById('max-jackpot').innerText = "EST. " + lottoData.lotto_max.jackpot;
-                    if (lottoData.lotto_max.maxmillions > 0) {
-                        document.getElementById('maxmillion-badge').classList.remove('hidden');
-                        document.getElementById('maxmillion-count').innerText = lottoData.lotto_max.maxmillions;
+                    if (lottoData.lotto_max.jackpot) {
+                        document.getElementById('max-jackpot').innerText = "EST. " + lottoData.lotto_max.jackpot;
                     }
-                    renderBalls('max-balls', lottoData.lotto_max.recommended);
+                    const maxProvText = lottoData.lotto_max.winner_province || lottoData.lotto_max.winner_region;
+                    if (maxProvText) {
+                        document.getElementById('max-province-text').innerText = maxProvText;
+                    }
+                    if (lottoData.lotto_max.recommended) {
+                        renderBalls('max-balls', lottoData.lotto_max.recommended);
+                    }
                 }
 
-                // Lotto 6/49 업데이트
                 if (lottoData.lotto_649) {
-                    document.getElementById('goldball-amount').innerText = lottoData.lotto_649.gold_ball;
-                    document.getElementById('classic-amount').innerText = lottoData.lotto_649.classic_jackpot;
-                    renderBalls('l649-balls', lottoData.lotto_649.recommended);
+                    if (lottoData.lotto_649.gold_ball) {
+                        document.getElementById('goldball-amount').innerText = lottoData.lotto_649.gold_ball;
+                    }
+                    if (lottoData.lotto_649.classic_jackpot) {
+                        document.getElementById('classic-amount').innerText = lottoData.lotto_649.classic_jackpot;
+                    }
+                    const l649ProvText = lottoData.lotto_649.winner_province || lottoData.lotto_649.winner_region;
+                    if (l649ProvText) {
+                        document.getElementById('l649-province-text').innerText = l649ProvText;
+                    }
+                    if (lottoData.lotto_649.recommended) {
+                        renderBalls('l649-balls', lottoData.lotto_649.recommended);
+                    }
                 }
 
             } catch (e) {
-                console.error("JSON fetch error:", e);
+                console.error("Data load fallback triggered:", e);
                 generateNewNumbers('max');
                 generateNewNumbers('649');
             }
