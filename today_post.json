@@ -1,34 +1,63 @@
 {
     "date": "2026-08-11",
-    "title": "Lotto Max Winning Odds & Analysis (2026-08-11)",
-    "jackpot": "$30 Million",
-    "hot_numbers": [
-        3,
-        11,
-        19,
-        23,
-        35,
-        41,
-        48,
-        52
-    ],
-    "cold_numbers": [
-        2,
-        7,
-        14,
-        29,
-        38,
-        50,
-        51
-    ],
-    "recommended_combination": [
-        4,
-        7,
-        19,
-        25,
-        35,
-        38,
-        48
-    ],
-    "content": "\n<div class=\"space-y-5\">\n    <!-- Top Prize Alert Banner -->\n    <div class=\"bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-200 p-5 rounded-2xl flex items-center justify-between shadow-sm\">\n        <div>\n            <span class=\"text-xs font-extrabold text-teal-700 uppercase tracking-wider block mb-1\">🎯 Live Draw Jackpot</span>\n            <p class=\"text-xl sm:text-2xl font-black text-slate-900\">Estimated Top Prize: <span class=\"text-emerald-600\">$30 Million</span></p>\n        </div>\n        <span class=\"text-3xl sm:text-4xl\">💰</span>\n    </div>\n\n    <!-- Hot & Cold Stats Grid -->\n    <div class=\"grid grid-cols-1 sm:grid-cols-2 gap-4\">\n        <div class=\"bg-slate-50 p-4 rounded-2xl border border-slate-200\">\n            <h4 class=\"font-bold text-red-600 text-sm flex items-center gap-1.5 mb-2\">\n                🔥 Hot Numbers (Frequently Drawn)\n            </h4>\n            <div class=\"flex flex-wrap gap-1.5\">\n                <span class=\"px-2.5 py-1 bg-red-500 text-white font-black rounded-lg text-xs\">3</span>\n                <span class=\"px-2.5 py-1 bg-red-500 text-white font-black rounded-lg text-xs\">11</span>\n                <span class=\"px-2.5 py-1 bg-red-500 text-white font-black rounded-lg text-xs\">19</span>\n                <span class=\"px-2.5 py-1 bg-red-500 text-white font-black rounded-lg text-xs\">23</span>\n                <span class=\"px-2.5 py-1 bg-red-500 text-white font-black rounded-lg text-xs\">35</span>\n                <span class=\"px-2.5 py-1 bg-red-500 text-white font-black rounded-lg text-xs\">41</span>\n                <span class=\"px-2.5 py-1 bg-red-500 text-white font-black rounded-lg text-xs\">48</span>\n                <span class=\"px-2.5 py-1 bg-red-500 text-white font-black rounded-lg text-xs\">52</span>\n            </div>\n        </div>\n\n        <div class=\"bg-slate-50 p-4 rounded-2xl border border-slate-200\">\n            <h4 class=\"font-bold text-blue-600 text-sm flex items-center gap-1.5 mb-2\">\n                ❄️ Cold Numbers (Overdue)\n            </h4>\n            <div class=\"flex flex-wrap gap-1.5\">\n                <span class=\"px-2.5 py-1 bg-blue-600 text-white font-black rounded-lg text-xs\">2</span>\n                <span class=\"px-2.5 py-1 bg-blue-600 text-white font-black rounded-lg text-xs\">7</span>\n                <span class=\"px-2.5 py-1 bg-blue-600 text-white font-black rounded-lg text-xs\">14</span>\n                <span class=\"px-2.5 py-1 bg-blue-600 text-white font-black rounded-lg text-xs\">29</span>\n                <span class=\"px-2.5 py-1 bg-blue-600 text-white font-black rounded-lg text-xs\">38</span>\n                <span class=\"px-2.5 py-1 bg-blue-600 text-white font-black rounded-lg text-xs\">50</span>\n                <span class=\"px-2.5 py-1 bg-blue-600 text-white font-black rounded-lg text-xs\">51</span>\n            </div>\n        </div>\n    </div>\n\n    <!-- Recommended Line Highlight Box -->\n    <div class=\"bg-slate-900 text-white p-5 rounded-2xl shadow-md border border-slate-800\">\n        <h4 class=\"text-xs font-bold text-amber-400 uppercase tracking-widest mb-1\">Today's AI Selected Combination</h4>\n        <p class=\"text-xl font-extrabold tracking-wider text-emerald-300\">\n            4, 7, 19, 25, 35, 38, 48\n        </p>\n        <p class=\"text-xs text-slate-400 mt-2\">\n            Optimized with 40% Hot, 30% Cold, and 30% Random Distribution across matrix 1–52.\n        </p>\n    </div>\n</div>\n"
+    "title": "Canada Lotto Helper Analysis & Daily AI Line (2026-08-11)",
+    "lotto_max": {
+        "jackpot": "$30 Million",
+        "recommended": [
+            2,
+            3,
+            19,
+            35,
+            44,
+            46,
+            51
+        ],
+        "hot_numbers": [
+            3,
+            11,
+            19,
+            23,
+            35,
+            41,
+            48,
+            52
+        ],
+        "cold_numbers": [
+            2,
+            7,
+            14,
+            29,
+            38,
+            50,
+            51
+        ]
+    },
+    "lotto_649": {
+        "jackpot": "$5 Million Gold Ball",
+        "recommended": [
+            4,
+            13,
+            20,
+            23,
+            28,
+            32
+        ],
+        "hot_numbers": [
+            6,
+            12,
+            20,
+            28,
+            34,
+            44
+        ],
+        "cold_numbers": [
+            4,
+            15,
+            23,
+            31,
+            40,
+            49
+        ]
+    },
+    "content": "\n<div class=\"space-y-6\">\n    <!-- Lotto Max Card -->\n    <div class=\"bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 p-5 rounded-2xl shadow-sm\">\n        <div class=\"flex items-center justify-between mb-3\">\n            <span class=\"text-xs font-black bg-emerald-600 text-white px-3 py-1 rounded-full uppercase\">Lotto Max (1-52)</span>\n            <span class=\"text-sm font-extrabold text-emerald-800\">Est. Jackpot: $30 Million</span>\n        </div>\n        <p class=\"text-sm text-slate-700 mb-2\">Today's AI Recommended Line (7 Numbers):</p>\n        <p class=\"text-lg font-black text-emerald-700\">2, 3, 19, 35, 44, 46, 51</p>\n    </div>\n\n    <!-- Lotto 6/49 Card -->\n    <div class=\"bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 p-5 rounded-2xl shadow-sm\">\n        <div class=\"flex items-center justify-between mb-3\">\n            <span class=\"text-xs font-black bg-blue-600 text-white px-3 py-1 rounded-full uppercase\">Lotto 6/49 (1-49)</span>\n            <span class=\"text-sm font-extrabold text-blue-800\">Est. Jackpot: $5 Million Gold Ball</span>\n        </div>\n        <p class=\"text-sm text-slate-700 mb-2\">Today's AI Recommended Line (6 Numbers):</p>\n        <p class=\"text-lg font-black text-blue-700\">4, 13, 20, 23, 28, 32</p>\n    </div>\n</div>\n"
 }
