@@ -1,30 +1,36 @@
 import json
 import random
-import urllib.request
 import re
 from datetime import datetime, timezone, timedelta
+import urllib.request
+import ssl
 
 def get_live_jackpots_and_provinces():
-    """WCLC, OLG 등에서 잭팟 금액 및 당첨 주(Province) 파싱"""
+    """WCLC, OLG 등에서 잭팟 금액 및 당첨 주(Province) 파싱 (SSL 차단 해제 적용)"""
     max_url = "https://www.wclc.com/winning-numbers/lotto-max.htm"
     l649_url = "https://www.wclc.com/winning-numbers/lotto-649.htm"
     
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.5'
     }
+    
+    # SSL 검증 우회 컨텍스트 생성 (GitHub Actions 환경 차단 방지)
+    context = ssl._create_unverified_context()
     
     max_jackpot = "$40 Million"
     max_millions_count = 0
     l649_goldball = "$10 Million"
     l649_classic = "$5 Million"
     
-    max_winner_province = "No Jackpot Winner (Rolled Over)"
-    l649_winner_province = "Guaranteed Draw Active"
+    max_winner_province = "No Jackpot Winner (Rolled Over to $40M)"
+    l649_winner_province = "Guaranteed Gold Ball Draw Active"
 
     # 1. Lotto Max 파싱
     try:
         req = urllib.request.Request(max_url, headers=headers)
-        with urllib.request.urlopen(req, timeout=10) as resp:
+        with urllib.request.urlopen(req, timeout=10, context=context) as resp:
             html = resp.read().decode('utf-8', errors='ignore')
             matches = re.findall(r'\$\s*(\d+)\s*Million', html, re.IGNORECASE)
             if matches:
@@ -35,7 +41,6 @@ def get_live_jackpots_and_provinces():
                     if max_val > 50:
                         max_millions_count = max_val - 40
 
-            # 당첨 주(Province) 키워드 감지
             provinces = []
             if "Ontario" in html:
                 provinces.append("Ontario")
@@ -56,7 +61,7 @@ def get_live_jackpots_and_provinces():
     # 2. Lotto 6/49 파싱
     try:
         req = urllib.request.Request(l649_url, headers=headers)
-        with urllib.request.urlopen(req, timeout=10) as resp:
+        with urllib.request.urlopen(req, timeout=10, context=context) as resp:
             html = resp.read().decode('utf-8', errors='ignore')
             matches = re.findall(r'\$\s*(\d+)\s*Million', html, re.IGNORECASE)
             if matches:
