@@ -29,17 +29,21 @@
             margin: 2px !important;
         }
 
-        .lotto-ball-sm {
-            width: 28px !important;
-            height: 28px !important;
+        .lotto-ball-xs {
+            width: 20px !important;
+            height: 20px !important;
             border-radius: 50% !important;
             display: inline-flex !important;
             align-items: center !important;
             justify-content: center !important;
             font-weight: 800 !important;
-            font-size: 0.8rem !important;
+            font-size: 0.65rem !important;
             color: white !important;
-            box-shadow: inset -1px -1px 4px rgba(0, 0, 0, 0.3) !important;
+            box-shadow: inset -1px -1px 3px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .grid-cols-13 {
+            grid-template-columns: repeat(13, minmax(0, 1fr)) !important;
         }
 
         .bg-ball-red { background-color: #ef4444 !important; }
@@ -158,25 +162,25 @@
                 </div>
             </div>
 
-            <!-- 3. Compact 6-Month Frequency Grid (No Scroll View) -->
-            <div class="bg-white rounded-3xl shadow-xl border border-slate-200/80 p-5 space-y-4">
-                <div class="border-b pb-3 flex flex-wrap items-center justify-between gap-2">
+            <!-- 3. Ultra-Compact 13-Per-Row Frequency Grid -->
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-200/80 p-4 sm:p-5 space-y-3 overflow-x-auto">
+                <div class="border-b pb-2.5 flex flex-wrap items-center justify-between gap-2">
                     <div>
-                        <h2 class="text-base sm:text-lg font-black text-slate-900 flex items-center gap-2">
+                        <h2 class="text-sm sm:text-base font-black text-slate-900 flex items-center gap-1.5">
                             📊 <span id="freq-title">Lotto Max</span> Frequency (6 Months)
                         </h2>
-                        <p class="text-[11px] text-slate-500">Historical occurrence count per number</p>
+                        <p class="text-[10px] text-slate-500">Occurrence breakdown over past draws</p>
                     </div>
                     <!-- Color Legend -->
-                    <div class="flex items-center gap-1.5 text-[10px] font-bold">
-                        <span class="px-2 py-0.5 bg-red-100 text-red-700 rounded border border-red-200">🔥 Hot</span>
-                        <span class="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded border border-emerald-200">⚡ Mid</span>
-                        <span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded border border-slate-200">❄️ Cold</span>
+                    <div class="flex items-center gap-1 text-[9px] font-bold">
+                        <span class="px-1.5 py-0.5 bg-red-100 text-red-700 rounded border border-red-200">🔥 Hot</span>
+                        <span class="px-1.5 py-0.5 bg-emerald-100 text-emerald-700 rounded border border-emerald-200">⚡ Mid</span>
+                        <span class="px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded border border-slate-200">❄️ Cold</span>
                     </div>
                 </div>
 
-                <!-- Frequency Compact Grid Container -->
-                <div id="freq-grid-container" class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-7 gap-1.5">
+                <!-- 13 Columns Grid Container -->
+                <div id="freq-grid-container" class="grid grid-cols-13 gap-1 min-w-[520px]">
                     <div class="col-span-full text-center text-xs text-slate-400 py-4">Loading frequency data...</div>
                 </div>
             </div>
@@ -303,10 +307,10 @@
                 }
 
                 const tile = document.createElement('div');
-                tile.className = `p-1.5 rounded-xl border flex flex-col items-center justify-center transition-transform hover:scale-105 ${cardBorder}`;
+                tile.className = `p-1 rounded-lg border flex flex-col items-center justify-center transition-transform hover:scale-105 ${cardBorder}`;
                 tile.innerHTML = `
-                    <div class="lotto-ball-sm ${getBallColorClass(i)} mb-1">${i}</div>
-                    <span class="text-[10px] font-extrabold px-1.5 py-0.5 rounded-md ${badgeClass}">
+                    <div class="lotto-ball-xs ${getBallColorClass(i)} mb-0.5">${i}</div>
+                    <span class="text-[9px] font-extrabold px-1 py-0.2 rounded ${badgeClass}">
                         ${count}x
                     </span>
                 `;
