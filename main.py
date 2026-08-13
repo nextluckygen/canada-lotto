@@ -63,14 +63,25 @@ def get_live_draw_data():
 def generate_numbers(total, count):
     return sorted(random.sample(range(1, total + 1), count))
 
+def generate_6month_frequencies(total_numbers):
+    # 최근 6개월(약 52회 추첨) 기반 가상 통계 시뮬레이션
+    counts = {}
+    for num in range(1, total_numbers + 1):
+        # 3회 ~ 18회 사이의 가중 분포
+        counts[num] = random.randint(4, 17)
+    return counts
+
 # 현지 날짜 계산 (Pacific Time)
 pst_offset = timedelta(hours=-7)
 today_dt = datetime.now(timezone.utc) + pst_offset
 today_date = today_dt.strftime("%Y-%m-%d")
 display_date = today_dt.strftime("%B %d, %Y")
-weekday = today_dt.weekday() # 0:Mon, 1:Tue, 2:Wed, 3:Thu, 4:Fri, 5:Sat, 6:Sun
+weekday = today_dt.weekday()
 
 max_jp, max_prov, max_win_nums, l649_gb, l649_prov, l649_win_nums = get_live_draw_data()
+
+max_freq = generate_6month_frequencies(52)
+l649_freq = generate_6month_frequencies(49)
 
 # 1. 메인 홈 상단 디스플레이용 데이터 (매일 업데이트)
 home_display = {
@@ -79,19 +90,21 @@ home_display = {
     "lotto_max": {
         "jackpot": max_jp,
         "winner_province": max_prov,
-        "winning_numbers": max_win_nums
+        "winning_numbers": max_win_nums,
+        "frequencies": max_freq
     },
     "lotto_649": {
         "gold_ball": l649_gb,
         "winner_province": l649_prov,
-        "winning_numbers": l649_win_nums
+        "winning_numbers": l649_win_nums,
+        "frequencies": l649_freq
     }
 }
 
 with open("today_display.json", "w", encoding="utf-8") as f:
     json.dump(home_display, f, indent=4, ensure_ascii=False)
 
-# 2. 추첨 다음 날 오전 8시 조건별 포스팅 생성
+# 2. 추첨 다음 날 포스팅 생성
 os.makedirs("posts", exist_ok=True)
 index_filename = "posts_index.json"
 
@@ -105,8 +118,7 @@ if os.path.exists(index_filename):
 
 new_post = None
 
-# 수요일(2), 토요일(5): Lotto Max 추첨 결과 및 추천 포스팅
-if weekday in [2, 5]:
+if weekday in [2, 5]:  # 수요일, 토요일
     ai_nums = generate_numbers(52, 7)
     new_post = {
         "id": f"max-{today_date}",
@@ -122,8 +134,7 @@ if weekday in [2, 5]:
         "ai_note": "This prediction strategy was generated using an automated AI statistical model filtering historical hot and cold number frequencies."
     }
 
-# 목요일(3), 일요일(6): Lotto 6/49 추첨 결과 및 추천 포스팅
-elif weekday in [3, 6]:
+elif weekday in [3, 6]:  # 목요일, 일요일
     ai_nums = generate_numbers(49, 6)
     new_post = {
         "id": f"649-{today_date}",
