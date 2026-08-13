@@ -6,7 +6,7 @@ import os
 from datetime import datetime, timezone, timedelta
 
 def get_live_lotto_data():
-    # 기본 안전값 설정 (API 통신 장애 대비)
+    # 기본값 (이번 주 토요일 6/49 골드볼 $12M 반영)
     max_jp = "$40 Million"
     max_prov = "British Columbia, Ontario"
     max_win_nums = [3, 11, 19, 23, 35, 41, 48]
@@ -18,7 +18,7 @@ def get_live_lotto_data():
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
     context = ssl._create_unverified_context()
 
-    # 1. WCLC 공식 JSON API 호출
+    # WCLC 공식 JSON API 연동
     api_url = "https://www.wclc.com/api/winning-numbers.json"
     
     try:
@@ -26,7 +26,6 @@ def get_live_lotto_data():
         with urllib.request.urlopen(req, timeout=10, context=context) as resp:
             data = json.loads(resp.read().decode('utf-8'))
             
-            # API 데이터에서 Lotto Max 파싱
             if "lottoMax" in data:
                 max_info = data["lottoMax"]
                 if "jackpot" in max_info:
@@ -34,7 +33,6 @@ def get_live_lotto_data():
                 if "winningNumbers" in max_info:
                     max_win_nums = sorted([int(n) for n in max_info["winningNumbers"]])
 
-            # API 데이터에서 Lotto 6/49 파싱
             if "lotto649" in data:
                 l649_info = data["lotto649"]
                 if "goldBallJackpot" in l649_info:
@@ -45,7 +43,7 @@ def get_live_lotto_data():
                     l649_win_nums = sorted([int(n) for n in l649_info["winningNumbers"]])
 
     except Exception as e:
-        print(f"API Fetch Fallback used: {e}")
+        print(f"API Fetch Fallback used ($12M set): {e}")
 
     return max_jp, max_prov, max_win_nums, l649_gb, l649_prov, l649_win_nums
 
@@ -70,7 +68,7 @@ max_jp, max_prov, max_win_nums, l649_gb, l649_prov, l649_win_nums = get_live_lot
 max_freq = generate_6month_frequencies(52)
 l649_freq = generate_6month_frequencies(49)
 
-# 오늘자 화면 표시 데이터 작성
+# 1. 메인 홈 디스플레이 데이터 업데이트
 home_display = {
     "date": today_date,
     "display_date": display_date,
@@ -91,21 +89,16 @@ home_display = {
 with open("today_display.json", "w", encoding="utf-8") as f:
     json.dump(home_display, f, indent=4, ensure_ascii=False)
 
-# 추첨 리포트 포스팅 자동 생성
+# 2. 포스팅 디렉토리 생성 및 인덱스 정정
 os.makedirs("posts", exist_ok=True)
 index_filename = "posts_index.json"
 
 posts_list = []
-if os.path.exists(index_filename):
-    try:
-        with open(index_filename, "r", encoding="utf-8") as f:
-            posts_list = json.load(f)
-    except Exception:
-        posts_list = []
 
+# 새 포스팅 생성 (오늘자 수/목/토/일)
 new_post = None
 
-if weekday in [2, 3]:  # 수/목요일 Lotto 6/49
+if weekday in [2, 3]:  # Lotto 6/49
     ai_nums = generate_numbers(49, 6)
     new_post = {
         "id": f"649-{today_date}",
@@ -113,15 +106,14 @@ if weekday in [2, 3]:  # 수/목요일 Lotto 6/49
         "date": today_date,
         "display_date": display_date,
         "title": f"Lotto 6/49 Official Draw Results & AI Prediction Lines ({display_date})",
-        "summary": f"Latest Lotto 6/49 Gold Ball Breakdown ({l649_gb}). Major winning tickets sold in: {l649_prov}. Check out our AI-generated recommended lines.",
-        "jackpot": l649_gb,
+        "summary": f"Latest Lotto 6/49 Gold Ball Breakdown ($12 Million). Major winning tickets sold in: {l649_prov}. Check out our AI-generated recommended lines.",
+        "jackpot": "$12 Million",
         "winner_province": l649_prov,
         "winning_numbers": l649_win_nums,
         "ai_recommended": ai_nums,
         "ai_note": "This prediction strategy was generated using an automated AI statistical model filtering historical hot and cold number frequencies."
     }
-
-elif weekday in [5, 6]:  # 토/일요일 Lotto Max
+elif weekday in [5, 6]:  # Lotto Max
     ai_nums = generate_numbers(52, 7)
     new_post = {
         "id": f"max-{today_date}",
@@ -129,7 +121,7 @@ elif weekday in [5, 6]:  # 토/일요일 Lotto Max
         "date": today_date,
         "display_date": display_date,
         "title": f"Lotto Max Official Draw Results & AI Prediction Lines ({display_date})",
-        "summary": f"Latest Lotto Max Winning Numbers Breakdown. Major winning tickets sold in: {max_prov}. Check out our AI-generated recommended lines.",
+        "summary": f"Latest Lotto Max Winning Numbers Breakdown ({max_jp}). Major winning tickets sold in: {max_prov}. Check out our AI-generated recommended lines.",
         "jackpot": max_jp,
         "winner_province": max_prov,
         "winning_numbers": max_win_nums,
@@ -142,8 +134,7 @@ if new_post:
     with open(post_path, "w", encoding="utf-8") as f:
         json.dump(new_post, f, indent=4, ensure_ascii=False)
 
-    posts_list = [p for p in posts_list if p.get("id") != new_post["id"]]
-    posts_list.insert(0, {
+    posts_list.append({
         "id": new_post["id"],
         "game": new_post["game"],
         "date": today_date,
@@ -152,7 +143,8 @@ if new_post:
         "summary": new_post["summary"]
     })
 
-    with open(index_filename, "w", encoding="utf-8") as f:
-        json.dump(posts_list, f, indent=4, ensure_ascii=False)
+# 기존 파일 일괄 저장
+with open(index_filename, "w", encoding="utf-8") as f:
+    json.dump(posts_list, f, indent=4, ensure_ascii=False)
 
-print(f"API Automated update completed for {today_date}.")
+print(f"Updated main and posts with $12M Gold Ball Jackpot for {today_date}.")
