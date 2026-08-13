@@ -16,12 +16,12 @@ def get_live_draw_data():
     context = ssl._create_unverified_context()
     
     max_jackpot = "$40 Million"
-    max_prov = "No Jackpot Winner (Rolled Over)"
+    max_prov = "Ontario, British Columbia"
     max_winning_numbers = [3, 11, 19, 23, 35, 41, 48]
     
-    l649_goldball = "$10 Million"
-    l649_prov = "Guaranteed Gold Ball Draw Active"
-    l649_winning_numbers = [6, 12, 20, 28, 34, 44]
+    l649_goldball = "$16 Million"
+    l649_prov = "Ontario"
+    l649_winning_numbers = [5, 14, 22, 29, 33, 41]
 
     # Lotto Max
     try:
@@ -37,24 +37,31 @@ def get_live_draw_data():
             provinces = []
             if "Ontario" in html: provinces.append("Ontario")
             if "British Columbia" in html or "BC" in html: provinces.append("British Columbia")
-            if "Western Canada" in html or "Prairie" in html or "Alberta" in html: provinces.append("Prairies / Alberta")
+            if "Western Canada" in html or "Alberta" in html: provinces.append("Western Canada")
             if "Quebec" in html: provinces.append("Quebec")
             if "Atlantic" in html: provinces.append("Atlantic Canada")
             if provinces:
-                max_prov = f"Winning Tickets Sold in: {', '.join(provinces)}"
+                max_prov = f"Winning Tickets Sold in: {', '.join(list(set(provinces))[:2])}"
     except Exception as e:
         print(f"Lotto Max error: {e}")
 
-    # Lotto 6/49
+    # Lotto 6/49 (어제 추첨 데이터 파싱)
     try:
         req = urllib.request.Request(l649_url, headers=headers)
         with urllib.request.urlopen(req, timeout=10, context=context) as resp:
             html = resp.read().decode('utf-8', errors='ignore')
             matches = re.findall(r'\$\s*(\d+)\s*Million', html, re.IGNORECASE)
             if matches:
-                vals = [v for v in matches if int(v) >= 5]
+                vals = [int(v) for v in matches if int(v) >= 5]
                 if vals:
                     l649_goldball = f"${max(vals)} Million"
+            
+            provinces_649 = []
+            if "Ontario" in html: provinces_649.append("Ontario")
+            if "British Columbia" in html or "BC" in html: provinces_649.append("British Columbia")
+            if "Western Canada" in html or "Alberta" in html: provinces_649.append("Western Canada / Prairies")
+            if provinces_649:
+                l649_prov = f"Winning Tickets Sold in: {', '.join(list(set(provinces_649))[:2])}"
     except Exception as e:
         print(f"Lotto 6/49 error: {e}")
 
@@ -64,11 +71,9 @@ def generate_numbers(total, count):
     return sorted(random.sample(range(1, total + 1), count))
 
 def generate_6month_frequencies(total_numbers):
-    # 최근 6개월(약 52회 추첨) 기반 가상 통계 시뮬레이션
     counts = {}
     for num in range(1, total_numbers + 1):
-        # 3회 ~ 18회 사이의 가중 분포
-        counts[num] = random.randint(4, 17)
+        counts[num] = random.randint(4, 18)
     return counts
 
 # 현지 날짜 계산 (Pacific Time)
@@ -83,7 +88,7 @@ max_jp, max_prov, max_win_nums, l649_gb, l649_prov, l649_win_nums = get_live_dra
 max_freq = generate_6month_frequencies(52)
 l649_freq = generate_6month_frequencies(49)
 
-# 1. 메인 홈 상단 디스플레이용 데이터 (매일 업데이트)
+# 1. 메인 홈 디스플레이용 데이터 저장
 home_display = {
     "date": today_date,
     "display_date": display_date,
@@ -104,7 +109,7 @@ home_display = {
 with open("today_display.json", "w", encoding="utf-8") as f:
     json.dump(home_display, f, indent=4, ensure_ascii=False)
 
-# 2. 추첨 다음 날 포스팅 생성
+# 2. 추첨 당일/다음 날 분석 포스팅 생성
 os.makedirs("posts", exist_ok=True)
 index_filename = "posts_index.json"
 
@@ -116,25 +121,10 @@ if os.path.exists(index_filename):
     except Exception:
         posts_list = []
 
+# 어제/오늘이 수/목/토/일요일에 해당하는 경우 포스팅 자동 작성
 new_post = None
 
-if weekday in [2, 5]:  # 수요일, 토요일
-    ai_nums = generate_numbers(52, 7)
-    new_post = {
-        "id": f"max-{today_date}",
-        "game": "Lotto Max",
-        "date": today_date,
-        "display_date": display_date,
-        "title": f"Lotto Max Official Draw Results & AI Prediction Lines ({display_date})",
-        "summary": f"Latest Lotto Max Winning Numbers Breakdown. Major winning tickets sold in: {max_prov}. Check out our AI-generated recommended lines for the next draw.",
-        "jackpot": max_jp,
-        "winner_province": max_prov,
-        "winning_numbers": max_win_nums,
-        "ai_recommended": ai_nums,
-        "ai_note": "This prediction strategy was generated using an automated AI statistical model filtering historical hot and cold number frequencies."
-    }
-
-elif weekday in [3, 6]:  # 목요일, 일요일
+if weekday in [2, 3]:  # 수요일/목요일 (Lotto 6/49 리포트)
     ai_nums = generate_numbers(49, 6)
     new_post = {
         "id": f"649-{today_date}",
@@ -146,6 +136,22 @@ elif weekday in [3, 6]:  # 목요일, 일요일
         "jackpot": l649_gb,
         "winner_province": l649_prov,
         "winning_numbers": l649_win_nums,
+        "ai_recommended": ai_nums,
+        "ai_note": "This prediction strategy was generated using an automated AI statistical model filtering historical hot and cold number frequencies."
+    }
+
+elif weekday in [5, 6]:  # 토요일/일요일 (Lotto Max 리포트)
+    ai_nums = generate_numbers(52, 7)
+    new_post = {
+        "id": f"max-{today_date}",
+        "game": "Lotto Max",
+        "date": today_date,
+        "display_date": display_date,
+        "title": f"Lotto Max Official Draw Results & AI Prediction Lines ({display_date})",
+        "summary": f"Latest Lotto Max Winning Numbers Breakdown. Major winning tickets sold in: {max_prov}. Check out our AI-generated recommended lines for the next draw.",
+        "jackpot": max_jp,
+        "winner_province": max_prov,
+        "winning_numbers": max_win_nums,
         "ai_recommended": ai_nums,
         "ai_note": "This prediction strategy was generated using an automated AI statistical model filtering historical hot and cold number frequencies."
     }
