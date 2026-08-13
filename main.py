@@ -6,7 +6,6 @@ import os
 from datetime import datetime, timezone, timedelta
 
 def get_live_lotto_data():
-    # 기본값 (이번 주 토요일 6/49 골드볼 $12M 반영)
     max_jp = "$40 Million"
     max_prov = "British Columbia, Ontario"
     max_win_nums = [3, 11, 19, 23, 35, 41, 48]
@@ -18,7 +17,6 @@ def get_live_lotto_data():
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
     context = ssl._create_unverified_context()
 
-    # WCLC 공식 JSON API 연동
     api_url = "https://www.wclc.com/api/winning-numbers.json"
     
     try:
@@ -68,7 +66,7 @@ max_jp, max_prov, max_win_nums, l649_gb, l649_prov, l649_win_nums = get_live_lot
 max_freq = generate_6month_frequencies(52)
 l649_freq = generate_6month_frequencies(49)
 
-# 1. 메인 홈 디스플레이 데이터 업데이트
+# 1. 메인 홈 디스플레이 데이터
 home_display = {
     "date": today_date,
     "display_date": display_date,
@@ -89,13 +87,20 @@ home_display = {
 with open("today_display.json", "w", encoding="utf-8") as f:
     json.dump(home_display, f, indent=4, ensure_ascii=False)
 
-# 2. 포스팅 디렉토리 생성 및 인덱스 정정
+# 2. 포스팅 저장 및 누적 업데이트
 os.makedirs("posts", exist_ok=True)
 index_filename = "posts_index.json"
 
 posts_list = []
 
-# 새 포스팅 생성 (오늘자 수/목/토/일)
+# 기존 포스팅 목록 불러오기 (이전 포스팅 삭제 방지)
+if os.path.exists(index_filename):
+    try:
+        with open(index_filename, "r", encoding="utf-8") as f:
+            posts_list = json.load(f)
+    except Exception:
+        posts_list = []
+
 new_post = None
 
 if weekday in [2, 3]:  # Lotto 6/49
@@ -130,11 +135,14 @@ elif weekday in [5, 6]:  # Lotto Max
     }
 
 if new_post:
+    # 새 개별 포스팅 JSON 저장
     post_path = f"posts/{new_post['id']}.json"
     with open(post_path, "w", encoding="utf-8") as f:
         json.dump(new_post, f, indent=4, ensure_ascii=False)
 
-    posts_list.append({
+    # 기존 리스트에서 중복 ID 제거 후 맨 앞에 추가
+    posts_list = [p for p in posts_list if p.get("id") != new_post["id"]]
+    posts_list.insert(0, {
         "id": new_post["id"],
         "game": new_post["game"],
         "date": today_date,
@@ -143,8 +151,29 @@ if new_post:
         "summary": new_post["summary"]
     })
 
-# 기존 파일 일괄 저장
+# 백업 복구: `posts/` 폴더 내 기존 파일들 중 누락된 포스팅이 있으면 리스트에 자동으로 복구
+for file_name in os.listdir("posts"):
+    if file_name.endswith(".json"):
+        p_id = file_name.replace(".json", "")
+        if not any(p.get("id") == p_id for p in posts_list):
+            try:
+                with open(os.path.join("posts", file_name), "r", encoding="utf-8") as pf:
+                    p_data = json.load(pf)
+                    posts_list.append({
+                        "id": p_data.get("id", p_id),
+                        "game": p_data.get("game", "Lotto"),
+                        "date": p_data.get("date", ""),
+                        "display_date": p_data.get("display_date", ""),
+                        "title": p_data.get("title", ""),
+                        "summary": p_data.get("summary", "")
+                    })
+            except Exception:
+                pass
+
+# 날짜 순 정렬 (최신글이 맨 위로)
+posts_list.sort(key=lambda x: x.get("date", ""), reverse=True)
+
 with open(index_filename, "w", encoding="utf-8") as f:
     json.dump(posts_list, f, indent=4, ensure_ascii=False)
 
-print(f"Updated main and posts with $12M Gold Ball Jackpot for {today_date}.")
+print(f"Preserved all historical posts and updated for {today_date}.")
