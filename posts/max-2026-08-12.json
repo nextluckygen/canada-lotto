@@ -17,13 +17,13 @@
         48
     ],
     "ai_recommended": [
-        5,
-        7,
-        18,
-        21,
+        9,
         23,
-        25,
-        44
+        27,
+        38,
+        39,
+        42,
+        46
     ],
     "ai_note": "This prediction strategy was generated using an automated AI statistical model filtering historical hot and cold number frequencies."
 }
