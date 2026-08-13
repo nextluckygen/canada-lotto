@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Canada Official Lotto Portal | Max & 6/49</title>
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -53,207 +54,263 @@
         .bg-ball-purple { background-color: #9333ea !important; }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen text-slate-900 font-sans">
+<body class="bg-slate-50 min-h-screen text-slate-900 font-sans flex flex-col justify-between">
 
-    <!-- Header Navigation -->
-    <header class="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-700 text-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-4xl mx-auto px-4 py-5 flex items-center justify-between">
-            <a href="#" onclick="showHome(); return false;" class="flex items-center gap-3">
-                <div class="bg-amber-400 text-slate-900 font-black px-3 py-1 rounded-lg text-base tracking-widest shadow">CANADA LOTTO</div>
-                <div>
-                    <h1 class="text-lg sm:text-2xl font-bold tracking-tight">Official Helper Portal</h1>
-                    <p class="text-xs text-teal-100 hidden sm:block">AI Statistical Analysis & Daily Draw Strategy</p>
-                </div>
-            </a>
-            <button onclick="scrollToPosts()" class="text-xs font-bold bg-white/10 hover:bg-white/20 px-3.5 py-2 rounded-xl transition border border-white/20">
-                📚 Draw Reports
-            </button>
-        </div>
-    </header>
-
-    <!-- Main Container -->
-    <main class="max-w-3xl mx-auto px-4 py-8 space-y-10">
-        
-        <!-- View 1: Main Interactive Display & Post List -->
-        <div id="view-main" class="space-y-10">
-            
-            <!-- Game Switcher Tabs -->
-            <div class="flex justify-center gap-3">
-                <button id="tab-max" onclick="switchGame('max')" class="px-6 py-3.5 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-emerald-600 text-white">
-                    💚 LOTTO MAX (1-52)
-                </button>
-                <button id="tab-649" onclick="switchGame('649')" class="px-6 py-3.5 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">
-                    💙 LOTTO 6/49 (1-49)
-                </button>
-            </div>
-
-            <!-- Lotto Max Main Card -->
-            <div id="card-max" class="space-y-6">
-                <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
-                    <div class="bg-slate-900 p-6 text-center text-white">
-                        <span class="bg-amber-400 text-slate-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-widest block w-max mx-auto mb-2">Lotto Max Main Jackpot</span>
-                        <h2 id="max-jackpot" class="text-4xl sm:text-5xl font-black text-amber-300">EST. $40 Million</h2>
-                        
-                        <!-- Winning Province Badge -->
-                        <div class="mt-4 bg-slate-800/80 border border-slate-700/80 p-2.5 rounded-xl max-w-md mx-auto text-xs text-amber-200/90 font-medium">
-                            🇨🇦 <span id="max-prov-text">Checking winning locations...</span>
-                        </div>
-                    </div>
-                    
-                    <div class="p-6 sm:p-8 text-center space-y-8">
-                        <!-- 1. Last Draw Winning Numbers -->
-                        <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200/80">
-                            <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider block mb-3">⚡ Latest Official Draw Winning Numbers</span>
-                            <div id="max-win-balls" class="ball-flex-container"></div>
-                        </div>
-
-                        <!-- 2. AI Recommended Line Strategy -->
-                        <div>
-                            <h3 class="text-lg font-bold text-slate-800 mb-1">🤖 AI Recommended Line Strategy For Next Draw</h3>
-                            <p class="text-xs text-slate-500 mb-5">7 Numbers generated with Hot/Cold historical frequency filter</p>
-                            
-                            <div id="max-balls" class="ball-flex-container mb-6"></div>
-                            
-                            <button onclick="generateNewNumbers('max')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3.5 px-8 rounded-2xl shadow-lg transition">🎲 Generate Different Numbers</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Lotto 6/49 Main Card -->
-            <div id="card-649" class="space-y-6 hidden">
-                <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
-                    <div class="bg-slate-900 p-6 text-center text-white">
-                        <span class="bg-blue-400 text-slate-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-widest block w-max mx-auto mb-2">Lotto 6/49 Draw Breakdown</span>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
-                            <div class="bg-white/10 p-3 rounded-2xl backdrop-blur">
-                                <span class="text-xs text-slate-300 block">Gold Ball Jackpot</span>
-                                <span id="goldball-amount" class="text-2xl font-black text-amber-300">$10 Million</span>
-                            </div>
-                            <div class="bg-white/10 p-3 rounded-2xl backdrop-blur">
-                                <span class="text-xs text-slate-300 block">Classic Jackpot</span>
-                                <span id="classic-amount" class="text-2xl font-black text-blue-300">$5 Million</span>
-                            </div>
-                        </div>
-
-                        <!-- Winning Province Badge -->
-                        <div class="mt-4 bg-slate-800/80 border border-slate-700/80 p-2.5 rounded-xl max-w-md mx-auto text-xs text-blue-200/90 font-medium">
-                            🇨🇦 <span id="l649-prov-text">Checking winning locations...</span>
-                        </div>
-                    </div>
-
-                    <div class="p-6 sm:p-8 text-center space-y-8">
-                        <!-- 1. Last Draw Winning Numbers -->
-                        <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200/80">
-                            <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider block mb-3">⚡ Latest Official Draw Winning Numbers</span>
-                            <div id="l649-win-balls" class="ball-flex-container"></div>
-                        </div>
-
-                        <!-- 2. AI Recommended Line Strategy -->
-                        <div>
-                            <h3 class="text-lg font-bold text-slate-800 mb-1">🤖 AI Recommended Line Strategy For Next Draw</h3>
-                            <p class="text-xs text-slate-500 mb-5">6 Numbers generated with Hot/Cold historical frequency filter</p>
-                            
-                            <div id="l649-balls" class="ball-flex-container mb-6"></div>
-
-                            <button onclick="generateNewNumbers('649')" class="bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3.5 px-8 rounded-2xl shadow-lg transition">🎲 Generate Different Numbers</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 3. Ultra-Compact 13-Per-Row Frequency Grid -->
-            <div class="bg-white rounded-3xl shadow-xl border border-slate-200/80 p-4 sm:p-5 space-y-3 overflow-x-auto">
-                <div class="border-b pb-2.5 flex flex-wrap items-center justify-between gap-2">
+    <div>
+        <!-- Header Navigation -->
+        <header class="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-700 text-white shadow-lg sticky top-0 z-50">
+            <div class="max-w-4xl mx-auto px-4 py-5 flex items-center justify-between">
+                <a href="#" onclick="showHome(); return false;" class="flex items-center gap-3">
+                    <div class="bg-amber-400 text-slate-900 font-black px-3 py-1 rounded-lg text-base tracking-widest shadow">CANADA LOTTO</div>
                     <div>
-                        <h2 class="text-sm sm:text-base font-black text-slate-900 flex items-center gap-1.5">
-                            📊 <span id="freq-title">Lotto Max</span> Frequency (6 Months)
-                        </h2>
-                        <p class="text-[10px] text-slate-500">Occurrence breakdown over past draws</p>
+                        <h1 class="text-lg sm:text-2xl font-bold tracking-tight">Official Helper Portal</h1>
+                        <p class="text-xs text-teal-100 hidden sm:block">AI Statistical Analysis & Daily Draw Strategy</p>
                     </div>
-                    <!-- Color Legend -->
-                    <div class="flex items-center gap-1 text-[9px] font-bold">
-                        <span class="px-1.5 py-0.5 bg-red-100 text-red-700 rounded border border-red-200">🔥 Hot</span>
-                        <span class="px-1.5 py-0.5 bg-emerald-100 text-emerald-700 rounded border border-emerald-200">⚡ Mid</span>
-                        <span class="px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded border border-slate-200">❄️ Cold</span>
-                    </div>
-                </div>
-
-                <!-- 13 Columns Grid Container -->
-                <div id="freq-grid-container" class="grid grid-cols-13 gap-1 min-w-[520px]">
-                    <div class="col-span-full text-center text-xs text-slate-400 py-4">Loading frequency data...</div>
-                </div>
+                </a>
+                <button onclick="scrollToPosts()" class="text-xs font-bold bg-white/10 hover:bg-white/20 px-3.5 py-2 rounded-xl transition border border-white/20">
+                    📚 Draw Reports
+                </button>
             </div>
+        </header>
 
-            <!-- Blog Posts Section -->
-            <div id="posts-section" class="pt-6 border-t border-slate-200 space-y-4">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-lg sm:text-xl font-black text-slate-800">Latest Draw Analysis Reports</h2>
-                    <span class="text-xs text-teal-600 font-bold">Updated Wed, Thu, Sat, Sun</span>
-                </div>
+        <!-- Main Container -->
+        <main class="max-w-3xl mx-auto px-4 py-8 space-y-10">
+            
+            <!-- View 1: Main Interactive Display & Post List -->
+            <div id="view-main" class="space-y-10">
                 
-                <div id="posts-container" class="space-y-3">
-                    <div class="p-6 text-center text-slate-400 text-xs">Loading latest draw reports...</div>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- View 2: Single Post Detail View -->
-        <div id="view-post" class="space-y-4 hidden">
-            <button onclick="showHome()" class="text-xs font-bold text-teal-700 hover:underline flex items-center gap-1">
-                ← Back to Portal Home
-            </button>
-
-            <article class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
-                <div class="bg-slate-900 p-6 sm:p-8 text-white border-b border-slate-800">
-                    <span id="post-game-badge" class="bg-amber-400 text-slate-950 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest inline-block mb-2">Game</span>
-                    <h2 id="post-title" class="text-xl sm:text-2xl font-black leading-snug">Post Title</h2>
-                    <p id="post-date" class="text-xs text-slate-400 mt-2">Date</p>
-                </div>
-
-                <div class="p-6 sm:p-8 space-y-6">
-                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3">
-                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Official Draw Results</h3>
-                        <div class="flex items-center justify-between">
-                            <span id="post-jackpot" class="text-base font-black text-emerald-700">Jackpot</span>
-                        </div>
-                        <div id="post-win-balls" class="ball-flex-container"></div>
-                        <div class="bg-white p-3 rounded-xl text-xs font-medium text-slate-700 border">
-                            📍 <strong>Winning Locations:</strong> <span id="post-prov">Checking...</span>
-                        </div>
-                    </div>
-
-                    <div class="bg-emerald-50/60 p-5 rounded-2xl border border-emerald-100 space-y-3">
-                        <div class="flex items-center justify-between">
-                            <h3 class="text-sm font-black text-emerald-950">🤖 AI Recommended Prediction Line For Next Draw</h3>
-                            <span class="text-[10px] bg-emerald-200 text-emerald-800 font-bold px-2 py-0.5 rounded">AI Model</span>
-                        </div>
-                        <p id="post-ai-note" class="text-xs text-slate-600 leading-relaxed">Generated using statistical frequency analysis.</p>
-                        <div id="post-ai-balls" class="ball-flex-container pt-2"></div>
-                    </div>
-
-                    <button onclick="showHome()" class="w-full py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-2xl text-xs transition">
-                        ← Return to Portal Home
+                <!-- Game Switcher Tabs -->
+                <div class="flex justify-center gap-3">
+                    <button id="tab-max" onclick="switchGame('max')" class="px-6 py-3.5 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-emerald-600 text-white">
+                        💚 LOTTO MAX (1-52)
+                    </button>
+                    <button id="tab-649" onclick="switchGame('649')" class="px-6 py-3.5 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">
+                        💙 LOTTO 6/49 (1-49)
                     </button>
                 </div>
-            </article>
-        </div>
 
-        <!-- Official Disclaimer -->
-        <div class="bg-white rounded-3xl shadow-md p-6 border border-slate-200 space-y-3">
-            <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wide border-b pb-2">⚖️ Disclaimer & Terms of Use</h3>
-            <p class="text-xs text-slate-500 leading-relaxed">
-                Numbers generated on this portal are calculated using automated AI statistical algorithms based on historical frequency (Hot/Cold patterns). They do NOT guarantee winning outcomes. Please play responsibly for entertainment purposes only.
-            </p>
-            <p class="text-[10px] text-slate-400 text-center pt-2">© 2026 lottohelper.ca. All rights reserved.</p>
-        </div>
+                <!-- Lotto Max Main Card -->
+                <div id="card-max" class="space-y-6">
+                    <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
+                        <div class="bg-slate-900 p-6 text-center text-white">
+                            <span class="bg-amber-400 text-slate-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-widest block w-max mx-auto mb-2">Lotto Max Main Jackpot</span>
+                            <h2 id="max-jackpot" class="text-4xl sm:text-5xl font-black text-amber-300">EST. $40 Million</h2>
+                            
+                            <!-- Winning Province Badge -->
+                            <div class="mt-4 bg-slate-800/80 border border-slate-700/80 p-2.5 rounded-xl max-w-md mx-auto text-xs text-amber-200/90 font-medium">
+                                🇨🇦 <span id="max-prov-text">Checking winning locations...</span>
+                            </div>
+                        </div>
+                        
+                        <div class="p-6 sm:p-8 text-center space-y-8">
+                            <!-- 1. Last Draw Winning Numbers -->
+                            <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200/80">
+                                <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider block mb-3">⚡ Latest Official Draw Winning Numbers</span>
+                                <div id="max-win-balls" class="ball-flex-container"></div>
+                            </div>
 
-    </main>
+                            <!-- 2. AI Recommended Line Strategy -->
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-800 mb-1">🤖 AI Recommended Line Strategy For Next Draw</h3>
+                                <p class="text-xs text-slate-500 mb-5">7 Numbers generated with Hot/Cold historical frequency filter</p>
+                                
+                                <div id="max-balls" class="ball-flex-container mb-6"></div>
+                                
+                                <button onclick="generateNewNumbers('max')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3.5 px-8 rounded-2xl shadow-lg transition">🎲 Generate Different Numbers</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lotto 6/49 Main Card -->
+                <div id="card-649" class="space-y-6 hidden">
+                    <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
+                        <div class="bg-slate-900 p-6 text-center text-white">
+                            <span class="bg-blue-400 text-slate-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-widest block w-max mx-auto mb-2">Lotto 6/49 Draw Breakdown</span>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
+                                <div class="bg-white/10 p-3 rounded-2xl backdrop-blur">
+                                    <span class="text-xs text-slate-300 block">Gold Ball Jackpot</span>
+                                    <span id="goldball-amount" class="text-2xl font-black text-amber-300">$12 Million</span>
+                                </div>
+                                <div class="bg-white/10 p-3 rounded-2xl backdrop-blur">
+                                    <span class="text-xs text-slate-300 block">Classic Jackpot</span>
+                                    <span id="classic-amount" class="text-2xl font-black text-blue-300">$5 Million</span>
+                                </div>
+                            </div>
+
+                            <!-- Winning Province Badge -->
+                            <div class="mt-4 bg-slate-800/80 border border-slate-700/80 p-2.5 rounded-xl max-w-md mx-auto text-xs text-blue-200/90 font-medium">
+                                🇨🇦 <span id="l649-prov-text">Checking winning locations...</span>
+                            </div>
+                        </div>
+
+                        <div class="p-6 sm:p-8 text-center space-y-8">
+                            <!-- 1. Last Draw Winning Numbers -->
+                            <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200/80">
+                                <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider block mb-3">⚡ Latest Official Draw Winning Numbers</span>
+                                <div id="l649-win-balls" class="ball-flex-container"></div>
+                            </div>
+
+                            <!-- 2. AI Recommended Line Strategy -->
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-800 mb-1">🤖 AI Recommended Line Strategy For Next Draw</h3>
+                                <p class="text-xs text-slate-500 mb-5">6 Numbers generated with Hot/Cold historical frequency filter</p>
+                                
+                                <div id="l649-balls" class="ball-flex-container mb-6"></div>
+
+                                <button onclick="generateNewNumbers('649')" class="bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-3.5 px-8 rounded-2xl shadow-lg transition">🎲 Generate Different Numbers</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Ultra-Compact 13-Per-Row Frequency Grid -->
+                <div class="bg-white rounded-3xl shadow-xl border border-slate-200/80 p-4 sm:p-5 space-y-3 overflow-x-auto">
+                    <div class="border-b pb-2.5 flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                            <h2 class="text-sm sm:text-base font-black text-slate-900 flex items-center gap-1.5">
+                                📊 <span id="freq-title">Lotto Max</span> Frequency (6 Months)
+                            </h2>
+                            <p class="text-[10px] text-slate-500">Occurrence breakdown over past draws</p>
+                        </div>
+                        <!-- Color Legend -->
+                        <div class="flex items-center gap-1 text-[9px] font-bold">
+                            <span class="px-1.5 py-0.5 bg-red-100 text-red-700 rounded border border-red-200">🔥 Hot</span>
+                            <span class="px-1.5 py-0.5 bg-emerald-100 text-emerald-700 rounded border border-emerald-200">⚡ Mid</span>
+                            <span class="px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded border border-slate-200">❄️ Cold</span>
+                        </div>
+                    </div>
+
+                    <!-- 13 Columns Grid Container -->
+                    <div id="freq-grid-container" class="grid grid-cols-13 gap-1 min-w-[520px]">
+                        <div class="col-span-full text-center text-xs text-slate-400 py-4">Loading frequency data...</div>
+                    </div>
+                </div>
+
+                <!-- Blog Posts Section -->
+                <div id="posts-section" class="pt-6 border-t border-slate-200 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-lg sm:text-xl font-black text-slate-800">Latest Draw Analysis Reports</h2>
+                        <span class="text-xs text-teal-600 font-bold">Updated Wed, Thu, Sat, Sun</span>
+                    </div>
+                    
+                    <div id="posts-container" class="space-y-3">
+                        <div class="p-6 text-center text-slate-400 text-xs">Loading latest draw reports...</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- View 2: Single Post Detail View -->
+            <div id="view-post" class="space-y-4 hidden">
+                <button onclick="showHome()" class="text-xs font-bold text-teal-700 hover:underline flex items-center gap-1">
+                    ← Back to Portal Home
+                </button>
+
+                <article class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
+                    <div class="bg-slate-900 p-6 sm:p-8 text-white border-b border-slate-800">
+                        <span id="post-game-badge" class="bg-amber-400 text-slate-950 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest inline-block mb-2">Game</span>
+                        <h2 id="post-title" class="text-xl sm:text-2xl font-black leading-snug">Post Title</h2>
+                        <p id="post-date" class="text-xs text-slate-400 mt-2">Date</p>
+                    </div>
+
+                    <div class="p-6 sm:p-8 space-y-6">
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3">
+                            <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Official Draw Results</h3>
+                            <div class="flex items-center justify-between">
+                                <span id="post-jackpot" class="text-base font-black text-emerald-700">Jackpot</span>
+                            </div>
+                            <div id="post-win-balls" class="ball-flex-container"></div>
+                            <div class="bg-white p-3 rounded-xl text-xs font-medium text-slate-700 border">
+                                📍 <strong>Winning Locations:</strong> <span id="post-prov">Checking...</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-emerald-50/60 p-5 rounded-2xl border border-emerald-100 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-sm font-black text-emerald-950">🤖 AI Recommended Prediction Line For Next Draw</h3>
+                                <span class="text-[10px] bg-emerald-200 text-emerald-800 font-bold px-2 py-0.5 rounded">AI Model</span>
+                            </div>
+                            <p id="post-ai-note" class="text-xs text-slate-600 leading-relaxed">Generated using statistical frequency analysis.</p>
+                            <div id="post-ai-balls" class="ball-flex-container pt-2"></div>
+                        </div>
+
+                        <button onclick="showHome()" class="w-full py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-2xl text-xs transition">
+                            ← Return to Portal Home
+                        </button>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Official Disclaimer -->
+            <div class="bg-white rounded-3xl shadow-md p-6 border border-slate-200 space-y-3">
+                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wide border-b pb-2">⚖️ Disclaimer & Terms of Use</h3>
+                <p class="text-xs text-slate-500 leading-relaxed">
+                    Numbers generated on this portal are calculated using automated AI statistical algorithms based on historical frequency (Hot/Cold patterns). They do NOT guarantee winning outcomes. Please play responsibly for entertainment purposes only.
+                </p>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Footer Area with Privacy Policy Link -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-6 mt-12 border-t border-slate-800">
+        <div class="max-w-3xl mx-auto px-4 text-center space-y-2">
+            <p>© 2026 lottohelper.ca. All rights reserved.</p>
+            <div class="flex justify-center gap-4 text-slate-300 font-medium pt-1">
+                <a href="#" onclick="openPrivacyModal(); return false;" class="hover:text-amber-400 underline transition">Privacy Policy</a>
+                <span>•</span>
+                <a href="#" onclick="showHome(); return false;" class="hover:text-amber-400 underline transition">Home</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Privacy Policy Modal Window -->
+    <div id="privacy-modal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[85vh] overflow-hidden shadow-2xl border border-slate-200 flex flex-col">
+            <!-- Modal Header -->
+            <div class="bg-slate-900 text-white p-5 flex items-center justify-between border-b border-slate-800">
+                <h3 class="font-black text-base flex items-center gap-2">🔒 Privacy Policy</h3>
+                <button onclick="closePrivacyModal()" class="text-slate-400 hover:text-white text-xl font-bold p-1">✕</button>
+            </div>
+            
+            <!-- Modal Body (AdSense Compliant Text) -->
+            <div class="p-6 space-y-4 overflow-y-auto text-xs text-slate-600 leading-relaxed">
+                <p class="font-bold text-slate-800">Last updated: August 13, 2026</p>
+                
+                <h4 class="font-bold text-slate-800 text-sm border-b pb-1">1. Information We Collect</h4>
+                <p>lottohelper.ca does not require personal user registration or request personal identifying data. We collect standard server web log information and performance data to optimize site performance.</p>
+
+                <h4 class="font-bold text-slate-800 text-sm border-b pb-1">2. Cookies and Third-Party Advertising</h4>
+                <p>We may use third-party advertising companies, such as Google AdSense, to serve ads when you visit our website. These companies may use cookies and web beacons to collect non-personally identifiable information (such as your IP address, browser type, and click activity) to provide relevant advertisements about goods and services of interest to you.</p>
+
+                <h4 class="font-bold text-slate-800 text-sm border-b pb-1">3. Google DART Cookies</h4>
+                <p>Google, as a third-party vendor, uses cookies to serve ads on lottohelper.ca. Google's use of the DART cookie enables it to serve ads to users based on their visit to our site and other sites on the Internet. Users may opt out of the use of the DART cookie by visiting the Google Ad and Content Network privacy policy.</p>
+
+                <h4 class="font-bold text-slate-800 text-sm border-b pb-1">4. Disclaimer</h4>
+                <p>This website is an independent analytical portal and is not affiliated with or endorsed by WCLC, BCLC, or any official Canadian lottery corporation.</p>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 bg-slate-50 border-t text-right">
+                <button onclick="closePrivacyModal()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl text-xs transition">
+                    I Understand & Close
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script>
         let globalDisplayData = null;
         let currentGame = 'max';
+
+        function openPrivacyModal() {
+            document.getElementById('privacy-modal').classList.remove('hidden');
+        }
+
+        function closePrivacyModal() {
+            document.getElementById('privacy-modal').classList.add('hidden');
+        }
 
         function getBallColorClass(num) {
             if (num <= 10) return 'bg-ball-red';
@@ -398,7 +455,7 @@
                 }
             } catch (e) {
                 renderBalls('max-win-balls', [3, 11, 19, 23, 35, 41, 48]);
-                renderBalls('l649-win-balls', [6, 12, 20, 28, 34, 44]);
+                renderBalls('l649-win-balls', [5, 14, 22, 29, 33, 41]);
             }
 
             generateNewNumbers('max');
