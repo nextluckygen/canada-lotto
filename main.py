@@ -19,47 +19,59 @@ def get_live_draw_data():
     max_prov = "Ontario, British Columbia"
     max_winning_numbers = [3, 11, 19, 23, 35, 41, 48]
     
-    l649_goldball = "$16 Million"
-    l649_prov = "Ontario"
+    l649_goldball = "$10 Million"
+    l649_prov = "Ontario, Western Canada"
     l649_winning_numbers = [5, 14, 22, 29, 33, 41]
 
-    # Lotto Max
+    # 1. Lotto Max 파싱
     try:
         req = urllib.request.Request(max_url, headers=headers)
         with urllib.request.urlopen(req, timeout=10, context=context) as resp:
             html = resp.read().decode('utf-8', errors='ignore')
+            
+            # Jackpot 파싱
             matches = re.findall(r'\$\s*(\d+)\s*Million', html, re.IGNORECASE)
             if matches:
                 vals = [int(v) for v in matches]
                 if max(vals) >= 10:
                     max_jackpot = f"${max(vals)} Million"
 
+            # 당첨 번호 파싱
+            num_matches = re.findall(r'class=["\']num["\']>(\d+)<', html)
+            if len(num_matches) >= 7:
+                max_winning_numbers = sorted([int(x) for x in num_matches[:7]])
+
             provinces = []
             if "Ontario" in html: provinces.append("Ontario")
             if "British Columbia" in html or "BC" in html: provinces.append("British Columbia")
             if "Western Canada" in html or "Alberta" in html: provinces.append("Western Canada")
-            if "Quebec" in html: provinces.append("Quebec")
-            if "Atlantic" in html: provinces.append("Atlantic Canada")
             if provinces:
                 max_prov = f"Winning Tickets Sold in: {', '.join(list(set(provinces))[:2])}"
     except Exception as e:
         print(f"Lotto Max error: {e}")
 
-    # Lotto 6/49 (어제 추첨 데이터 파싱)
+    # 2. Lotto 6/49 파싱
     try:
         req = urllib.request.Request(l649_url, headers=headers)
         with urllib.request.urlopen(req, timeout=10, context=context) as resp:
             html = resp.read().decode('utf-8', errors='ignore')
+            
+            # Gold Ball / Jackpot 파싱
             matches = re.findall(r'\$\s*(\d+)\s*Million', html, re.IGNORECASE)
             if matches:
                 vals = [int(v) for v in matches if int(v) >= 5]
                 if vals:
                     l649_goldball = f"${max(vals)} Million"
-            
+
+            # 당첨 번호 파싱
+            num_matches = re.findall(r'class=["\']num["\']>(\d+)<', html)
+            if len(num_matches) >= 6:
+                l649_winning_numbers = sorted([int(x) for x in num_matches[:6]])
+
             provinces_649 = []
             if "Ontario" in html: provinces_649.append("Ontario")
             if "British Columbia" in html or "BC" in html: provinces_649.append("British Columbia")
-            if "Western Canada" in html or "Alberta" in html: provinces_649.append("Western Canada / Prairies")
+            if "Western Canada" in html or "Alberta" in html: provinces_649.append("Western Canada")
             if provinces_649:
                 l649_prov = f"Winning Tickets Sold in: {', '.join(list(set(provinces_649))[:2])}"
     except Exception as e:
@@ -88,7 +100,7 @@ max_jp, max_prov, max_win_nums, l649_gb, l649_prov, l649_win_nums = get_live_dra
 max_freq = generate_6month_frequencies(52)
 l649_freq = generate_6month_frequencies(49)
 
-# 1. 메인 홈 디스플레이용 데이터 저장
+# 메인 홈 디스플레이 데이터
 home_display = {
     "date": today_date,
     "display_date": display_date,
@@ -109,7 +121,7 @@ home_display = {
 with open("today_display.json", "w", encoding="utf-8") as f:
     json.dump(home_display, f, indent=4, ensure_ascii=False)
 
-# 2. 추첨 당일/다음 날 분석 포스팅 생성
+# 포스팅 작성
 os.makedirs("posts", exist_ok=True)
 index_filename = "posts_index.json"
 
@@ -121,10 +133,9 @@ if os.path.exists(index_filename):
     except Exception:
         posts_list = []
 
-# 어제/오늘이 수/목/토/일요일에 해당하는 경우 포스팅 자동 작성
 new_post = None
 
-if weekday in [2, 3]:  # 수요일/목요일 (Lotto 6/49 리포트)
+if weekday in [2, 3]:  # 수/목요일 Lotto 6/49 포스팅
     ai_nums = generate_numbers(49, 6)
     new_post = {
         "id": f"649-{today_date}",
@@ -139,8 +150,7 @@ if weekday in [2, 3]:  # 수요일/목요일 (Lotto 6/49 리포트)
         "ai_recommended": ai_nums,
         "ai_note": "This prediction strategy was generated using an automated AI statistical model filtering historical hot and cold number frequencies."
     }
-
-elif weekday in [5, 6]:  # 토요일/일요일 (Lotto Max 리포트)
+elif weekday in [5, 6]:  # 토/일요일 Lotto Max 포스팅
     ai_nums = generate_numbers(52, 7)
     new_post = {
         "id": f"max-{today_date}",
