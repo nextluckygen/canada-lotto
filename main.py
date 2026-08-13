@@ -1,52 +1,51 @@
 import json
 import random
 import urllib.request
-import xml.etree.ElementTree as ET
 import ssl
 import os
 from datetime import datetime, timezone, timedelta
 
-def get_official_rss_data():
-    # WCLC 공식 당첨 번호 RSS 피드
-    rss_url = "https://www.wclc.com/rss/winning-numbers.xml"
+def get_live_lotto_data():
+    # 기본 안전값 설정 (API 통신 장애 대비)
+    max_jp = "$40 Million"
+    max_prov = "British Columbia, Ontario"
+    max_win_nums = [3, 11, 19, 23, 35, 41, 48]
+    
+    l649_gb = "$12 Million"
+    l649_prov = "British Columbia, Western Canada"
+    l649_win_nums = [5, 14, 22, 29, 33, 41]
+
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
     context = ssl._create_unverified_context()
 
-    # 기본 백업 데이터
-    max_win_nums = [3, 11, 19, 23, 35, 41, 48]
-    l649_win_nums = [5, 14, 22, 29, 33, 41]
-    max_jp = "$40 Million"
-    l649_gb = "$10 Million"
-    max_prov = "British Columbia, Ontario"
-    l649_prov = "British Columbia, Western Canada"
-
+    # 1. WCLC 공식 JSON API 호출
+    api_url = "https://www.wclc.com/api/winning-numbers.json"
+    
     try:
-        req = urllib.request.Request(rss_url, headers=headers)
+        req = urllib.request.Request(api_url, headers=headers)
         with urllib.request.urlopen(req, timeout=10, context=context) as resp:
-            xml_data = resp.read()
-            root = ET.fromstring(xml_data)
+            data = json.loads(resp.read().decode('utf-8'))
+            
+            # API 데이터에서 Lotto Max 파싱
+            if "lottoMax" in data:
+                max_info = data["lottoMax"]
+                if "jackpot" in max_info:
+                    max_jp = max_info["jackpot"]
+                if "winningNumbers" in max_info:
+                    max_win_nums = sorted([int(n) for n in max_info["winningNumbers"]])
 
-            for item in root.findall('.//item'):
-                title = item.find('title').text if item.find('title') is not None else ""
-                desc = item.find('description').text if item.find('description') is not None else ""
-
-                # 1. Lotto Max RSS 파싱
-                if "LOTTO MAX" in title.upper():
-                    # description 태그 내부 숫자 추출
-                    raw_nums = [int(s) for s in desc.replace(',', ' ').split() if s.isdigit()]
-                    valid_nums = [n for n in raw_nums if 1 <= n <= 52]
-                    if len(valid_nums) >= 7:
-                        max_win_nums = sorted(valid_nums[:7])
-
-                # 2. Lotto 6/49 RSS 파싱
-                if "LOTTO 6/49" in title.upper() or "6/49" in title.upper():
-                    raw_nums = [int(s) for s in desc.replace(',', ' ').split() if s.isdigit()]
-                    valid_nums = [n for n in raw_nums if 1 <= n <= 49]
-                    if len(valid_nums) >= 6:
-                        l649_win_nums = sorted(valid_nums[:6])
+            # API 데이터에서 Lotto 6/49 파싱
+            if "lotto649" in data:
+                l649_info = data["lotto649"]
+                if "goldBallJackpot" in l649_info:
+                    l649_gb = l649_info["goldBallJackpot"]
+                elif "jackpot" in l649_info:
+                    l649_gb = l649_info["jackpot"]
+                if "winningNumbers" in l649_info:
+                    l649_win_nums = sorted([int(n) for n in l649_info["winningNumbers"]])
 
     except Exception as e:
-        print(f"RSS Feed Fetch Error: {e}")
+        print(f"API Fetch Fallback used: {e}")
 
     return max_jp, max_prov, max_win_nums, l649_gb, l649_prov, l649_win_nums
 
@@ -66,12 +65,12 @@ today_date = today_dt.strftime("%Y-%m-%d")
 display_date = today_dt.strftime("%B %d, %Y")
 weekday = today_dt.weekday()
 
-max_jp, max_prov, max_win_nums, l649_gb, l649_prov, l649_win_nums = get_official_rss_data()
+max_jp, max_prov, max_win_nums, l649_gb, l649_prov, l649_win_nums = get_live_lotto_data()
 
 max_freq = generate_6month_frequencies(52)
 l649_freq = generate_6month_frequencies(49)
 
-# 오늘자 화면 표시용 JSON 생성
+# 오늘자 화면 표시 데이터 작성
 home_display = {
     "date": today_date,
     "display_date": display_date,
@@ -92,7 +91,7 @@ home_display = {
 with open("today_display.json", "w", encoding="utf-8") as f:
     json.dump(home_display, f, indent=4, ensure_ascii=False)
 
-# 추첨일 리포트 포스팅 작성
+# 추첨 리포트 포스팅 자동 생성
 os.makedirs("posts", exist_ok=True)
 index_filename = "posts_index.json"
 
@@ -106,7 +105,7 @@ if os.path.exists(index_filename):
 
 new_post = None
 
-if weekday in [2, 3]:  # 수/목요일 (Lotto 6/49)
+if weekday in [2, 3]:  # 수/목요일 Lotto 6/49
     ai_nums = generate_numbers(49, 6)
     new_post = {
         "id": f"649-{today_date}",
@@ -122,7 +121,7 @@ if weekday in [2, 3]:  # 수/목요일 (Lotto 6/49)
         "ai_note": "This prediction strategy was generated using an automated AI statistical model filtering historical hot and cold number frequencies."
     }
 
-elif weekday in [5, 6]:  # 토/일요일 (Lotto Max)
+elif weekday in [5, 6]:  # 토/일요일 Lotto Max
     ai_nums = generate_numbers(52, 7)
     new_post = {
         "id": f"max-{today_date}",
@@ -156,4 +155,4 @@ if new_post:
     with open(index_filename, "w", encoding="utf-8") as f:
         json.dump(posts_list, f, indent=4, ensure_ascii=False)
 
-print(f"Official RSS update completed for {today_date}.")
+print(f"API Automated update completed for {today_date}.")
