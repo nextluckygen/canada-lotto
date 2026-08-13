@@ -4,9 +4,9 @@
     "date": "2026-08-13",
     "display_date": "August 13, 2026",
     "title": "Lotto 6/49 Official Draw Results & AI Prediction Lines (August 13, 2026)",
-    "summary": "Latest Lotto 6/49 Gold Ball Breakdown ($10 Million). Major winning tickets sold in: Ontario, Western Canada. Check out our AI-generated recommended lines for the next draw.",
-    "jackpot": "$10 Million",
-    "winner_province": "Ontario, Western Canada",
+    "summary": "Latest Lotto 6/49 Gold Ball Breakdown ($12 Million). Major winning tickets sold in: British Columbia, Western Canada. Check out our AI-generated recommended lines.",
+    "jackpot": "$12 Million",
+    "winner_province": "British Columbia, Western Canada",
     "winning_numbers": [
         5,
         14,
@@ -16,12 +16,12 @@
         41
     ],
     "ai_recommended": [
-        7,
-        13,
+        14,
         19,
+        21,
         27,
-        31,
-        32
+        38,
+        47
     ],
     "ai_note": "This prediction strategy was generated using an automated AI statistical model filtering historical hot and cold number frequencies."
 }
