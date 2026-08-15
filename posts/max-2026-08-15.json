@@ -4,9 +4,9 @@
     "date": "2026-08-15",
     "display_date": "August 15, 2026",
     "title": "Lotto Max Official Draw Results & AI Prediction Lines (August 15, 2026)",
-    "summary": "Latest Lotto Max Winning Numbers Breakdown ($40 Million). Major winning tickets sold in: British Columbia, Ontario. Check out our AI-generated recommended lines.",
-    "jackpot": "$40 Million",
-    "winner_province": "British Columbia, Ontario",
+    "summary": "Latest Lotto Max Draw Breakdown ($50 Million). Winning status: No jackpot winner on Aug 14 (Rolled over to $50M). Check out our AI-generated recommended lines.",
+    "jackpot": "$50 Million",
+    "winner_province": "No jackpot winner on Aug 14 (Rolled over to $50M)",
     "winning_numbers": [
         3,
         11,
@@ -17,13 +17,13 @@
         48
     ],
     "ai_recommended": [
-        3,
-        7,
-        8,
-        26,
-        33,
-        40,
-        51
+        23,
+        29,
+        32,
+        35,
+        39,
+        49,
+        52
     ],
     "ai_note": "This prediction strategy was generated using an automated AI statistical model filtering historical hot and cold number frequencies."
 }
