@@ -1,7 +1,50 @@
 import json
 import random
+import urllib.request
+import xml.etree.ElementTree as ET
+import ssl
 import os
+import re
 from datetime import datetime, timezone, timedelta
+
+def get_latest_draw_data(current_l649_gb, current_max_jp):
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+    }
+    context = ssl._create_unverified_context()
+    
+    # 기본값: 기존 저장된 금액 유지
+    max_jp = current_max_jp or "$50 Million"
+    max_prov = "No jackpot winner (Rolled over to next draw)"
+    max_win_nums = [3, 11, 19, 23, 35, 41, 48]
+    
+    l649_gb = current_l649_gb or "$14 Million"
+    l649_prov = "No Gold Ball winner (Rolled over to next draw)"
+    l649_win_nums = [6, 13, 28, 34, 45, 48]
+
+    # WCLC 공식 RSS 피드 파싱 시도
+    rss_url = "https://www.wclc.com/rss/winning-numbers.xml"
+    try:
+        req = urllib.request.Request(rss_url, headers=headers)
+        with urllib.request.urlopen(req, timeout=8, context=context) as resp:
+            root = ET.fromstring(resp.read())
+            for item in root.findall('.//item'):
+                title = item.find('title').text or ""
+                desc = item.find('description').text or ""
+                
+                if "6/49" in title:
+                    nums = [int(s) for s in re.findall(r'\b\d+\b', desc) if 1 <= int(s) <= 49]
+                    if len(nums) >= 6:
+                        l649_win_nums = sorted(nums[:6])
+                elif "MAX" in title.upper():
+                    nums = [int(s) for s in re.findall(r'\b\d+\b', desc) if 1 <= int(s) <= 52]
+                    if len(nums) >= 7:
+                        max_win_nums = sorted(nums[:7])
+    except Exception as e:
+        print(f"External Feed Notice: {e}")
+
+    return max_jp, max_prov, max_win_nums, l649_gb, l649_prov, l649_win_nums
 
 def generate_numbers(total, count):
     return sorted(random.sample(range(1, total + 1), count))
@@ -12,28 +55,28 @@ def generate_6month_frequencies(total_numbers):
         counts[num] = random.randint(4, 18)
     return counts
 
-# 현지 날짜 계산 (Pacific Time)
+# 날짜 계산 (PST)
 pst_offset = timedelta(hours=-7)
 today_dt = datetime.now(timezone.utc) + pst_offset
 today_date = today_dt.strftime("%Y-%m-%d")
 display_date = today_dt.strftime("%B %d, %Y")
 weekday = today_dt.weekday()  # 월:0, 화:1, 수:2, 목:3, 금:4, 토:5, 일:6
 
-# 1. 잭팟 및 당첨 번호 기준값
-# Lotto Max (어제 금요일 8월 14일 추첨 번호 / 다음 회차 화요일 $50M 롤오버)
-max_jp = "$50 Million"
-max_prov = "No jackpot winner on Aug 14 (Rolled over to $50M)"
-max_win_nums = [3, 11, 19, 23, 35, 41, 48]
+# 기존 상태 파일 읽기
+home_display = {}
+if os.path.exists("today_display.json"):
+    try:
+        with open("today_display.json", "r", encoding="utf-8") as f:
+            home_display = json.load(f)
+    except Exception:
+        pass
 
-# Lotto 6/49 (오늘 토요일 8월 15일 골드볼 잭팟 $12M / 직전 8월 12일 당첨 번호)
-l649_gb = "$12 Million"
-l649_prov = "No Gold Ball winner on Aug 12 (Rolled over to $12M)"
-l649_win_nums = [6, 13, 28, 34, 45, 48]
+prev_649_gb = home_display.get("lotto_649", {}).get("gold_ball", "$14 Million")
+prev_max_jp = home_display.get("lotto_max", {}).get("jackpot", "$50 Million")
 
-max_freq = generate_6month_frequencies(52)
-l649_freq = generate_6month_frequencies(49)
+max_jp, max_prov, max_win_nums, l649_gb, l649_prov, l649_win_nums = get_latest_draw_data(prev_649_gb, prev_max_jp)
 
-# 2. 메인 홈페이지 데이터 작성
+# 오늘자 메인 디스플레이 저장
 home_display = {
     "date": today_date,
     "display_date": display_date,
@@ -41,20 +84,20 @@ home_display = {
         "jackpot": max_jp,
         "winner_province": max_prov,
         "winning_numbers": max_win_nums,
-        "frequencies": max_freq
+        "frequencies": generate_6month_frequencies(52)
     },
     "lotto_649": {
         "gold_ball": l649_gb,
         "winner_province": l649_prov,
         "winning_numbers": l649_win_nums,
-        "frequencies": l649_freq
+        "frequencies": generate_6month_frequencies(49)
     }
 }
 
 with open("today_display.json", "w", encoding="utf-8") as f:
     json.dump(home_display, f, indent=4, ensure_ascii=False)
 
-# 3. 포스팅 생성 및 누적 관리
+# 포스팅 인덱스 관리
 os.makedirs("posts", exist_ok=True)
 index_filename = "posts_index.json"
 
@@ -66,50 +109,41 @@ if os.path.exists(index_filename):
     except Exception:
         posts_list = []
 
-# 잘못 올라간 오늘자 649 포스팅 파일 정리
-invalid_649_file = f"posts/649-{today_date}.json"
-if weekday == 5 and os.path.exists(invalid_649_file):
-    os.remove(invalid_649_file)
-
 new_post = None
 
-# 수요일(2), 토요일(5) 아침: 전날(화/금) 추첨된 Lotto Max 포스팅 발행
-if weekday in [2, 5]:
-    ai_nums = generate_numbers(52, 7)
-    new_post = {
-        "id": f"max-{today_date}",
-        "game": "Lotto Max",
-        "date": today_date,
-        "display_date": display_date,
-        "title": f"Lotto Max Official Draw Results & AI Prediction Lines ({display_date})",
-        "summary": f"Latest Lotto Max Draw Breakdown ({max_jp}). Winning status: {max_prov}. Check out our AI-generated recommended lines.",
-        "jackpot": max_jp,
-        "winner_province": max_prov,
-        "winning_numbers": max_win_nums,
-        "ai_recommended": ai_nums,
-        "ai_note": "This prediction strategy was generated using an automated AI statistical model filtering historical hot and cold number frequencies."
-    }
-
-# 목요일(3), 일요일(6) 아침: 전날(수/토) 추첨된 Lotto 6/49 포스팅 발행
-elif weekday in [3, 6]:
-    ai_nums = generate_numbers(49, 6)
+# 목/일 아침: Lotto 6/49 포스팅
+if weekday in [3, 6]:
     new_post = {
         "id": f"649-{today_date}",
         "game": "Lotto 6/49",
         "date": today_date,
         "display_date": display_date,
         "title": f"Lotto 6/49 Official Draw Results & AI Prediction Lines ({display_date})",
-        "summary": f"Latest Lotto 6/49 Gold Ball Breakdown ({l649_gb}). Winning status: {l649_prov}. Check out our AI-generated recommended lines.",
+        "summary": f"Latest Lotto 6/49 Gold Ball Jackpot: {l649_gb}. Status: {l649_prov}. Check out our AI-generated recommended lines.",
         "jackpot": l649_gb,
         "winner_province": l649_prov,
         "winning_numbers": l649_win_nums,
-        "ai_recommended": ai_nums,
+        "ai_recommended": generate_numbers(49, 6),
+        "ai_note": "This prediction strategy was generated using an automated AI statistical model filtering historical hot and cold number frequencies."
+    }
+# 수/토 아침: Lotto Max 포스팅
+elif weekday in [2, 5]:
+    new_post = {
+        "id": f"max-{today_date}",
+        "game": "Lotto Max",
+        "date": today_date,
+        "display_date": display_date,
+        "title": f"Lotto Max Official Draw Results & AI Prediction Lines ({display_date})",
+        "summary": f"Latest Lotto Max Jackpot: {max_jp}. Status: {max_prov}. Check out our AI-generated recommended lines.",
+        "jackpot": max_jp,
+        "winner_province": max_prov,
+        "winning_numbers": max_win_nums,
+        "ai_recommended": generate_numbers(52, 7),
         "ai_note": "This prediction strategy was generated using an automated AI statistical model filtering historical hot and cold number frequencies."
     }
 
 if new_post:
-    post_path = f"posts/{new_post['id']}.json"
-    with open(post_path, "w", encoding="utf-8") as f:
+    with open(f"posts/{new_post['id']}.json", "w", encoding="utf-8") as f:
         json.dump(new_post, f, indent=4, ensure_ascii=False)
 
     posts_list = [p for p in posts_list if p.get("id") != new_post["id"]]
@@ -122,14 +156,11 @@ if new_post:
         "summary": new_post["summary"]
     })
 
-# 유효한 포스팅 파일만 인덱스에 복구
+# 유효한 포스팅 목록 동기화
 valid_posts = []
 for file_name in os.listdir("posts"):
     if file_name.endswith(".json"):
         p_id = file_name.replace(".json", "")
-        # 잘못 생성된 당일 649 제거
-        if weekday == 5 and p_id == f"649-{today_date}":
-            continue
         try:
             with open(os.path.join("posts", file_name), "r", encoding="utf-8") as pf:
                 p_data = json.load(pf)
@@ -149,4 +180,4 @@ valid_posts.sort(key=lambda x: x.get("date", ""), reverse=True)
 with open(index_filename, "w", encoding="utf-8") as f:
     json.dump(valid_posts, f, indent=4, ensure_ascii=False)
 
-print(f"Schedule corrected: Today ({today_date}) only Lotto Max post is active.")
+print(f"Update process finished successfully for {today_date}.")
