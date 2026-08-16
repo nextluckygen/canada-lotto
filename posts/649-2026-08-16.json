@@ -4,24 +4,10 @@
     "date": "2026-08-16",
     "display_date": "August 16, 2026",
     "title": "Lotto 6/49 Official Draw Results & AI Prediction Lines (August 16, 2026)",
-    "summary": "Latest Lotto 6/49 Gold Ball Breakdown ($12 Million). Winning status: No Gold Ball winner on Aug 12 (Rolled over to $12M). Check out our AI-generated recommended lines.",
-    "jackpot": "$12 Million",
-    "winner_province": "No Gold Ball winner on Aug 12 (Rolled over to $12M)",
-    "winning_numbers": [
-        6,
-        13,
-        28,
-        34,
-        45,
-        48
-    ],
-    "ai_recommended": [
-        14,
-        21,
-        25,
-        31,
-        33,
-        43
-    ],
+    "summary": "Latest Lotto 6/49 Gold Ball Breakdown ($14 Million). Status: Guaranteed $1M won in Ontario (Gold Ball rolled over to $14M). Check out our AI-generated recommended lines.",
+    "jackpot": "$14 Million",
+    "winner_province": "Guaranteed $1M won in Ontario (Gold Ball rolled over to $14M)",
+    "winning_numbers": [1, 9, 17, 34, 36, 43],
+    "ai_recommended": [4, 12, 23, 31, 38, 45],
     "ai_note": "This prediction strategy was generated using an automated AI statistical model filtering historical hot and cold number frequencies."
 }
