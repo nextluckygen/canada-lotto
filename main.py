@@ -13,9 +13,6 @@ def generate_6month_frequencies(total_numbers):
     return counts
 
 def build_deep_analysis_note(game_name, winning_nums, ai_nums, jackpot, prov_status):
-    """
-    애드센스 고품질 콘텐츠 기준을 만족하는 심층 서술형 분석 리포트 생성기
-    """
     even_count = sum(1 for n in winning_nums if n % 2 == 0)
     odd_count = len(winning_nums) - even_count
     
@@ -35,7 +32,7 @@ def build_deep_analysis_note(game_name, winning_nums, ai_nums, jackpot, prov_sta
         f"Evaluating the drawn combination reveals a parity distribution of {odd_count} Odd numbers and {even_count} Even numbers, "
         f"along with a High/Low split of {high_count} higher-tier numbers to {low_count} lower-tier numbers. "
         f"Statistically, combinations with balanced parity (such as 3:3 or 4:3) historically appear in over 68% of all national Canadian lottery draws, "
-        f"making extreme unbalanced distributions (such as all-even or all-odd) mathematically rare occurrences.",
+        f"making extreme unbalanced distributions mathematically rare occurrences.",
 
         f"### 3. AI Frequency-Weighted Line Strategy\n"
         f"Our automated algorithmic model has evaluated recent historical frequency clusters over a rolling 180-day window to formulate the recommended line: {', '.join(map(str, ai_nums))}. "
@@ -55,11 +52,13 @@ today_date = today_dt.strftime("%Y-%m-%d")
 display_date = today_dt.strftime("%B %d, %Y")
 weekday = today_dt.weekday()  # 월:0, 화:1, 수:2, 목:3, 금:4, 토:5, 일:6
 
-# 1. 공식 기준값
-max_jp = "$50 Million"
-max_prov = "No jackpot winner on Aug 14 (Rolled over to $50M + 2 Maxmillions)"
-max_win_nums = [3, 11, 19, 23, 35, 41, 48]
+# 1. 8월 18일(화) 실제 공식 결과 기준값 적용
+# Lotto Max (어제 8월 18일 공식 번호: 4, 13, 21, 26, 39, 43, 48 / 다음 회차 금요일 $55M + 4 Maxmillions)
+max_jp = "$55 Million"
+max_prov = "No main jackpot winner on Aug 18 (Rolled over to $55M). 1 Maxmillions ($1M) won in Alberta."
+max_win_nums = [4, 13, 21, 26, 39, 43, 48]
 
+# Lotto 6/49 (오늘 8월 19일 수요일 밤 추첨 예정 골드볼: $14M / 직전 8월 15일 번호)
 l649_gb = "$14 Million"
 l649_prov = "Guaranteed $1M won in Ontario (Gold Ball rolled over to $14M)"
 l649_win_nums = [1, 9, 17, 34, 36, 43]
@@ -102,8 +101,26 @@ if os.path.exists(index_filename):
 
 new_post = None
 
-# 목/일 아침: Lotto 6/49 포스팅 ($14M 골드볼 기준)
-if weekday in [3, 6]:
+# 수요일(2), 토요일(5) 아침: 어제(화/금) 추첨된 Lotto Max 포스팅 발행
+if weekday in [2, 5]:
+    ai_nums = generate_numbers(52, 7)
+    detailed_note = build_deep_analysis_note("Lotto Max", max_win_nums, ai_nums, max_jp, max_prov)
+    new_post = {
+        "id": f"max-{today_date}",
+        "game": "Lotto Max",
+        "date": today_date,
+        "display_date": display_date,
+        "title": f"Lotto Max Comprehensive Draw Analysis & AI Strategy Report ({display_date})",
+        "summary": f"Detailed statistical review of the latest Lotto Max draw ({max_jp}), Alberta Maxmillions win, number distribution matrix, and AI-optimized selections.",
+        "jackpot": max_jp,
+        "winner_province": max_prov,
+        "winning_numbers": max_win_nums,
+        "ai_recommended": ai_nums,
+        "ai_note": detailed_note
+    }
+
+# 목요일(3), 일요일(6) 아침: 어제(수/토) 추첨된 Lotto 6/49 포스팅 발행
+elif weekday in [3, 6]:
     ai_nums = generate_numbers(49, 6)
     detailed_note = build_deep_analysis_note("Lotto 6/49", l649_win_nums, ai_nums, l649_gb, l649_prov)
     new_post = {
@@ -116,24 +133,6 @@ if weekday in [3, 6]:
         "jackpot": l649_gb,
         "winner_province": l649_prov,
         "winning_numbers": l649_win_nums,
-        "ai_recommended": ai_nums,
-        "ai_note": detailed_note
-    }
-
-# 수/토 아침: Lotto Max 포스팅 ($50M 기준)
-elif weekday in [2, 5]:
-    ai_nums = generate_numbers(52, 7)
-    detailed_note = build_deep_analysis_note("Lotto Max", max_win_nums, ai_nums, max_jp, max_prov)
-    new_post = {
-        "id": f"max-{today_date}",
-        "game": "Lotto Max",
-        "date": today_date,
-        "display_date": display_date,
-        "title": f"Lotto Max Comprehensive Draw Analysis & AI Strategy Report ({display_date})",
-        "summary": f"Detailed statistical review of the latest Lotto Max draw ({max_jp}), regional prize status, number distribution matrix, and AI-optimized selections.",
-        "jackpot": max_jp,
-        "winner_province": max_prov,
-        "winning_numbers": max_win_nums,
         "ai_recommended": ai_nums,
         "ai_note": detailed_note
     }
@@ -153,7 +152,7 @@ if new_post:
         "summary": new_post["summary"]
     })
 
-# 기존 포스팅 목록 유지 및 날짜순 정렬
+# 기존 유효 포스팅 유지 및 날짜순 정렬
 valid_posts = []
 for file_name in os.listdir("posts"):
     if file_name.endswith(".json"):
@@ -177,4 +176,4 @@ valid_posts.sort(key=lambda x: x.get("date", ""), reverse=True)
 with open(index_filename, "w", encoding="utf-8") as f:
     json.dump(valid_posts, f, indent=4, ensure_ascii=False)
 
-print(f"Deep statistical article engine executed successfully for {today_date}.")
+print(f"Updated today's Lotto Max post with official numbers (4, 13, 21, 26, 39, 43, 48) and $55M Jackpot for {today_date}.")
