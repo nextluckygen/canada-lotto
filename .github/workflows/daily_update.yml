@@ -1,31 +1,29 @@
-name: Daily Lotto Post Generator
+name: Canada Lotto Daily Update & Posting
 
 on:
   schedule:
-    # 밴쿠버 PST 오전 8:00 (UTC 15:00) 매일 실행
-    - cron: '0 15 * * *'
-  workflow_dispatch:
+    # 매일 자정 12:00 AM PDT (UTC 07:00 AM)에 자동 실행
+    - cron: '0 7 * * *'
+  workflow_dispatch: # 관리자가 수동으로 즉시 실행할 수 있는 버튼 유지
 
 jobs:
-  build-and-post:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name: Run Lotto Generator Script
+      - name: Run Auto Posting Script
         run: python main.py
 
-      - name: Commit and push changes
+      - name: Commit and Push Updates
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action Bot"
+          git config --global user.name "GitHub Action Bot"
+          git config --global user.email "action@github.com"
           git add -A
-          git diff-index --quiet HEAD || git commit -m "Auto-published daily lotto report & updated numbers [skip ci]"
-          git push
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto update lotto data and posts (Midnight PST)" && git push)
