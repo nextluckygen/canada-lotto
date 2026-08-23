@@ -47,11 +47,6 @@
         .grid-cols-13 {
             grid-template-columns: repeat(13, minmax(0, 1fr)) !important;
         }
-        .bg-ball-red { background-color: #ef4444 !important; }
-        .bg-ball-blue { background-color: #2563eb !important; }
-        .bg-ball-teal { background-color: #14b8a6 !important; }
-        .bg-ball-amber { background-color: #f59e0b !important; }
-        .bg-ball-purple { background-color: #9333ea !important; }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-900 font-sans flex flex-col justify-between">
@@ -152,7 +147,7 @@
                     </div>
                 </div>
 
-                <!-- Frequency Matrix Grid (범례와 100% 일치하는 3색 시스템) -->
+                <!-- Frequency Matrix Grid -->
                 <div class="bg-white rounded-3xl shadow-xl border border-slate-200 p-5 space-y-3 overflow-x-auto">
                     <div class="border-b pb-3 flex flex-wrap items-center justify-between gap-2">
                         <div>
@@ -247,28 +242,47 @@
         let globalDisplayData = null;
         let currentGame = 'max';
 
-        // 1. 상단 당첨 번호 및 AI 추천 라인: 고유 10진수 5색 볼 복원
-        function getDecadeBallClass(num) {
-            if (num <= 10) return 'bg-ball-red';
-            if (num <= 20) return 'bg-ball-blue';
-            if (num <= 30) return 'bg-ball-teal';
-            if (num <= 40) return 'bg-ball-amber';
-            return 'bg-ball-purple';
+        // 빈도 데이터 기준에 따라 완벽히 동일한 색상 클래스를 반환하는 함수
+        function getFrequencyColorClass(num, game = currentGame) {
+            let freqData = {};
+            if (globalDisplayData) {
+                freqData = (game === 'max') 
+                    ? (globalDisplayData.lotto_max?.frequencies || {})
+                    : (globalDisplayData.lotto_649?.frequencies || {});
+            }
+
+            const count = freqData[num] || 7;
+            const counts = Object.values(freqData).map(Number).filter(n => !isNaN(n));
+            const maxVal = counts.length > 0 ? Math.max(...counts) : 13;
+            const minVal = counts.length > 0 ? Math.min(...counts) : 5;
+            const range = (maxVal - minVal) / 3;
+
+            const hotThresh = maxVal - range;   // 10회 이상
+            const coldThresh = minVal + range;  // 7회 이하
+
+            if (count >= hotThresh) {
+                return 'bg-red-600';     // 🔥 Hot (빨강)
+            } else if (count <= coldThresh) {
+                return 'bg-sky-600';     // ❄️ Cold (파랑)
+            }
+            return 'bg-emerald-600';     // ⚡ Mid (초록)
         }
 
-        function renderBalls(containerId, numbers) {
+        // 상단/추천 볼 렌더링 (하단 빈도표 색상과 100% 동일하게 매칭)
+        function renderBalls(containerId, numbers, game = currentGame) {
             const container = document.getElementById(containerId);
             if (!container) return;
             container.innerHTML = '';
             (numbers || []).forEach(num => {
+                const colorClass = getFrequencyColorClass(num, game);
                 const ball = document.createElement('div');
-                ball.className = `lotto-ball ${getDecadeBallClass(num)}`;
+                ball.className = `lotto-ball ${colorClass}`;
                 ball.innerText = num;
                 container.appendChild(ball);
             });
         }
 
-        // 2. 하단 빈도수 매트릭스: Hot/Mid/Cold 3색 통일
+        // 하단 빈도수 매트릭스 렌더링
         function renderFrequencyGrid(game) {
             const container = document.getElementById('freq-grid-container');
             const titleElem = document.getElementById('freq-title');
@@ -290,8 +304,8 @@
             const minVal = counts.length > 0 ? Math.min(...counts) : 5;
             const range = (maxVal - minVal) / 3;
 
-            const hotThresh = maxVal - range;   // 10회 이상
-            const coldThresh = minVal + range;  // 7회 이하
+            const hotThresh = maxVal - range;
+            const coldThresh = minVal + range;
 
             for (let i = 1; i <= totalNumbers; i++) {
                 const count = freqData[i] || 7;
@@ -300,14 +314,11 @@
                 let ballColor = "bg-emerald-600";
                 let badgeStyle = "bg-emerald-600 text-white";
 
-                // 🔥 Hot (빨강)
                 if (count >= hotThresh) {
                     cardStyle = "border-red-300 bg-red-50/70";
                     ballColor = "bg-red-600";
                     badgeStyle = "bg-red-600 text-white";
-                } 
-                // ❄️ Cold (파랑)
-                else if (count <= coldThresh) {
+                } else if (count <= coldThresh) {
                     cardStyle = "border-sky-300 bg-sky-50/70";
                     ballColor = "bg-sky-600";
                     badgeStyle = "bg-sky-600 text-white";
@@ -338,17 +349,26 @@
                 : "px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-white text-slate-600 hover:bg-slate-100 border border-slate-200";
 
             renderFrequencyGrid(game);
+            
+            // 탭 전환 시 상단 볼 색상도 해당 게임 빈도에 맞춰 즉시 갱신
+            if (globalDisplayData) {
+                if (isMax && globalDisplayData.lotto_max) {
+                    renderBalls('max-win-balls', globalDisplayData.lotto_max.winning_numbers, 'max');
+                } else if (!isMax && globalDisplayData.lotto_649) {
+                    renderBalls('l649-win-balls', globalDisplayData.lotto_649.winning_numbers, '649');
+                }
+            }
         }
 
         function generateNewNumbers(game) {
             if (game === 'max') {
                 const numbers = new Set();
                 while (numbers.size < 7) numbers.add(Math.floor(Math.random() * 52) + 1);
-                renderBalls('max-balls', Array.from(numbers).sort((a, b) => a - b));
+                renderBalls('max-balls', Array.from(numbers).sort((a, b) => a - b), 'max');
             } else {
                 const numbers = new Set();
                 while (numbers.size < 6) numbers.add(Math.floor(Math.random() * 49) + 1);
-                renderBalls('l649-balls', Array.from(numbers).sort((a, b) => a - b));
+                renderBalls('l649-balls', Array.from(numbers).sort((a, b) => a - b), '649');
             }
         }
 
@@ -363,6 +383,8 @@
                 const response = await fetch(`posts/${postId}.json?cache=` + new Date().getTime());
                 let post = await response.json();
                 
+                const postGame = (post.game && post.game.toLowerCase().includes('649')) ? '649' : 'max';
+
                 document.getElementById('post-title').innerText = post.title;
                 document.getElementById('post-game-badge').innerText = post.game || "Lotto";
                 document.getElementById('post-date').innerText = post.display_date || post.date;
@@ -370,8 +392,8 @@
                 document.getElementById('post-prov').innerText = post.winner_province || "";
                 document.getElementById('post-ai-note').innerText = post.ai_note || "";
 
-                renderBalls('post-win-balls', post.winning_numbers || []);
-                renderBalls('post-ai-balls', post.ai_recommended || []);
+                renderBalls('post-win-balls', post.winning_numbers || [], postGame);
+                renderBalls('post-ai-balls', post.ai_recommended || [], postGame);
 
                 document.getElementById('view-main').classList.add('hidden');
                 document.getElementById('view-post').classList.remove('hidden');
@@ -389,21 +411,21 @@
                 if (globalDisplayData.lotto_max) {
                     document.getElementById('max-jackpot').innerText = "EST. " + globalDisplayData.lotto_max.jackpot;
                     document.getElementById('max-prov-text').innerText = globalDisplayData.lotto_max.winner_province;
-                    renderBalls('max-win-balls', globalDisplayData.lotto_max.winning_numbers);
+                    renderBalls('max-win-balls', globalDisplayData.lotto_max.winning_numbers, 'max');
                 }
                 if (globalDisplayData.lotto_649) {
                     document.getElementById('goldball-amount').innerText = globalDisplayData.lotto_649.gold_ball;
                     document.getElementById('l649-prov-text').innerText = globalDisplayData.lotto_649.winner_province;
-                    renderBalls('l649-win-balls', globalDisplayData.lotto_649.winning_numbers);
+                    renderBalls('l649-win-balls', globalDisplayData.lotto_649.winning_numbers, '649');
                 }
             } catch (e) {
-                renderBalls('max-win-balls', [1, 4, 15, 18, 24, 25, 51]);
-                renderBalls('l649-win-balls', [11, 13, 21, 31, 34, 45]);
+                renderBalls('max-win-balls', [1, 4, 15, 18, 24, 25, 51], 'max');
+                renderBalls('l649-win-balls', [11, 13, 21, 31, 34, 45], '649');
             }
 
+            renderFrequencyGrid(currentGame);
             generateNewNumbers('max');
             generateNewNumbers('649');
-            renderFrequencyGrid(currentGame);
 
             const container = document.getElementById('posts-container');
             try {
