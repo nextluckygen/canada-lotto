@@ -33,25 +33,20 @@
             margin: 2px !important;
         }
         .lotto-ball-xs {
-            width: 20px !important;
-            height: 20px !important;
+            width: 22px !important;
+            height: 22px !important;
             border-radius: 50% !important;
             display: inline-flex !important;
             align-items: center !important;
             justify-content: center !important;
             font-weight: 800 !important;
-            font-size: 0.65rem !important;
+            font-size: 0.7rem !important;
             color: white !important;
             box-shadow: inset -1px -1px 3px rgba(0, 0, 0, 0.3) !important;
         }
         .grid-cols-13 {
             grid-template-columns: repeat(13, minmax(0, 1fr)) !important;
         }
-        .bg-ball-red { background-color: #ef4444 !important; }
-        .bg-ball-blue { background-color: #2563eb !important; }
-        .bg-ball-teal { background-color: #14b8a6 !important; }
-        .bg-ball-amber { background-color: #f59e0b !important; }
-        .bg-ball-purple { background-color: #9333ea !important; }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-900 font-sans flex flex-col justify-between">
@@ -152,7 +147,7 @@
                     </div>
                 </div>
 
-                <!-- Frequency Matrix Grid -->
+                <!-- Frequency Matrix Grid (Hot/Mid/Cold 색상 완벽 일치) -->
                 <div class="bg-white rounded-3xl shadow-xl border border-slate-200 p-5 space-y-3 overflow-x-auto">
                     <div class="border-b pb-3 flex flex-wrap items-center justify-between gap-2">
                         <div>
@@ -161,13 +156,13 @@
                             </h2>
                             <p class="text-xs text-slate-500">Occurrence counts based on official national records</p>
                         </div>
-                        <div class="flex items-center gap-1 text-[10px] font-bold">
-                            <span class="px-2 py-0.5 bg-red-100 text-red-700 rounded border border-red-200">🔥 Hot (High)</span>
-                            <span class="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded border border-emerald-200">⚡ Mid</span>
-                            <span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded border border-slate-200">❄️ Cold (Low)</span>
+                        <div class="flex items-center gap-1.5 text-[11px] font-bold">
+                            <span class="px-2.5 py-1 bg-red-100 text-red-700 rounded-lg border border-red-300">🔥 Hot (High)</span>
+                            <span class="px-2.5 py-1 bg-emerald-100 text-emerald-700 rounded-lg border border-emerald-300">⚡ Mid</span>
+                            <span class="px-2.5 py-1 bg-sky-100 text-sky-700 rounded-lg border border-sky-300">❄️ Cold (Low)</span>
                         </div>
                     </div>
-                    <div id="freq-grid-container" class="grid grid-cols-13 gap-1 min-w-[520px]"></div>
+                    <div id="freq-grid-container" class="grid grid-cols-13 gap-1.5 min-w-[540px]"></div>
                 </div>
 
                 <!-- Blog Posts Section -->
@@ -179,29 +174,16 @@
                     <div id="posts-container" class="space-y-3"></div>
                 </div>
 
-                <!-- Comprehensive Publisher Guide (Static SEO & AdSense Content) -->
+                <!-- Static SEO Content -->
                 <section class="bg-white rounded-3xl shadow-xl border border-slate-200 p-6 sm:p-8 space-y-6 text-slate-700 leading-relaxed text-sm">
                     <h2 class="text-xl sm:text-2xl font-black text-slate-900 border-b pb-3">Understanding Canadian Lottery Probabilities & Statistical Trends</h2>
-                    
                     <div class="space-y-3">
                         <h3 class="text-base font-bold text-slate-800">1. Overview of Lotto Max and Lotto 6/49 Rules</h3>
-                        <p>Lotto Max is Canada's flagship nationwide lottery game featuring a matrix of 7 winning numbers selected from a pool of 1 to 52. When the main jackpot reaches $50 Million, additional Maxmillions draws are introduced, offering individual $1 Million prizes. In comparison, Lotto 6/49 utilizes a classic 6/49 matrix alongside an innovative Gold Ball draw system that guarantees a $1 Million winner every draw while rolling over a progressively increasing jackpot pool that can grow up to $68 Million.</p>
+                        <p>Lotto Max is Canada's flagship nationwide lottery game featuring a matrix of 7 winning numbers selected from a pool of 1 to 52. When the main jackpot reaches $50 Million, additional Maxmillions draws are introduced. In comparison, Lotto 6/49 utilizes a classic 6/49 matrix alongside a Gold Ball draw system offering growing jackpot pools.</p>
                     </div>
-
                     <div class="space-y-3">
                         <h3 class="text-base font-bold text-slate-800">2. How Statistical Frequency Modeling Works</h3>
-                        <p>Every lottery draw is an independent random event governed by strict mathematical odds. However, statistical tracking of past historical draws allows analysts to observe empirical distribution patterns:
-                        <ul class="list-disc pl-5 space-y-1.5 mt-2">
-                            <li><strong>Hot Numbers:</strong> Numbers that have appeared significantly above the statistical median frequency over a designated rolling 6-month window.</li>
-                            <li><strong>Cold Numbers:</strong> Numbers that have experienced an extended drought since their last appearance.</li>
-                            <li><strong>Odd/Even Ratio Balance:</strong> Historical aggregates indicate that combinations maintaining a balanced odd-even distribution (e.g., 3-3 or 4-3) account for over 65% of all winning lines.</li>
-                        </ul>
-                        </p>
-                    </div>
-
-                    <div class="space-y-3">
-                        <h3 class="text-base font-bold text-slate-800">3. Responsible Gaming and Independent Analytical Notice</h3>
-                        <p>The statistical algorithms, frequency matrices, and prediction line generators provided on <strong>lottohelper.ca</strong> are engineered solely for educational, analytical, and entertainment purposes. No algorithm or past statistical trend can alter the fundamental mathematical probability of random lottery drawings. We urge all Canadian players to play responsibly within their personal limits.</p>
+                        <p>Every lottery draw is an independent random event governed by strict mathematical odds. Analysts track empirical distribution patterns to evaluate hot, mid, and cold clusters over a rolling 6-month window.</p>
                     </div>
                 </section>
 
@@ -242,7 +224,7 @@
         </main>
     </div>
 
-    <!-- Footer Area -->
+    <!-- Footer -->
     <footer class="bg-slate-900 text-slate-400 text-xs py-8 mt-12 border-t border-slate-800">
         <div class="max-w-4xl mx-auto px-4 text-center space-y-3">
             <p>© 2026 lottohelper.ca. All rights reserved. Independent Canadian Lottery Statistics Portal.</p>
@@ -260,27 +242,20 @@
         let globalDisplayData = null;
         let currentGame = 'max';
 
-        function getBallColorClass(num) {
-            if (num <= 10) return 'bg-ball-red';
-            if (num <= 20) return 'bg-ball-blue';
-            if (num <= 30) return 'bg-ball-teal';
-            if (num <= 40) return 'bg-ball-amber';
-            return 'bg-ball-purple';
-        }
-
-        function renderBalls(containerId, numbers) {
+        // 메인 상단 결과 볼 렌더링 (블루/에메랄드 톤)
+        function renderBalls(containerId, numbers, ballBg = "bg-emerald-600") {
             const container = document.getElementById(containerId);
             if (!container) return;
             container.innerHTML = '';
             (numbers || []).forEach(num => {
                 const ball = document.createElement('div');
-                ball.className = `lotto-ball ${getBallColorClass(num)}`;
+                ball.className = `lotto-ball ${ballBg}`;
                 ball.innerText = num;
                 container.appendChild(ball);
             });
         }
 
-        // 상대적 3분할 Hot/Cold 자동 계산
+        // Hot / Mid / Cold 3색 일치 렌더러
         function renderFrequencyGrid(game) {
             const container = document.getElementById('freq-grid-container');
             const titleElem = document.getElementById('freq-title');
@@ -302,27 +277,34 @@
             const minVal = counts.length > 0 ? Math.min(...counts) : 5;
             const range = (maxVal - minVal) / 3;
 
-            const hotThresh = maxVal - range;
-            const coldThresh = minVal + range;
+            const hotThresh = maxVal - range;   // 10회 이상
+            const coldThresh = minVal + range;  // 7회 이하
 
             for (let i = 1; i <= totalNumbers; i++) {
                 const count = freqData[i] || 7;
-                let cardBorder = "border-emerald-200 bg-emerald-50";
-                let badgeClass = "bg-emerald-600 text-white font-bold";
+                
+                let cardStyle = "border-emerald-300 bg-emerald-50/70";
+                let ballColor = "bg-emerald-600";
+                let badgeStyle = "bg-emerald-600 text-white";
 
+                // 🔥 Hot (빨강)
                 if (count >= hotThresh) {
-                    cardBorder = "border-red-300 bg-red-50";
-                    badgeClass = "bg-red-500 text-white font-black";
-                } else if (count <= coldThresh) {
-                    cardBorder = "border-slate-200 bg-slate-50";
-                    badgeClass = "bg-slate-200 text-slate-700";
+                    cardStyle = "border-red-300 bg-red-50/70";
+                    ballColor = "bg-red-600";
+                    badgeStyle = "bg-red-600 text-white";
+                } 
+                // ❄️ Cold (파랑/하늘)
+                else if (count <= coldThresh) {
+                    cardStyle = "border-sky-300 bg-sky-50/70";
+                    ballColor = "bg-sky-600";
+                    badgeStyle = "bg-sky-600 text-white";
                 }
 
                 const tile = document.createElement('div');
-                tile.className = `p-1 rounded-lg border flex flex-col items-center justify-center ${cardBorder}`;
+                tile.className = `p-1.5 rounded-xl border flex flex-col items-center justify-center ${cardStyle}`;
                 tile.innerHTML = `
-                    <div class="lotto-ball-xs ${getBallColorClass(i)} mb-0.5">${i}</div>
-                    <span class="text-[9px] font-extrabold px-1 py-0.2 rounded ${badgeClass}">${count}x</span>
+                    <div class="lotto-ball-xs ${ballColor} mb-1">${i}</div>
+                    <span class="text-[10px] font-black px-1.5 py-0.5 rounded-md ${badgeStyle}">${count}x</span>
                 `;
                 container.appendChild(tile);
             }
@@ -349,11 +331,11 @@
             if (game === 'max') {
                 const numbers = new Set();
                 while (numbers.size < 7) numbers.add(Math.floor(Math.random() * 52) + 1);
-                renderBalls('max-balls', Array.from(numbers).sort((a, b) => a - b));
+                renderBalls('max-balls', Array.from(numbers).sort((a, b) => a - b), 'bg-emerald-600');
             } else {
                 const numbers = new Set();
                 while (numbers.size < 6) numbers.add(Math.floor(Math.random() * 49) + 1);
-                renderBalls('l649-balls', Array.from(numbers).sort((a, b) => a - b));
+                renderBalls('l649-balls', Array.from(numbers).sort((a, b) => a - b), 'bg-blue-600');
             }
         }
 
@@ -375,8 +357,8 @@
                 document.getElementById('post-prov').innerText = post.winner_province || "";
                 document.getElementById('post-ai-note').innerText = post.ai_note || "";
 
-                renderBalls('post-win-balls', post.winning_numbers || []);
-                renderBalls('post-ai-balls', post.ai_recommended || []);
+                renderBalls('post-win-balls', post.winning_numbers || [], 'bg-slate-800');
+                renderBalls('post-ai-balls', post.ai_recommended || [], 'bg-emerald-600');
 
                 document.getElementById('view-main').classList.add('hidden');
                 document.getElementById('view-post').classList.remove('hidden');
@@ -394,16 +376,16 @@
                 if (globalDisplayData.lotto_max) {
                     document.getElementById('max-jackpot').innerText = "EST. " + globalDisplayData.lotto_max.jackpot;
                     document.getElementById('max-prov-text').innerText = globalDisplayData.lotto_max.winner_province;
-                    renderBalls('max-win-balls', globalDisplayData.lotto_max.winning_numbers);
+                    renderBalls('max-win-balls', globalDisplayData.lotto_max.winning_numbers, 'bg-emerald-600');
                 }
                 if (globalDisplayData.lotto_649) {
                     document.getElementById('goldball-amount').innerText = globalDisplayData.lotto_649.gold_ball;
                     document.getElementById('l649-prov-text').innerText = globalDisplayData.lotto_649.winner_province;
-                    renderBalls('l649-win-balls', globalDisplayData.lotto_649.winning_numbers);
+                    renderBalls('l649-win-balls', globalDisplayData.lotto_649.winning_numbers, 'bg-blue-600');
                 }
             } catch (e) {
-                renderBalls('max-win-balls', [1, 4, 15, 18, 24, 25, 51]);
-                renderBalls('l649-win-balls', [11, 13, 21, 31, 34, 45]);
+                renderBalls('max-win-balls', [1, 4, 15, 18, 24, 25, 51], 'bg-emerald-600');
+                renderBalls('l649-win-balls', [11, 13, 21, 31, 34, 45], 'bg-blue-600');
             }
 
             generateNewNumbers('max');
