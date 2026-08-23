@@ -3,25 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canada Lotto Official Helper | Live Results & Frequency Tracker</title>
+    <title>Canada Lotto | Official Helper Portal</title>
     <style>
         :root {
-            --primary: #008752;
-            --primary-dark: #005f39;
-            --bg: #f4f6f8;
+            --bg-color: #f1f5f9;
+            --header-gradient: linear-gradient(135deg, #008752 0%, #0d9488 100%);
             --card-bg: #ffffff;
-            --text-main: #111827;
-            --text-muted: #6b7280;
-            --border: #e5e7eb;
-            --hot-bg: #fee2e2;
-            --hot-border: #ef4444;
-            --hot-text: #b91c1c;
-            --mid-bg: #dcfce7;
-            --mid-border: #22c55e;
-            --mid-text: #15803d;
-            --cold-bg: #e0f2fe;
-            --cold-border: #38bdf8;
-            --cold-text: #0369a1;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --primary-btn: #008752;
+            --primary-btn-hover: #006b40;
+            --yellow-badge: #fbbf24;
+            --yellow-badge-text: #78350f;
         }
 
         * {
@@ -29,269 +22,299 @@
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: var(--bg);
-            color: var(--text-main);
-            line-height: 1.5;
-            padding-bottom: 80px;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            padding-bottom: 60px;
         }
 
+        /* Header */
         header {
-            background-color: var(--primary);
+            background: var(--header-gradient);
+            padding: 16px 20px 20px;
             color: white;
-            padding: 20px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
 
-        .header-container {
-            max-width: 1080px;
-            margin: 0 auto;
+        .header-top {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
             gap: 12px;
+            margin-bottom: 14px;
         }
 
-        .brand-title {
-            font-size: 1.4rem;
-            font-weight: 800;
-        }
-
-        .brand-subtitle {
+        .brand-badge {
+            background-color: var(--yellow-badge);
+            color: var(--yellow-badge-text);
+            font-weight: 900;
             font-size: 0.85rem;
-            opacity: 0.9;
+            padding: 6px 14px;
+            border-radius: 8px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        nav a {
+        .header-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            background: rgba(255, 255, 255, 0.15);
             color: white;
             text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            margin-left: 20px;
-        }
-
-        main {
-            max-width: 1080px;
-            margin: 24px auto;
-            padding: 0 16px;
-        }
-
-        /* Top Result Cards */
-        .live-results-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 20px;
-            margin-bottom: 28px;
-        }
-
-        .result-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            border: 1px solid var(--border);
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 10px;
+            padding: 6px 14px;
             border-radius: 20px;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .nav-tab.active, .nav-tab:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Container */
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        /* Card Common */
+        .card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 24px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        /* Generator Card */
+        .generator-card {
+            text-align: center;
+        }
+
+        .strategy-title {
+            font-size: 1.3rem;
             font-weight: 800;
-            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .strategy-subtitle {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
+
+        .generator-balls-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .balls-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .gen-ball {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1.15rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .gen-ball:active {
+            transform: scale(0.92);
+        }
+
+        /* Vibrant Ball Colors */
+        .ball-red { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .ball-blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+        .ball-teal { background: linear-gradient(135deg, #14b8a6, #0f766e); }
+        .ball-yellow { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .ball-purple { background: linear-gradient(135deg, #a855f7, #7e22ce); }
+
+        .btn-generate {
+            background: var(--primary-btn);
+            color: white;
+            border: none;
+            padding: 13px 24px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border-radius: 14px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 14px rgba(0, 135, 82, 0.3);
+            transition: transform 0.1s, background 0.2s;
+        }
+
+        .btn-generate:hover {
+            background: var(--primary-btn-hover);
+        }
+
+        .btn-generate:active {
+            transform: scale(0.96);
+        }
+
+        /* Frequency Card */
+        .freq-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
             margin-bottom: 12px;
         }
 
-        .badge-max { background: #dbeafe; color: #1e40af; }
-        .badge-649 { background: #fef3c7; color: #92400e; }
-
-        .jackpot-highlight {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 4px;
+        .freq-icon {
+            font-size: 1.5rem;
         }
 
-        .winner-status {
-            font-size: 0.85rem;
+        .freq-title-box h2 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            line-height: 1.25;
+        }
+
+        .freq-desc {
+            font-size: 0.78rem;
             color: var(--text-muted);
-            margin-bottom: 16px;
-            line-height: 1.4;
+            margin-top: 4px;
+            margin-bottom: 14px;
         }
 
-        .winning-balls {
+        .legend-row {
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 10px;
+            gap: 6px;
+            margin-bottom: 18px;
         }
 
-        .ball {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 1rem;
-            color: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-        }
-
-        .ball-max { background: #2563eb; }
-        .ball-649 { background: #d97706; }
-
-        /* Generator Box */
-        .action-box {
-            text-align: center;
-            margin-bottom: 28px;
-        }
-
-        .generator-btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 14px 28px;
-            font-size: 1.05rem;
-            font-weight: 700;
-            border-radius: 12px;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0, 135, 82, 0.25);
-            transition: all 0.2s ease;
-        }
-
-        .generator-btn:hover {
-            background-color: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-
-        /* Section Cards */
-        .section-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 28px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            border: 1px solid var(--border);
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 16px;
-            margin-bottom: 20px;
-            gap: 12px;
-        }
-
-        .section-title {
-            font-size: 1.2rem;
-            font-weight: 800;
-        }
-
-        .legend {
-            display: flex;
-            gap: 8px;
+        .legend-pill {
+            padding: 4px 10px;
+            border-radius: 8px;
             font-size: 0.75rem;
             font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
-        .legend-badge {
-            padding: 4px 8px;
-            border-radius: 12px;
-        }
+        .pill-hot { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+        .pill-mid { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
+        .pill-cold { background: #f0f9ff; color: #0369a1; border: 1px solid #bae6fd; }
 
-        .legend-hot { background: var(--hot-bg); color: var(--hot-text); border: 1px solid var(--hot-border); }
-        .legend-mid { background: var(--mid-bg); color: var(--mid-text); border: 1px solid var(--mid-border); }
-        .legend-cold { background: var(--cold-bg); color: var(--cold-text); border: 1px solid var(--cold-border); }
-
-        .numbers-grid {
+        /* Freq 8-Column Grid */
+        .freq-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
-            gap: 8px;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 6px;
         }
 
-        .num-card {
+        .freq-cell {
             border-radius: 10px;
-            padding: 8px 4px;
+            padding: 6px 2px 4px;
             text-align: center;
-            border: 2px solid transparent;
-            transition: transform 0.15s;
+            border: 1.5px solid transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .num-card:hover {
-            transform: scale(1.05);
+        /* 3-Tier Status Border Styling */
+        .freq-cell.hot {
+            background-color: #fff1f2;
+            border-color: #f43f5e;
         }
 
-        .num-card.hot { background: var(--hot-bg); border-color: var(--hot-border); color: var(--hot-text); }
-        .num-card.mid { background: var(--mid-bg); border-color: var(--mid-border); color: var(--mid-text); }
-        .num-card.cold { background: var(--cold-bg); border-color: var(--cold-border); color: var(--cold-text); }
+        .freq-cell.mid {
+            background-color: #f0fdf4;
+            border-color: #4ade80;
+        }
 
-        .ball-circle {
-            width: 32px;
-            height: 32px;
+        .freq-cell.cold {
+            background-color: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        .inner-ball {
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 4px;
             font-weight: 800;
-            font-size: 0.95rem;
+            font-size: 0.78rem;
             color: white;
+            margin-bottom: 2px;
         }
 
-        .num-card.hot .ball-circle { background-color: var(--hot-border); }
-        .num-card.mid .ball-circle { background-color: var(--mid-border); }
-        .num-card.cold .ball-circle { background-color: var(--cold-border); }
-
-        .count-text {
-            font-size: 0.75rem;
-            font-weight: 700;
+        .freq-count {
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: var(--text-dark);
         }
 
-        .posts-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 14px;
-        }
-
-        .post-card {
+        /* Post Items */
+        .post-item {
             background: #ffffff;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 18px;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
             text-decoration: none;
             color: inherit;
             display: block;
-            transition: all 0.2s;
+            transition: transform 0.15s, border 0.15s;
         }
 
-        .post-card:hover {
-            border-color: var(--primary);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        .post-item:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary-btn);
         }
 
         .post-date {
-            font-size: 0.8rem;
-            color: var(--text-muted);
+            font-size: 0.75rem;
             font-weight: 700;
+            color: var(--text-muted);
             margin-bottom: 4px;
         }
 
         .post-title {
-            font-size: 1.05rem;
-            font-weight: 700;
-            margin-bottom: 6px;
+            font-size: 0.95rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+            line-height: 1.3;
         }
 
-        .post-summary {
-            font-size: 0.88rem;
+        .post-snippet {
+            font-size: 0.8rem;
             color: var(--text-muted);
             line-height: 1.4;
         }
@@ -300,175 +323,199 @@
 <body>
 
     <header>
-        <div class="header-container">
-            <div>
-                <div class="brand-title">Official Helper Portal</div>
-                <div class="brand-subtitle">AI Statistical Probability & Real-Time Verified Draw Records</div>
-            </div>
-            <nav>
-                <a href="#results">Results</a>
-                <a href="#frequencies">Frequencies</a>
-                <a href="#posts">Draw Reports</a>
-            </nav>
+        <div class="header-top">
+            <span class="brand-badge">Canada Lotto</span>
+            <div class="header-title">Official Helper Portal</div>
         </div>
+        <nav class="nav-tabs">
+            <a href="index.html" class="nav-tab active">Home</a>
+            <a href="#lotto-max-sec" class="nav-tab">Lotto Max</a>
+            <a href="#lotto-649-sec" class="nav-tab">Lotto 6/49</a>
+            <a href="#reports-sec" class="nav-tab">Draw Reports</a>
+        </nav>
     </header>
 
-    <main>
-        <!-- 1. Live Draw Results Section -->
-        <section id="results" class="live-results-grid">
-            <div class="result-card">
-                <span class="badge badge-max">Lotto Max Official Result</span>
-                <div id="max-jackpot" class="jackpot-highlight">$10 Million</div>
-                <div id="max-status" class="winner-status">Loading official draw status...</div>
-                <div style="font-size:0.8rem; font-weight:700; color:var(--text-muted); margin-bottom:4px;">WINNING NUMBERS (AUG 21)</div>
-                <div id="max-balls" class="winning-balls"></div>
+    <div class="container">
+        
+        <!-- 1. AI Number Strategy Generator Card -->
+        <div class="card generator-card">
+            <h1 class="strategy-title">AI Recommendation Strategy</h1>
+            <p class="strategy-subtitle">7 Numbers generated with Hot/Cold historical frequency weighting</p>
+            
+            <div class="generator-balls-container">
+                <div class="balls-row" id="gen-row-1">
+                    <div class="gen-ball ball-red">6</div>
+                    <div class="gen-ball ball-blue">16</div>
+                    <div class="gen-ball ball-teal">27</div>
+                    <div class="gen-ball ball-teal">29</div>
+                    <div class="gen-ball ball-yellow">40</div>
+                </div>
+                <div class="balls-row" id="gen-row-2">
+                    <div class="gen-ball ball-purple">44</div>
+                    <div class="gen-ball ball-purple">50</div>
+                </div>
             </div>
 
-            <div class="result-card">
-                <span class="badge badge-649">Lotto 6/49 Official Result</span>
-                <div id="649-jackpot" class="jackpot-highlight">$18 Million</div>
-                <div id="649-status" class="winner-status">Loading official draw status...</div>
-                <div style="font-size:0.8rem; font-weight:700; color:var(--text-muted); margin-bottom:4px;">WINNING NUMBERS (AUG 22)</div>
-                <div id="649-balls" class="winning-balls"></div>
-            </div>
-        </section>
-
-        <div class="action-box">
-            <button class="generator-btn" onclick="alert('Generated Balanced Line: ' + Array.from({length: 7}, () => Math.floor(Math.random() * 52) + 1).sort((a,b)=>a-b).join(', '))">
-                🎲 Generate Balanced AI Line
+            <button class="btn-generate" onclick="generateNewRecommendation()">
+                🎲 Generate New Numbers
             </button>
         </div>
 
-        <!-- 2. Frequencies Section -->
-        <section id="frequencies" class="section-card">
-            <div class="section-header">
-                <div>
-                    <div class="section-title">📊 Lotto Max (1-52) Frequency Analysis</div>
-                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Verified national occurrence counts over past 6 months</div>
-                </div>
-                <div class="legend">
-                    <span class="legend-badge legend-hot">🔥 Hot</span>
-                    <span class="legend-badge legend-mid">⚡ Mid</span>
-                    <span class="legend-badge legend-cold">❄️ Cold</span>
+        <!-- 2. Lotto Max Frequency Card (8 Columns) -->
+        <div id="lotto-max-sec" class="card">
+            <div class="freq-header">
+                <span class="freq-icon">📊</span>
+                <div class="freq-title-box">
+                    <h2>Lotto Max Frequency (Past 6 Months)</h2>
                 </div>
             </div>
-            <div id="max-grid" class="numbers-grid"></div>
-        </section>
+            <p class="freq-desc">Occurrence counts based on official national records</p>
+            
+            <div class="legend-row">
+                <div class="legend-pill pill-hot">🔥 Hot (High)</div>
+                <div class="legend-pill pill-mid">⚡ Mid</div>
+                <div class="legend-pill pill-cold">❄️ Cold (Low)</div>
+            </div>
 
-        <section class="section-card">
-            <div class="section-header">
-                <div>
-                    <div class="section-title">📊 Lotto 6/49 (1-49) Frequency Analysis</div>
-                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Verified national occurrence counts over past 6 months</div>
-                </div>
-                <div class="legend">
-                    <span class="legend-badge legend-hot">🔥 Hot</span>
-                    <span class="legend-badge legend-mid">⚡ Mid</span>
-                    <span class="legend-badge legend-cold">❄️ Cold</span>
-                </div>
-            </div>
-            <div id="649-grid" class="numbers-grid"></div>
-        </section>
+            <div id="max-grid" class="freq-grid"></div>
+        </div>
 
-        <!-- 3. Official Analysis Reports Section -->
-        <section id="posts" class="section-card">
-            <div class="section-header">
-                <div class="section-title">📑 Official Verified Draw Reports</div>
+        <!-- 3. Lotto 6/49 Frequency Card (8 Columns) -->
+        <div id="lotto-649-sec" class="card">
+            <div class="freq-header">
+                <span class="freq-icon">📊</span>
+                <div class="freq-title-box">
+                    <h2>Lotto 6/49 Frequency (Past 6 Months)</h2>
+                </div>
             </div>
-            <div id="posts-container" class="posts-grid"></div>
-        </section>
-    </main>
+            <p class="freq-desc">Occurrence counts based on official national records</p>
+            
+            <div class="legend-row">
+                <div class="legend-pill pill-hot">🔥 Hot (High)</div>
+                <div class="legend-pill pill-mid">⚡ Mid</div>
+                <div class="legend-pill pill-cold">❄️ Cold (Low)</div>
+            </div>
+
+            <div id="649-grid" class="freq-grid"></div>
+        </div>
+
+        <!-- 4. Official Reports List -->
+        <div id="reports-sec" class="card">
+            <div class="freq-header">
+                <span class="freq-icon">📑</span>
+                <div class="freq-title-box">
+                    <h2>Verified Draw Analysis Reports</h2>
+                </div>
+            </div>
+            <div id="posts-container" style="margin-top: 14px;"></div>
+        </div>
+
+    </div>
 
     <script>
-        async function loadData() {
+        // 10진수별 오리지널 고유 볼 컬러 매핑
+        function getDecadeColorClass(num) {
+            if (num <= 10) return 'ball-red';      // 1-10 빨강
+            if (num <= 20) return 'ball-blue';     // 11-20 파랑
+            if (num <= 30) return 'ball-teal';     // 21-30 청록
+            if (num <= 40) return 'ball-yellow';   // 31-40 노랑/주황
+            return 'ball-purple';                  // 41-52 보라
+        }
+
+        async function initPage() {
             try {
-                // 1. 최신 당첨 결과 및 빈도표 로드
                 const displayRes = await fetch('today_display.json');
                 const d = await displayRes.json();
 
-                // Lotto Max 배너 렌더링
-                document.getElementById('max-jackpot').textContent = d.lotto_max.jackpot;
-                document.getElementById('max-status').textContent = d.lotto_max.winner_province;
-                renderBalls('max-balls', d.lotto_max.winning_numbers, 'ball-max');
+                renderDecadeFrequencyGrid('max-grid', d.lotto_max.frequencies);
+                renderDecadeFrequencyGrid('649-grid', d.lotto_649.frequencies);
 
-                // Lotto 6/49 배너 렌더링
-                document.getElementById('649-jackpot').textContent = d.lotto_649.gold_ball;
-                document.getElementById('649-status').textContent = d.lotto_649.winner_province;
-                renderBalls('649-balls', d.lotto_649.winning_numbers, 'ball-649');
-
-                // 빈도표 렌더링 (동적 Hot/Cold 3등분 계산)
-                renderFrequencyGrid('max-grid', d.lotto_max.frequencies);
-                renderFrequencyGrid('649-grid', d.lotto_649.frequencies);
-
-                // 2. 포스팅 목록 로드
                 const postsRes = await fetch('posts_index.json');
                 const posts = await postsRes.json();
-                renderPosts(posts);
+                renderReports(posts);
             } catch (err) {
                 console.error("Data load failed:", err);
             }
         }
 
-        function renderBalls(containerId, numbers, ballClass) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = '';
-            numbers.forEach(n => {
-                const b = document.createElement('div');
-                b.className = `ball ${ballClass}`;
-                b.textContent = n;
-                container.appendChild(b);
-            });
-        }
-
-        function renderFrequencyGrid(containerId, frequencies) {
+        // 8열 그리드 + 10진수 컬러볼 + 3분할 Hot/Cold 보더 렌더러
+        function renderDecadeFrequencyGrid(containerId, frequencies) {
             const container = document.getElementById(containerId);
             container.innerHTML = '';
 
             const counts = Object.values(frequencies);
             const maxVal = Math.max(...counts);
             const minVal = Math.min(...counts);
-            const range = (maxVal - minVal) / 3;
+            const step = (maxVal - minVal) / 3;
 
-            const hotThreshold = maxVal - range;
-            const coldThreshold = minVal + range;
+            const hotThresh = maxVal - step;
+            const coldThresh = minVal + step;
 
-            for (const [num, count] of Object.entries(frequencies)) {
-                let statusClass = 'mid';
-                if (count >= hotThreshold) {
-                    statusClass = 'hot';
-                } else if (count <= coldThreshold) {
-                    statusClass = 'cold';
-                }
+            for (const [numStr, count] of Object.entries(frequencies)) {
+                const num = parseInt(numStr);
+                let borderClass = 'mid';
+                if (count >= hotThresh) borderClass = 'hot';
+                else if (count <= coldThresh) borderClass = 'cold';
 
-                const card = document.createElement('div');
-                card.className = `num-card ${statusClass}`;
-                card.innerHTML = `
-                    <div class="ball-circle">${num}</div>
-                    <div class="count-text">${count}x</div>
+                const ballColor = getDecadeColorClass(num);
+
+                const cell = document.createElement('div');
+                cell.className = `freq-cell ${borderClass}`;
+                cell.innerHTML = `
+                    <div class="inner-ball ${ballColor}">${num}</div>
+                    <div class="freq-count">${count}x</div>
                 `;
-                container.appendChild(card);
+                container.appendChild(cell);
             }
         }
 
-        function renderPosts(posts) {
+        function renderReports(posts) {
             const container = document.getElementById('posts-container');
             container.innerHTML = '';
 
-            posts.slice(0, 10).forEach(post => {
-                const item = document.createElement('a');
-                item.className = 'post-card';
-                item.href = `posts/${post.id}.json`;
-                item.target = '_blank';
-                item.innerHTML = `
-                    <div class="post-date">${post.display_date || post.date}</div>
-                    <div class="post-title">${post.title}</div>
-                    <div class="post-summary">${post.summary}</div>
+            posts.slice(0, 10).forEach(p => {
+                const a = document.createElement('a');
+                a.className = 'post-item';
+                a.href = `posts/${p.id}.json`;
+                a.target = '_blank';
+                a.innerHTML = `
+                    <div class="post-date">${p.display_date || p.date}</div>
+                    <div class="post-title">${p.title}</div>
+                    <div class="post-snippet">${p.summary}</div>
                 `;
-                container.appendChild(item);
+                container.appendChild(a);
             });
         }
 
-        document.addEventListener('DOMContentLoaded', loadData);
+        function generateNewRecommendation() {
+            const nums = [];
+            while(nums.length < 7) {
+                const r = Math.floor(Math.random() * 52) + 1;
+                if(!nums.includes(r)) nums.push(r);
+            }
+            nums.sort((a,b) => a - b);
+
+            const row1 = document.getElementById('gen-row-1');
+            const row2 = document.getElementById('gen-row-2');
+            row1.innerHTML = '';
+            row2.innerHTML = '';
+
+            nums.slice(0, 5).forEach(n => {
+                const b = document.createElement('div');
+                b.className = `gen-ball ${getDecadeColorClass(n)}`;
+                b.textContent = n;
+                row1.appendChild(b);
+            });
+
+            nums.slice(5, 7).forEach(n => {
+                const b = document.createElement('div');
+                b.className = `gen-ball ${getDecadeColorClass(n)}`;
+                b.textContent = n;
+                row2.appendChild(b);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', initPage);
     </script>
 </body>
 </html>
