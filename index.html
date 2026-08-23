@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canada Lotto | Official Helper Portal</title>
+    <title>Canada Lotto Official Helper Portal</title>
     <style>
         :root {
+            --primary-grad: linear-gradient(135deg, #008752 0%, #0d9488 100%);
             --bg-color: #f1f5f9;
-            --header-gradient: linear-gradient(135deg, #008752 0%, #0d9488 100%);
             --card-bg: #ffffff;
-            --text-dark: #0f172a;
+            --text-main: #0f172a;
             --text-muted: #64748b;
-            --primary-btn: #008752;
-            --primary-btn-hover: #006b40;
-            --yellow-badge: #fbbf24;
-            --yellow-badge-text: #78350f;
+            --btn-green: #008752;
+            --btn-green-hover: #006b40;
+            --badge-yellow: #fbbf24;
+            --badge-yellow-text: #78350f;
+            --border-color: rgba(226, 232, 240, 0.9);
         }
 
         * {
@@ -27,37 +28,29 @@
 
         body {
             background-color: var(--bg-color);
-            color: var(--text-dark);
+            color: var(--text-main);
             padding-bottom: 60px;
         }
 
-        /* Header */
+        /* Top Header */
         header {
-            background: var(--header-gradient);
-            padding: 18px 24px;
+            background: var(--primary-grad);
+            padding: 16px 20px 20px;
             color: white;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
 
-        .header-container {
-            max-width: 1080px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
         .header-top {
+            max-width: 600px;
+            margin: 0 auto 14px;
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
         .brand-badge {
-            background-color: var(--yellow-badge);
-            color: var(--yellow-badge-text);
+            background-color: var(--badge-yellow);
+            color: var(--badge-yellow-text);
             font-weight: 900;
             font-size: 0.85rem;
             padding: 6px 14px;
@@ -68,12 +61,14 @@
         }
 
         .header-title {
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             font-weight: 800;
             letter-spacing: -0.3px;
         }
 
         .nav-tabs {
+            max-width: 600px;
+            margin: 0 auto;
             display: flex;
             gap: 10px;
             overflow-x: auto;
@@ -83,9 +78,9 @@
             background: rgba(255, 255, 255, 0.15);
             color: white;
             text-decoration: none;
-            padding: 7px 16px;
+            padding: 6px 16px;
             border-radius: 20px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
             transition: background 0.2s;
             white-space: nowrap;
@@ -95,69 +90,74 @@
             background: rgba(255, 255, 255, 0.3);
         }
 
-        /* Responsive Layout Container */
+        /* Container */
         .container {
-            max-width: 1080px;
-            margin: 24px auto;
-            padding: 0 20px;
+            max-width: 600px;
+            margin: 16px auto;
+            padding: 0 16px;
         }
 
-        /* Card Common */
+        /* White Cards */
         .card {
             background: var(--card-bg);
-            border-radius: 20px;
-            padding: 26px 24px;
-            margin-bottom: 24px;
+            border-radius: 24px;
+            padding: 24px 20px;
+            margin-bottom: 20px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-            border: 1px solid rgba(226, 232, 240, 0.8);
+            border: 1px solid var(--border-color);
         }
 
-        /* Generator Card */
+        /* Strategy Generator */
         .generator-card {
             text-align: center;
-            padding: 32px 24px;
         }
 
         .strategy-title {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 800;
             margin-bottom: 6px;
         }
 
         .strategy-subtitle {
-            font-size: 0.88rem;
+            font-size: 0.82rem;
             color: var(--text-muted);
             line-height: 1.4;
-            margin-bottom: 22px;
+            margin-bottom: 20px;
         }
 
         .generator-balls-container {
             display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
+            flex-direction: column;
+            align-items: center;
             gap: 12px;
-            margin-bottom: 24px;
+            margin-bottom: 22px;
+        }
+
+        .balls-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
         }
 
         .gen-ball {
-            width: 48px;
-            height: 48px;
+            width: 46px;
+            height: 46px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: 800;
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: transform 0.2s;
         }
 
         .gen-ball:active {
             transform: scale(0.92);
         }
 
-        /* Decade Ball Colors */
+        /* Original Color Sets */
         .ball-red { background: linear-gradient(135deg, #ef4444, #dc2626); }
         .ball-blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
         .ball-teal { background: linear-gradient(135deg, #14b8a6, #0f766e); }
@@ -165,11 +165,11 @@
         .ball-purple { background: linear-gradient(135deg, #a855f7, #7e22ce); }
 
         .btn-generate {
-            background: var(--primary-btn);
+            background: var(--btn-green);
             color: white;
             border: none;
-            padding: 14px 28px;
-            font-size: 1rem;
+            padding: 13px 24px;
+            font-size: 0.95rem;
             font-weight: 700;
             border-radius: 14px;
             cursor: pointer;
@@ -177,41 +177,27 @@
             align-items: center;
             gap: 8px;
             box-shadow: 0 4px 14px rgba(0, 135, 82, 0.3);
-            transition: transform 0.1s, background 0.2s;
+            transition: background 0.2s, transform 0.1s;
         }
 
         .btn-generate:hover {
-            background: var(--primary-btn-hover);
+            background: var(--btn-green-hover);
         }
 
         .btn-generate:active {
             transform: scale(0.96);
         }
 
-        /* PC 2-Column Grid for Frequency Tables */
-        .freq-columns {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 24px;
-            margin-bottom: 24px;
-        }
-
-        @media (min-width: 900px) {
-            .freq-columns {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        /* Frequency Card */
+        /* Frequency Card Header */
         .freq-header {
             display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 8px;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 4px;
         }
 
         .freq-icon {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
         }
 
         .freq-title-box h2 {
@@ -221,16 +207,16 @@
         }
 
         .freq-desc {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: var(--text-muted);
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
+        /* Legend */
         .legend-row {
             display: flex;
-            gap: 8px;
-            margin-bottom: 18px;
-            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 16px;
         }
 
         .legend-pill {
@@ -247,11 +233,11 @@
         .pill-mid { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
         .pill-cold { background: #f0f9ff; color: #0369a1; border: 1px solid #bae6fd; }
 
-        /* Freq Responsive Grid */
+        /* 8-Column Grid */
         .freq-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
-            gap: 8px;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 6px;
         }
 
         .freq-cell {
@@ -280,96 +266,97 @@
         }
 
         .inner-ball {
-            width: 28px;
-            height: 28px;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
-            font-size: 0.82rem;
+            font-size: 0.78rem;
             color: white;
             margin-bottom: 2px;
         }
 
         .freq-count {
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             font-weight: 800;
-            color: var(--text-dark);
+            color: var(--text-main);
         }
 
         /* Post Items */
         .post-item {
             background: #ffffff;
-            border: 1px solid rgba(226, 232, 240, 0.9);
+            border: 1px solid var(--border-color);
             border-radius: 16px;
-            padding: 18px 20px;
-            margin-bottom: 14px;
+            padding: 16px;
+            margin-bottom: 12px;
             text-decoration: none;
             color: inherit;
             display: block;
-            transition: transform 0.15s, border 0.15s, box-shadow 0.15s;
+            transition: transform 0.15s, border 0.15s;
         }
 
         .post-item:hover {
             transform: translateY(-2px);
-            border-color: var(--primary-btn);
-            box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+            border-color: var(--btn-green);
         }
 
         .post-date {
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             font-weight: 700;
             color: var(--text-muted);
             margin-bottom: 4px;
         }
 
         .post-title {
-            font-size: 1.05rem;
+            font-size: 0.95rem;
             font-weight: 800;
-            margin-bottom: 6px;
-            line-height: 1.35;
+            margin-bottom: 4px;
+            line-height: 1.3;
         }
 
         .post-snippet {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
-            line-height: 1.45;
+            line-height: 1.4;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="header-container">
-            <div class="header-top">
-                <span class="brand-badge">Canada Lotto</span>
-                <div class="header-title">Official Helper Portal</div>
-            </div>
-            <nav class="nav-tabs">
-                <a href="index.html" class="nav-tab active">Home</a>
-                <a href="#lotto-max-sec" class="nav-tab">Lotto Max</a>
-                <a href="#lotto-649-sec" class="nav-tab">Lotto 6/49</a>
-                <a href="#reports-sec" class="nav-tab">Draw Reports</a>
-            </nav>
+        <div class="header-top">
+            <span class="brand-badge">Canada Lotto</span>
+            <div class="header-title">Official Helper Portal</div>
         </div>
+        <nav class="nav-tabs">
+            <a href="index.html" class="nav-tab active">Home</a>
+            <a href="#lotto-max-sec" class="nav-tab">Lotto Max</a>
+            <a href="#lotto-649-sec" class="nav-tab">Lotto 6/49</a>
+            <a href="#reports-sec" class="nav-tab">Draw Reports</a>
+        </nav>
     </header>
 
     <div class="container">
         
-        <!-- 1. AI Number Strategy Generator Card -->
+        <!-- 1. Generator Box (2 Rows) -->
         <div class="card generator-card">
             <h1 class="strategy-title">AI Recommendation Strategy</h1>
             <p class="strategy-subtitle">7 Numbers generated with Hot/Cold historical frequency weighting</p>
             
-            <div class="generator-balls-container" id="generator-balls-box">
-                <div class="gen-ball ball-red">6</div>
-                <div class="gen-ball ball-blue">16</div>
-                <div class="gen-ball ball-teal">27</div>
-                <div class="gen-ball ball-teal">29</div>
-                <div class="gen-ball ball-yellow">40</div>
-                <div class="gen-ball ball-purple">44</div>
-                <div class="gen-ball ball-purple">50</div>
+            <div class="generator-balls-container">
+                <div class="balls-row" id="gen-row-1">
+                    <div class="gen-ball ball-red">6</div>
+                    <div class="gen-ball ball-blue">16</div>
+                    <div class="gen-ball ball-teal">27</div>
+                    <div class="gen-ball ball-teal">29</div>
+                    <div class="gen-ball ball-yellow">40</div>
+                </div>
+                <div class="balls-row" id="gen-row-2">
+                    <div class="gen-ball ball-purple">44</div>
+                    <div class="gen-ball ball-purple">50</div>
+                </div>
             </div>
 
             <button class="btn-generate" onclick="generateNewRecommendation()">
@@ -377,48 +364,45 @@
             </button>
         </div>
 
-        <!-- 2. PC 2-Column Responsive Frequency Section -->
-        <div class="freq-columns">
-            <!-- Lotto Max Frequency Card -->
-            <div id="lotto-max-sec" class="card">
-                <div class="freq-header">
-                    <span class="freq-icon">📊</span>
-                    <div class="freq-title-box">
-                        <h2>Lotto Max Frequency (Past 6 Months)</h2>
-                    </div>
+        <!-- 2. Lotto Max 8-Column Grid -->
+        <div id="lotto-max-sec" class="card">
+            <div class="freq-header">
+                <span class="freq-icon">📊</span>
+                <div class="freq-title-box">
+                    <h2>Lotto Max (1-52) Frequency (Past 6 Months)</h2>
                 </div>
-                <p class="freq-desc">Occurrence counts based on official national records</p>
-                
-                <div class="legend-row">
-                    <div class="legend-pill pill-hot">🔥 Hot (High)</div>
-                    <div class="legend-pill pill-mid">⚡ Mid</div>
-                    <div class="legend-pill pill-cold">❄️ Cold (Low)</div>
-                </div>
-
-                <div id="max-grid" class="freq-grid"></div>
+            </div>
+            <p class="freq-desc">Occurrence counts based on official national records</p>
+            
+            <div class="legend-row">
+                <div class="legend-pill pill-hot">🔥 Hot (High)</div>
+                <div class="legend-pill pill-mid">⚡ Mid</div>
+                <div class="legend-pill pill-cold">❄️ Cold (Low)</div>
             </div>
 
-            <!-- Lotto 6/49 Frequency Card -->
-            <div id="lotto-649-sec" class="card">
-                <div class="freq-header">
-                    <span class="freq-icon">📊</span>
-                    <div class="freq-title-box">
-                        <h2>Lotto 6/49 Frequency (Past 6 Months)</h2>
-                    </div>
-                </div>
-                <p class="freq-desc">Occurrence counts based on official national records</p>
-                
-                <div class="legend-row">
-                    <div class="legend-pill pill-hot">🔥 Hot (High)</div>
-                    <div class="legend-pill pill-mid">⚡ Mid</div>
-                    <div class="legend-pill pill-cold">❄️ Cold (Low)</div>
-                </div>
-
-                <div id="649-grid" class="freq-grid"></div>
-            </div>
+            <div id="max-grid" class="freq-grid"></div>
         </div>
 
-        <!-- 3. Official Reports List -->
+        <!-- 3. Lotto 6/49 8-Column Grid -->
+        <div id="lotto-649-sec" class="card">
+            <div class="freq-header">
+                <span class="freq-icon">📊</span>
+                <div class="freq-title-box">
+                    <h2>Lotto 6/49 (1-49) Frequency (Past 6 Months)</h2>
+                </div>
+            </div>
+            <p class="freq-desc">Occurrence counts based on official national records</p>
+            
+            <div class="legend-row">
+                <div class="legend-pill pill-hot">🔥 Hot (High)</div>
+                <div class="legend-pill pill-mid">⚡ Mid</div>
+                <div class="legend-pill pill-cold">❄️ Cold (Low)</div>
+            </div>
+
+            <div id="649-grid" class="freq-grid"></div>
+        </div>
+
+        <!-- 4. Verified Reports -->
         <div id="reports-sec" class="card">
             <div class="freq-header">
                 <span class="freq-icon">📑</span>
@@ -426,7 +410,7 @@
                     <h2>Verified Draw Analysis Reports</h2>
                 </div>
             </div>
-            <div id="posts-container" style="margin-top: 16px;"></div>
+            <div id="posts-container" style="margin-top: 14px;"></div>
         </div>
 
     </div>
@@ -512,14 +496,23 @@
             }
             nums.sort((a,b) => a - b);
 
-            const box = document.getElementById('generator-balls-box');
-            box.innerHTML = '';
+            const row1 = document.getElementById('gen-row-1');
+            const row2 = document.getElementById('gen-row-2');
+            row1.innerHTML = '';
+            row2.innerHTML = '';
 
-            nums.forEach(n => {
+            nums.slice(0, 5).forEach(n => {
                 const b = document.createElement('div');
                 b.className = `gen-ball ${getDecadeColorClass(n)}`;
                 b.textContent = n;
-                box.appendChild(b);
+                row1.appendChild(b);
+            });
+
+            nums.slice(5, 7).forEach(n => {
+                const b = document.createElement('div');
+                b.className = `gen-ball ${getDecadeColorClass(n)}`;
+                b.textContent = n;
+                row2.appendChild(b);
             });
         }
 
