@@ -3,432 +3,401 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canada Official Lotto Portal | Max & 6/49 AI Statistics</title>
-    <meta name="description" content="Comprehensive statistical analysis, draw breakdowns, and historical frequency tracking for Canada Lotto Max and Lotto 6/49.">
-    
-    <!-- Google AdSense Code -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5048509015899303" crossorigin="anonymous"></script>
-
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Canada Lotto AI Helper | Official Analytics Portal</title>
     <style>
-        .ball-flex-container {
-            display: flex !important;
-            flex-wrap: wrap !important;
-            justify-content: center !important;
-            gap: 8px !important;
-            min-height: 48px !important;
+        :root {
+            --primary: #008752;
+            --primary-dark: #005f39;
+            --bg: #f4f6f8;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --hot-bg: #fee2e2;
+            --hot-border: #ef4444;
+            --hot-text: #b91c1c;
+            --mid-bg: #dcfce7;
+            --mid-border: #22c55e;
+            --mid-text: #15803d;
+            --cold-bg: #e0f2fe;
+            --cold-border: #38bdf8;
+            --cold-text: #0369a1;
         }
-        .lotto-ball {
-            width: 42px !important;
-            height: 42px !important;
-            border-radius: 50% !important;
-            display: inline-flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            font-weight: 800 !important;
-            font-size: 1.05rem !important;
-            color: white !important;
-            box-shadow: inset -2px -2px 6px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0,0,0,0.15) !important;
-            margin: 2px !important;
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
-        .lotto-ball-xs {
-            width: 20px !important;
-            height: 20px !important;
-            border-radius: 50% !important;
-            display: inline-flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            font-weight: 800 !important;
-            font-size: 0.65rem !important;
-            color: white !important;
-            box-shadow: inset -1px -1px 3px rgba(0, 0, 0, 0.3) !important;
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.5;
+            padding-bottom: 60px;
         }
-        .grid-cols-13 {
-            grid-template-columns: repeat(13, minmax(0, 1fr)) !important;
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 24px 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
-        .bg-ball-red { background-color: #ef4444 !important; }
-        .bg-ball-blue { background-color: #2563eb !important; }
-        .bg-ball-teal { background-color: #14b8a6 !important; }
-        .bg-ball-amber { background-color: #f59e0b !important; }
-        .bg-ball-purple { background-color: #9333ea !important; }
+
+        .header-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .brand-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-subtitle {
+            font-size: 0.875rem;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-left: 20px;
+            opacity: 0.9;
+            transition: opacity 0.2s;
+        }
+
+        nav a:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 16px;
+        }
+
+        .hero-banner {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .generator-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 135, 82, 0.25);
+            transition: all 0.2s ease;
+        }
+
+        .generator-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .section-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+            gap: 12px;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend {
+            display: flex;
+            gap: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .legend-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .legend-hot { background: var(--hot-bg); color: var(--hot-text); border: 1px solid var(--hot-border); }
+        .legend-mid { background: var(--mid-bg); color: var(--mid-text); border: 1px solid var(--mid-border); }
+        .legend-cold { background: var(--cold-bg); color: var(--cold-text); border: 1px solid var(--cold-border); }
+
+        .numbers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(68px, 1fr));
+            gap: 10px;
+        }
+
+        .num-card {
+            border-radius: 12px;
+            padding: 10px 4px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: transform 0.15s;
+        }
+
+        .num-card:hover {
+            transform: scale(1.05);
+        }
+
+        .num-card.hot {
+            background-color: var(--hot-bg);
+            border-color: var(--hot-border);
+            color: var(--hot-text);
+        }
+
+        .num-card.mid {
+            background-color: var(--mid-bg);
+            border-color: var(--mid-border);
+            color: var(--mid-text);
+        }
+
+        .num-card.cold {
+            background-color: var(--cold-bg);
+            border-color: var(--cold-border);
+            color: var(--cold-text);
+        }
+
+        .ball-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 6px;
+            font-weight: 800;
+            font-size: 1rem;
+            color: white;
+        }
+
+        .num-card.hot .ball-circle { background-color: var(--hot-border); }
+        .num-card.mid .ball-circle { background-color: var(--mid-border); }
+        .num-card.cold .ball-circle { background-color: var(--cold-border); }
+
+        .count-text {
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .posts-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .post-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            transition: all 0.2s;
+        }
+
+        .post-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .post-date {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .post-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .post-summary {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen text-slate-900 font-sans flex flex-col justify-between">
+<body>
 
-    <div>
-        <!-- Header Navigation -->
-        <header class="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-700 text-white shadow-lg sticky top-0 z-50">
-            <div class="max-w-5xl mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-4">
-                <a href="index.html" class="flex items-center gap-3">
-                    <div class="bg-amber-400 text-slate-900 font-black px-3 py-1 rounded-lg text-sm tracking-widest shadow">CANADA LOTTO</div>
-                    <div>
-                        <h1 class="text-lg sm:text-xl font-bold tracking-tight">Official Helper Portal</h1>
-                        <p class="text-xs text-teal-100 hidden sm:block">AI Statistical Analysis & Historical Probability Tracking</p>
-                    </div>
-                </a>
-                <nav class="flex items-center gap-2 sm:gap-4 text-xs font-semibold">
-                    <a href="index.html" class="bg-white/20 px-3 py-1.5 rounded-lg text-white">Home</a>
-                    <a href="about.html" class="hover:bg-white/10 px-3 py-1.5 rounded-lg text-teal-100 transition">About Analysis</a>
-                    <a href="privacy.html" class="hover:bg-white/10 px-3 py-1.5 rounded-lg text-teal-100 transition">Privacy Policy</a>
-                </nav>
+    <header>
+        <div class="header-container">
+            <div>
+                <div class="brand-title">Official Helper Portal</div>
+                <div class="brand-subtitle">AI Statistical Analysis & Historical Probability Tracking</div>
             </div>
-        </header>
-
-        <!-- Main Content Area -->
-        <main class="max-w-4xl mx-auto px-4 py-8 space-y-10">
-            
-            <div id="view-main" class="space-y-10">
-                <!-- Game Switcher Tabs -->
-                <div class="flex justify-center gap-3">
-                    <button id="tab-max" onclick="switchGame('max')" class="px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-emerald-600 text-white">
-                        💚 LOTTO MAX (1-52)
-                    </button>
-                    <button id="tab-649" onclick="switchGame('649')" class="px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-white text-slate-600 hover:bg-slate-100 border border-slate-200">
-                        💙 LOTTO 6/49 (1-49)
-                    </button>
-                </div>
-
-                <!-- Lotto Max Main Card -->
-                <div id="card-max" class="space-y-6">
-                    <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
-                        <div class="bg-slate-900 p-6 text-center text-white">
-                            <span class="bg-amber-400 text-slate-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-widest block w-max mx-auto mb-2">Lotto Max Main Jackpot</span>
-                            <h2 id="max-jackpot" class="text-4xl sm:text-5xl font-black text-amber-300">EST. $50 Million</h2>
-                            <div class="mt-4 bg-slate-800/80 border border-slate-700/80 p-2.5 rounded-xl max-w-md mx-auto text-xs text-amber-200 font-medium">
-                                🇨🇦 <span id="max-prov-text">No jackpot winner on Aug 14 (Rolled over to $50M)</span>
-                            </div>
-                        </div>
-                        
-                        <div class="p-6 sm:p-8 text-center space-y-6">
-                            <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200">
-                                <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider block mb-3">⚡ Official Winning Numbers</span>
-                                <div id="max-win-balls" class="ball-flex-container"></div>
-                            </div>
-
-                            <div>
-                                <h3 class="text-lg font-bold text-slate-800 mb-1">🤖 AI Recommended Line Strategy</h3>
-                                <p class="text-xs text-slate-500 mb-4">7 Numbers generated with Hot/Cold historical frequency weighting</p>
-                                <div id="max-balls" class="ball-flex-container mb-4"></div>
-                                <button onclick="generateNewNumbers('max')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-6 rounded-xl shadow transition text-xs sm:text-sm">🎲 Generate New Numbers</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Lotto 6/49 Main Card -->
-                <div id="card-649" class="space-y-6 hidden">
-                    <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
-                        <div class="bg-slate-900 p-6 text-center text-white">
-                            <span class="bg-blue-400 text-slate-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-widest block w-max mx-auto mb-2">Lotto 6/49 Draw Breakdown</span>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
-                                <div class="bg-white/10 p-3 rounded-2xl backdrop-blur">
-                                    <span class="text-xs text-slate-300 block">Gold Ball Jackpot</span>
-                                    <span id="goldball-amount" class="text-2xl font-black text-amber-300">$14 Million</span>
-                                </div>
-                                <div class="bg-white/10 p-3 rounded-2xl backdrop-blur">
-                                    <span class="text-xs text-slate-300 block">Classic Jackpot</span>
-                                    <span class="text-2xl font-black text-blue-300">$5 Million</span>
-                                </div>
-                            </div>
-                            <div class="mt-4 bg-slate-800/80 border border-slate-700/80 p-2.5 rounded-xl max-w-md mx-auto text-xs text-blue-200 font-medium">
-                                🇨🇦 <span id="l649-prov-text">Guaranteed $1M won in Ontario (Gold Ball rolled over to $14M)</span>
-                            </div>
-                        </div>
-
-                        <div class="p-6 sm:p-8 text-center space-y-6">
-                            <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200">
-                                <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider block mb-3">⚡ Official Winning Numbers</span>
-                                <div id="l649-win-balls" class="ball-flex-container"></div>
-                            </div>
-
-                            <div>
-                                <h3 class="text-lg font-bold text-slate-800 mb-1">🤖 AI Recommended Line Strategy</h3>
-                                <p class="text-xs text-slate-500 mb-4">6 Numbers generated with Hot/Cold historical frequency weighting</p>
-                                <div id="l649-balls" class="ball-flex-container mb-4"></div>
-                                <button onclick="generateNewNumbers('649')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-6 rounded-xl shadow transition text-xs sm:text-sm">🎲 Generate New Numbers</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Frequency Matrix Grid -->
-                <div class="bg-white rounded-3xl shadow-xl border border-slate-200 p-5 space-y-3 overflow-x-auto">
-                    <div class="border-b pb-3 flex flex-wrap items-center justify-between gap-2">
-                        <div>
-                            <h2 class="text-base font-black text-slate-900 flex items-center gap-1.5">
-                                📊 <span id="freq-title">Lotto Max</span> Frequency (Past 6 Months)
-                            </h2>
-                            <p class="text-xs text-slate-500">Occurrence counts based on official national records</p>
-                        </div>
-                        <div class="flex items-center gap-1 text-[10px] font-bold">
-                            <span class="px-2 py-0.5 bg-red-100 text-red-700 rounded border border-red-200">🔥 Hot (High)</span>
-                            <span class="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded border border-emerald-200">⚡ Mid</span>
-                            <span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded border border-slate-200">❄️ Cold (Low)</span>
-                        </div>
-                    </div>
-                    <div id="freq-grid-container" class="grid grid-cols-13 gap-1 min-w-[520px]"></div>
-                </div>
-
-                <!-- Blog Posts Section -->
-                <div id="posts-section" class="pt-6 border-t border-slate-200 space-y-4">
-                    <div class="flex items-center justify-between">
-                        <h2 class="text-lg font-black text-slate-800">Latest Draw Analysis Reports</h2>
-                        <span class="text-xs text-teal-600 font-bold">Updated Weekly</span>
-                    </div>
-                    <div id="posts-container" class="space-y-3"></div>
-                </div>
-
-                <!-- Comprehensive Publisher Guide (Static SEO & AdSense Content) -->
-                <section class="bg-white rounded-3xl shadow-xl border border-slate-200 p-6 sm:p-8 space-y-6 text-slate-700 leading-relaxed text-sm">
-                    <h2 class="text-xl sm:text-2xl font-black text-slate-900 border-b pb-3">Understanding Canadian Lottery Probabilities & Statistical Trends</h2>
-                    
-                    <div class="space-y-3">
-                        <h3 class="text-base font-bold text-slate-800">1. Overview of Lotto Max and Lotto 6/49 Rules</h3>
-                        <p>Lotto Max is Canada's flagship nationwide lottery game featuring a matrix of 7 winning numbers selected from a pool of 1 to 52. When the main jackpot reaches $50 Million, additional Maxmillions draws are introduced, offering individual $1 Million prizes. In comparison, Lotto 6/49 utilizes a classic 6/49 matrix alongside an innovative Gold Ball draw system that guarantees a $1 Million winner every draw while rolling over a progressively increasing jackpot pool that can grow up to $68 Million.</p>
-                    </div>
-
-                    <div class="space-y-3">
-                        <h3 class="text-base font-bold text-slate-800">2. How Statistical Frequency Modeling Works</h3>
-                        <p>Every lottery draw is an independent random event governed by strict mathematical odds. However, statistical tracking of past historical draws allows analysts to observe empirical distribution patterns:
-                        <ul class="list-disc pl-5 space-y-1.5 mt-2">
-                            <li><strong>Hot Numbers:</strong> Numbers that have appeared significantly above the statistical median frequency over a designated rolling 6-month window.</li>
-                            <li><strong>Cold Numbers:</strong> Numbers that have experienced an extended drought since their last appearance.</li>
-                            <li><strong>Odd/Even Ratio Balance:</strong> Historical aggregates indicate that combinations maintaining a balanced odd-even distribution (e.g., 3-3 or 4-3) account for over 65% of all winning lines.</li>
-                        </ul>
-                        </p>
-                    </div>
-
-                    <div class="space-y-3">
-                        <h3 class="text-base font-bold text-slate-800">3. Responsible Gaming and Independent Analytical Notice</h3>
-                        <p>The statistical algorithms, frequency matrices, and prediction line generators provided on <strong>lottohelper.ca</strong> are engineered solely for educational, analytical, and entertainment purposes. No algorithm or past statistical trend can alter the fundamental mathematical probability of random lottery drawings. We urge all Canadian players to play responsibly within their personal limits.</p>
-                    </div>
-                </section>
-
-            </div>
-
-            <!-- Single Post Detail View -->
-            <div id="view-post" class="space-y-4 hidden">
-                <button onclick="showHome()" class="text-xs font-bold text-teal-700 hover:underline flex items-center gap-1">
-                    ← Back to Portal Home
-                </button>
-                <article class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
-                    <div class="bg-slate-900 p-6 sm:p-8 text-white border-b border-slate-800">
-                        <span id="post-game-badge" class="bg-amber-400 text-slate-950 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest inline-block mb-2">Game</span>
-                        <h2 id="post-title" class="text-xl sm:text-2xl font-black leading-snug">Post Title</h2>
-                        <p id="post-date" class="text-xs text-slate-400 mt-2">Date</p>
-                    </div>
-                    <div class="p-6 sm:p-8 space-y-6">
-                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3">
-                            <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Official Draw Results</h3>
-                            <span id="post-jackpot" class="text-base font-black text-emerald-700 block">Jackpot</span>
-                            <div id="post-win-balls" class="ball-flex-container"></div>
-                            <div class="bg-white p-3 rounded-xl text-xs font-medium text-slate-700 border">
-                                📍 <strong>Status / Winning Locations:</strong> <span id="post-prov">Checking...</span>
-                            </div>
-                        </div>
-                        <div class="bg-emerald-50/60 p-5 rounded-2xl border border-emerald-100 space-y-3">
-                            <h3 class="text-sm font-black text-emerald-950">🤖 AI Recommended Prediction Line</h3>
-                            <p id="post-ai-note" class="text-xs text-slate-600 leading-relaxed"></p>
-                            <div id="post-ai-balls" class="ball-flex-container pt-2"></div>
-                        </div>
-                        <button onclick="showHome()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition">
-                            ← Return to Portal Home
-                        </button>
-                    </div>
-                </article>
-            </div>
-
-        </main>
-    </div>
-
-    <!-- Footer Area -->
-    <footer class="bg-slate-900 text-slate-400 text-xs py-8 mt-12 border-t border-slate-800">
-        <div class="max-w-4xl mx-auto px-4 text-center space-y-3">
-            <p>© 2026 lottohelper.ca. All rights reserved. Independent Canadian Lottery Statistics Portal.</p>
-            <div class="flex justify-center flex-wrap gap-4 text-slate-300 font-medium pt-1">
-                <a href="index.html" class="hover:text-amber-400 underline transition">Home</a>
-                <span>•</span>
-                <a href="about.html" class="hover:text-amber-400 underline transition">About & Methodology</a>
-                <span>•</span>
-                <a href="privacy.html" class="hover:text-amber-400 underline transition">Privacy Policy & Cookies</a>
-            </div>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="#frequencies">Frequencies</a>
+                <a href="#posts">Analysis Reports</a>
+            </nav>
         </div>
-    </footer>
+    </header>
+
+    <main>
+        <section class="hero-banner">
+            <button class="generator-btn" onclick="alert('Generated Balanced Line: ' + Array.from({length: 7}, () => Math.floor(Math.random() * 52) + 1).sort((a,b)=>a-b).join(', '))">
+                🎲 Generate Balanced AI Line
+            </button>
+        </section>
+
+        <!-- Lotto Max Frequencies -->
+        <section id="frequencies" class="section-card">
+            <div class="section-header">
+                <div>
+                    <div class="section-title">📊 Lotto Max (1-52) Frequency (Past 6 Months)</div>
+                    <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Occurrence counts based on official national records</div>
+                </div>
+                <div class="legend">
+                    <span class="legend-badge legend-hot">🔥 Hot (High)</span>
+                    <span class="legend-badge legend-mid">⚡ Mid</span>
+                    <span class="legend-badge legend-cold">❄️ Cold (Low)</span>
+                </div>
+            </div>
+            <div id="max-grid" class="numbers-grid">
+                <!-- Dynamic Content -->
+            </div>
+        </section>
+
+        <!-- Lotto 6/49 Frequencies -->
+        <section class="section-card">
+            <div class="section-header">
+                <div>
+                    <div class="section-title">📊 Lotto 6/49 (1-49) Frequency (Past 6 Months)</div>
+                    <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Occurrence counts based on official national records</div>
+                </div>
+                <div class="legend">
+                    <span class="legend-badge legend-hot">🔥 Hot (High)</span>
+                    <span class="legend-badge legend-mid">⚡ Mid</span>
+                    <span class="legend-badge legend-cold">❄️ Cold (Low)</span>
+                </div>
+            </div>
+            <div id="649-grid" class="numbers-grid">
+                <!-- Dynamic Content -->
+            </div>
+        </section>
+
+        <!-- Official Analysis Reports -->
+        <section id="posts" class="section-card">
+            <div class="section-header">
+                <div class="section-title">📑 Official Verified Draw Reports</div>
+            </div>
+            <div id="posts-container" class="posts-grid">
+                <!-- Dynamic Content -->
+            </div>
+        </section>
+    </main>
 
     <script>
-        let globalDisplayData = null;
-        let currentGame = 'max';
+        async function loadLottoData() {
+            try {
+                // 1. 빈도 및 최신 디스플레이 렌더링
+                const displayRes = await fetch('today_display.json');
+                const displayData = await displayRes.json();
 
-        function getBallColorClass(num) {
-            if (num <= 10) return 'bg-ball-red';
-            if (num <= 20) return 'bg-ball-blue';
-            if (num <= 30) return 'bg-ball-teal';
-            if (num <= 40) return 'bg-ball-amber';
-            return 'bg-ball-purple';
+                renderFrequencyGrid('max-grid', displayData.lotto_max.frequencies);
+                renderFrequencyGrid('649-grid', displayData.lotto_649.frequencies);
+
+                // 2. 포스팅 목록 렌더링
+                const postsRes = await fetch('posts_index.json');
+                const postsList = await postsRes.json();
+                renderPosts(postsList);
+            } catch (err) {
+                console.error("Data loading failed:", err);
+            }
         }
 
-        function renderBalls(containerId, numbers) {
+        // 상대적 최댓값/최솟값 기준 자동 3분할 렌더링 로직
+        function renderFrequencyGrid(containerId, frequencies) {
             const container = document.getElementById(containerId);
-            if (!container) return;
             container.innerHTML = '';
-            (numbers || []).forEach(num => {
-                const ball = document.createElement('div');
-                ball.className = `lotto-ball ${getBallColorClass(num)}`;
-                ball.innerText = num;
-                container.appendChild(ball);
+
+            const counts = Object.values(frequencies);
+            const maxVal = Math.max(...counts);
+            const minVal = Math.min(...counts);
+            const range = (maxVal - minVal) / 3;
+
+            // 상위 33% = Hot, 하위 33% = Cold, 나머지 = Mid
+            const hotThreshold = maxVal - range;
+            const coldThreshold = minVal + range;
+
+            for (const [num, count] of Object.entries(frequencies)) {
+                let statusClass = 'mid';
+                if (count >= hotThreshold) {
+                    statusClass = 'hot';
+                } else if (count <= coldThreshold) {
+                    statusClass = 'cold';
+                }
+
+                const card = document.createElement('div');
+                card.className = `num-card ${statusClass}`;
+                card.innerHTML = `
+                    <div class="ball-circle">${num}</div>
+                    <div class="count-text">${count}x</div>
+                `;
+                container.appendChild(card);
+            }
+        }
+
+        function renderPosts(posts) {
+            const container = document.getElementById('posts-container');
+            container.innerHTML = '';
+
+            posts.slice(0, 10).forEach(post => {
+                const item = document.createElement('a');
+                item.className = 'post-card';
+                item.href = `posts/${post.id}.json`;
+                item.target = '_blank';
+                item.innerHTML = `
+                    <div class="post-date">${post.display_date || post.date}</div>
+                    <div class="post-title">${post.title}</div>
+                    <div class="post-summary">${post.summary}</div>
+                `;
+                container.appendChild(item);
             });
         }
 
-        function renderFrequencyGrid(game) {
-            const container = document.getElementById('freq-grid-container');
-            const titleElem = document.getElementById('freq-title');
-            if (!container) return;
-
-            titleElem.innerText = game === 'max' ? 'Lotto Max (1-52)' : 'Lotto 6/49 (1-49)';
-            let freqData = {};
-            if (globalDisplayData) {
-                freqData = (game === 'max') 
-                    ? (globalDisplayData.lotto_max?.frequencies || {})
-                    : (globalDisplayData.lotto_649?.frequencies || {});
-            }
-
-            const totalNumbers = game === 'max' ? 52 : 49;
-            container.innerHTML = '';
-
-            for (let i = 1; i <= totalNumbers; i++) {
-                const count = freqData[i] || Math.floor(Math.random() * 10) + 5;
-                let cardBorder = "border-slate-200 bg-slate-50";
-                let badgeClass = "bg-slate-200 text-slate-700";
-
-                if (count >= 13) {
-                    cardBorder = "border-red-300 bg-red-50";
-                    badgeClass = "bg-red-500 text-white font-black";
-                } else if (count >= 8) {
-                    cardBorder = "border-emerald-200 bg-emerald-50";
-                    badgeClass = "bg-emerald-600 text-white font-bold";
-                }
-
-                const tile = document.createElement('div');
-                tile.className = `p-1 rounded-lg border flex flex-col items-center justify-center ${cardBorder}`;
-                tile.innerHTML = `
-                    <div class="lotto-ball-xs ${getBallColorClass(i)} mb-0.5">${i}</div>
-                    <span class="text-[9px] font-extrabold px-1 py-0.2 rounded ${badgeClass}">${count}x</span>
-                `;
-                container.appendChild(tile);
-            }
-        }
-
-        function switchGame(game) {
-            currentGame = game;
-            const isMax = game === 'max';
-            document.getElementById('card-max').classList.toggle('hidden', !isMax);
-            document.getElementById('card-649').classList.toggle('hidden', isMax);
-
-            document.getElementById('tab-max').className = isMax 
-                ? "px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-emerald-600 text-white"
-                : "px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-white text-slate-600 hover:bg-slate-100 border border-slate-200";
-
-            document.getElementById('tab-649').className = !isMax 
-                ? "px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-blue-600 text-white"
-                : "px-6 py-3 rounded-2xl font-black text-sm sm:text-base transition-all shadow-md bg-white text-slate-600 hover:bg-slate-100 border border-slate-200";
-
-            renderFrequencyGrid(game);
-        }
-
-        function generateNewNumbers(game) {
-            if (game === 'max') {
-                const numbers = new Set();
-                while (numbers.size < 7) numbers.add(Math.floor(Math.random() * 52) + 1);
-                renderBalls('max-balls', Array.from(numbers).sort((a, b) => a - b));
-            } else {
-                const numbers = new Set();
-                while (numbers.size < 6) numbers.add(Math.floor(Math.random() * 49) + 1);
-                renderBalls('l649-balls', Array.from(numbers).sort((a, b) => a - b));
-            }
-        }
-
-        function showHome() {
-            document.getElementById('view-main').classList.remove('hidden');
-            document.getElementById('view-post').classList.add('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        async function openPost(postId) {
-            try {
-                const response = await fetch(`posts/${postId}.json?cache=` + new Date().getTime());
-                let post = await response.json();
-                
-                document.getElementById('post-title').innerText = post.title;
-                document.getElementById('post-game-badge').innerText = post.game || "Lotto";
-                document.getElementById('post-date').innerText = post.display_date || post.date;
-                document.getElementById('post-jackpot').innerText = post.jackpot || "";
-                document.getElementById('post-prov').innerText = post.winner_province || "";
-                document.getElementById('post-ai-note').innerText = post.ai_note || "";
-
-                renderBalls('post-win-balls', post.winning_numbers || []);
-                renderBalls('post-ai-balls', post.ai_recommended || []);
-
-                document.getElementById('view-main').classList.add('hidden');
-                document.getElementById('view-post').classList.remove('hidden');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            } catch (e) {
-                alert("Failed to load post detail.");
-            }
-        }
-
-        async function loadMainData() {
-            try {
-                const response = await fetch('today_display.json?cache=' + new Date().getTime());
-                globalDisplayData = await response.json();
-
-                if (globalDisplayData.lotto_max) {
-                    document.getElementById('max-jackpot').innerText = "EST. " + globalDisplayData.lotto_max.jackpot;
-                    document.getElementById('max-prov-text').innerText = globalDisplayData.lotto_max.winner_province;
-                    renderBalls('max-win-balls', globalDisplayData.lotto_max.winning_numbers);
-                }
-                if (globalDisplayData.lotto_649) {
-                    document.getElementById('goldball-amount').innerText = globalDisplayData.lotto_649.gold_ball;
-                    document.getElementById('l649-prov-text').innerText = globalDisplayData.lotto_649.winner_province;
-                    renderBalls('l649-win-balls', globalDisplayData.lotto_649.winning_numbers);
-                }
-            } catch (e) {
-                renderBalls('max-win-balls', [3, 11, 19, 23, 35, 41, 48]);
-                renderBalls('l649-win-balls', [1, 9, 17, 34, 36, 43]);
-            }
-
-            generateNewNumbers('max');
-            generateNewNumbers('649');
-            renderFrequencyGrid(currentGame);
-
-            const container = document.getElementById('posts-container');
-            try {
-                const response = await fetch('posts_index.json?cache=' + new Date().getTime());
-                const posts = await response.json();
-
-                if (!posts || posts.length === 0) throw new Error("No posts");
-
-                container.innerHTML = '';
-                posts.forEach(item => {
-                    const card = document.createElement('div');
-                    card.className = "bg-white p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition cursor-pointer";
-                    card.onclick = () => openPost(item.id);
-                    card.innerHTML = `
-                        <div class="flex items-center justify-between text-xs text-slate-400 font-medium mb-1.5">
-                            <span class="bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded font-bold">${item.game || 'Lotto'}</span>
-                            <span class="text-teal-600 font-bold">Read Analysis →</span>
-                        </div>
-                        <h3 class="text-base font-bold text-slate-800 mb-1 hover:text-teal-700 transition">${item.title}</h3>
-                        <p class="text-xs text-slate-500 leading-relaxed line-clamp-2">${item.summary}</p>
-                    `;
-                    container.appendChild(card);
-                });
-            } catch (e) {
-                container.innerHTML = `<div class="p-6 text-center text-slate-400 text-xs">No draw posts available.</div>`;
-            }
-        }
-
-        loadMainData();
+        document.addEventListener('DOMContentLoaded', loadLottoData);
     </script>
 </body>
 </html>
