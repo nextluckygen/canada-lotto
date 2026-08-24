@@ -14,6 +14,13 @@ from html.parser import HTMLParser
 
 WCLC_649_URL = "https://www.wclc.com/winning-numbers/lotto-649-extra.htm?channel=print"
 WCLC_MAX_URL = "https://www.wclc.com/winning-numbers/lotto-max-extra.htm?channel=print"
+WCLC_HOME_URL = "https://www.wclc.com/home.htm"
+
+# 참고: WCLC "Prize Details" 버튼은 JS/AJAX로 열리는 팝업이라 정적 스크래핑으로
+# 당첨 지역(province)을 안정적으로 가져올 방법이 없다. 이 스크립트는 지역명을
+# 지어내지 않고, 대신 공식 페이지로 바로 연결되는 링크를 제공한다.
+WCLC_MAX_PRIZE_PAGE = "https://www.wclc.com/winning-numbers/lotto-max-extra.htm"
+WCLC_649_PRIZE_PAGE = "https://www.wclc.com/winning-numbers/lotto-649-extra.htm"
 
 WEEKDAY_NAMES = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 DATE_PATTERN = r'((?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+\w+\s+\d{1,2},\s+\d{4})'
@@ -203,6 +210,70 @@ def parse_max(text, today_dt):
     }
 
 
+# ==========================================
+# 5b. WCLC 홈페이지 실시간 잭팟 티커 파싱
+#     (Prize Breakdown/당첨 지역은 JS 팝업이라 스크래핑 불가 -> 시도하지 않음.
+#      대신 공식적으로 발표된 "다음 회차 잭팟 금액"만 안전하게 가져온다.)
+# ==========================================
+def fetch_home_jackpots(text, today_dt):
+    date_re = DATE_PATTERN
+
+    gb_pattern = re.compile(
+        r"GOLD BALL JACKPOT\s*\$\s*(\d+)\s*Million.*?(\d+)\s*Balls Remaining.*?" + date_re,
+        re.DOTALL,
+    )
+    gb_match = gb_pattern.search(text)
+    if not gb_match:
+        raise ScrapeError("Home: Gold Ball jackpot ticker block not found")
+
+    gb_millions = int(gb_match.group(1))
+    balls_remaining = int(gb_match.group(2))
+    gb_next_date_str = gb_match.group(3)
+    gb_next_dt = parse_draw_date(gb_next_date_str)
+
+    if gb_next_dt.date() < today_dt.date():
+        raise ScrapeError(f"Home: Gold Ball next draw date {gb_next_dt.date()} is in the past")
+    if gb_next_dt.weekday() not in (2, 5):
+        raise ScrapeError(f"Home: Gold Ball next draw date {gb_next_dt.date()} is not Wed/Sat")
+    if not (1 <= balls_remaining <= 26):
+        raise ScrapeError(f"Home: implausible Balls Remaining value: {balls_remaining}")
+
+    max_pattern = re.compile(
+        r"\$\s*(\d+)\s*Million\s*(\d+)\s*x\s*\$100,000\s*" + date_re
+    )
+    max_match = max_pattern.search(text, gb_match.end())
+    if not max_match:
+        raise ScrapeError("Home: Lotto Max jackpot ticker block not found")
+
+    max_millions = int(max_match.group(1))
+    maxplus_count = int(max_match.group(2))
+    max_next_date_str = max_match.group(3)
+    max_next_dt = parse_draw_date(max_next_date_str)
+
+    if max_next_dt.date() < today_dt.date():
+        raise ScrapeError(f"Home: Lotto Max next draw date {max_next_dt.date()} is in the past")
+    if max_next_dt.weekday() not in (1, 4):
+        raise ScrapeError(f"Home: Lotto Max next draw date {max_next_dt.date()} is not Tue/Fri")
+    # 공식 규칙: MaxPlus 상품 개수 = 잭팟 금액(백만 단위). 어긋나면 페이지 구조가
+    # 바뀐 것으로 간주하고 신뢰하지 않는다.
+    if maxplus_count != max_millions:
+        raise ScrapeError(
+            f"Home: MaxPlus count ({maxplus_count}) does not match jackpot millions "
+            f"({max_millions}) — page structure may have changed"
+        )
+    if not (10 <= max_millions <= 90):
+        raise ScrapeError(f"Home: implausible Lotto Max jackpot value: ${max_millions}M")
+
+    return {
+        "gold_ball_jackpot": gb_millions * 1_000_000,
+        "gold_ball_next_draw": gb_next_date_str,
+        "gold_ball_balls_remaining": balls_remaining,
+        "max_jackpot": max_millions * 1_000_000,
+        "max_next_draw": max_next_date_str,
+        "max_maxplus_count": maxplus_count,
+    }
+
+
 def generate_ai_numbers(total, count):
     return sorted(random.sample(range(1, total + 1), count))
 
@@ -257,6 +328,8 @@ def main():
     l649_result = None
     max_error = None
     l649_error = None
+    home_jackpots = None
+    home_error = None
 
     try:
         max_text = fetch_text(WCLC_MAX_URL)
@@ -272,18 +345,43 @@ def main():
         l649_error = str(e)
         print(f"[WARN] Lotto 6/49 scrape/validation failed: {l649_error}", file=sys.stderr)
 
+    try:
+        home_text = fetch_text(WCLC_HOME_URL)
+        home_jackpots = fetch_home_jackpots(home_text, today_dt)
+        # 교차검증: 히스토리 기반 계산값과 홈페이지 실시간 값이 다르면 로그만 남기고
+        # 홈페이지의 "공식 발표 값"을 최종 소스로 신뢰한다 (계산값은 검증용 보조 지표).
+        if l649_result and l649_result["next_gold_ball_jackpot"] != home_jackpots["gold_ball_jackpot"]:
+            print(
+                f"[WARN] Gold Ball jackpot mismatch: computed="
+                f"{l649_result['next_gold_ball_jackpot']} vs live={home_jackpots['gold_ball_jackpot']}. "
+                f"Using live value.",
+                file=sys.stderr,
+            )
+    except Exception as e:
+        home_error = str(e)
+        print(f"[WARN] WCLC home jackpot ticker scrape/validation failed: {home_error}", file=sys.stderr)
+
     # ---- Lotto Max 데이터 구성 ----
     if max_result:
         max_win_nums = max_result["winning_numbers"]
         max_bonus = max_result["bonus"]
         max_draw_date = max_result["draw_date"]
-        # WCLC print 페이지에는 다음 회차 잭팟 금액/당첨 지역 정보가 없다 (Prize Breakdown 별도 페이지 필요).
-        # 검증되지 않은 금액/지역을 지어내지 않는다.
-        max_jp = "See official WCLC jackpot ticker (not auto-verified)"
-        max_prov = (
-            f"Draw confirmed for {max_draw_date}. Winning ticket location not auto-verified — "
-            f"see wclc.com prize breakdown for details."
-        )
+
+        if home_jackpots:
+            max_jp = f"${home_jackpots['max_jackpot'] / 1_000_000:.0f} Million"
+            max_prov = (
+                f"Draw confirmed for {max_draw_date}. Next jackpot ({home_jackpots['max_next_draw']}): "
+                f"{max_jp} ({home_jackpots['max_maxplus_count']} x $100,000 MaxPlus prizes). "
+                f"Winning ticket location: see official WCLC prize breakdown — "
+                f"{WCLC_MAX_PRIZE_PAGE}"
+            )
+        else:
+            # 잭팟 티커 스크래핑이 실패한 경우: 금액을 지어내지 않는다.
+            max_jp = "Jackpot amount unavailable this run — see official WCLC site"
+            max_prov = (
+                f"Draw confirmed for {max_draw_date}. Jackpot/winner details unavailable this run "
+                f"({home_error}). See {WCLC_MAX_PRIZE_PAGE}"
+            )
     elif previous_data and "lotto_max" in previous_data:
         print("[INFO] Falling back to previous Lotto Max data (last known good).", file=sys.stderr)
         max_win_nums = previous_data["lotto_max"]["winning_numbers"]
@@ -302,14 +400,26 @@ def main():
         l649_win_nums = l649_result["winning_numbers"]
         l649_bonus = l649_result["bonus"]
         l649_draw_date = l649_result["draw_date"]
-        l649_gb = f"${l649_result['next_gold_ball_jackpot']:,}".replace(",", ",")
-        l649_gb_display = f"${l649_result['next_gold_ball_jackpot'] / 1_000_000:.0f} Million"
+
+        # 홈페이지 실시간 값을 최우선으로 신뢰하고, 실패 시에만 계산값으로 대체
+        if home_jackpots:
+            gb_amount = home_jackpots["gold_ball_jackpot"]
+            gb_next_draw = home_jackpots["gold_ball_next_draw"]
+        else:
+            gb_amount = l649_result["next_gold_ball_jackpot"]
+            gb_next_draw = "next draw"
+
+        l649_gb_display = f"${gb_amount / 1_000_000:.0f} Million"
         outcome_text = (
             "Guaranteed $1,000,000 prize won (White ball drawn)."
             if l649_result["latest_ball_outcome"] == "White"
             else "GOLD BALL JACKPOT WON on this draw!"
         )
-        l649_prov = f"Draw confirmed for {l649_draw_date}. {outcome_text} Next Gold Ball jackpot: {l649_gb_display}."
+        l649_prov = (
+            f"Draw confirmed for {l649_draw_date}. {outcome_text} "
+            f"Next Gold Ball jackpot ({gb_next_draw}): {l649_gb_display}. "
+            f"Winning ticket location: see official WCLC prize breakdown — {WCLC_649_PRIZE_PAGE}"
+        )
     elif previous_data and "lotto_649" in previous_data:
         print("[INFO] Falling back to previous Lotto 6/49 data (last known good).", file=sys.stderr)
         l649_win_nums = previous_data["lotto_649"]["winning_numbers"]
