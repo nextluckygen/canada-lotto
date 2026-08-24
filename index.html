@@ -16,6 +16,7 @@
             display: flex !important;
             flex-wrap: wrap !important;
             justify-content: center !important;
+            align-items: center !important;
             gap: 8px !important;
             min-height: 48px !important;
         }
@@ -31,6 +32,33 @@
             color: white !important;
             box-shadow: inset -2px -2px 6px rgba(0, 0, 0, 0.3), 0 4px 8px rgba(0,0,0,0.15) !important;
             margin: 2px !important;
+        }
+        .lotto-ball-bonus {
+            border: 3px dashed rgba(255,255,255,0.85) !important;
+            position: relative !important;
+        }
+        .lotto-ball-bonus::after {
+            content: "B" !important;
+            position: absolute !important;
+            top: -8px !important;
+            right: -6px !important;
+            background: #0f172a !important;
+            color: #fbbf24 !important;
+            font-size: 0.6rem !important;
+            font-weight: 900 !important;
+            border-radius: 999px !important;
+            width: 16px !important;
+            height: 16px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            border: 1px solid #fbbf24 !important;
+        }
+        .ball-divider {
+            width: 1px;
+            height: 28px;
+            background: rgba(148, 163, 184, 0.5);
+            margin: 0 4px;
         }
         .lotto-ball-xs {
             width: 22px !important;
@@ -70,6 +98,11 @@
             </div>
         </header>
 
+        <!-- Stale data warning banner (hidden unless a scrape fell back to old data) -->
+        <div id="stale-banner" class="hidden bg-amber-100 border-b border-amber-300 text-amber-900 text-xs sm:text-sm font-semibold text-center py-2 px-4">
+            ⚠️ Some data below could not be freshly verified this run and may be out of date. Please cross-check with official sources.
+        </div>
+
         <!-- Main Content Area -->
         <main class="max-w-4xl mx-auto px-4 py-8 space-y-10">
             
@@ -88,10 +121,11 @@
                 <div id="card-max" class="space-y-6">
                     <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
                         <div class="bg-slate-900 p-6 text-center text-white">
-                            <span class="bg-amber-400 text-slate-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-widest block w-max mx-auto mb-2">Lotto Max Main Jackpot</span>
+                            <span class="bg-amber-400 text-slate-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-widest block w-max mx-auto mb-2">Lotto Max Next Jackpot</span>
                             <h2 id="max-jackpot" class="text-4xl sm:text-5xl font-black text-amber-300">EST. $10 Million</h2>
-                            <div class="mt-4 bg-slate-800/80 border border-slate-700/80 p-2.5 rounded-xl max-w-md mx-auto text-xs text-amber-200 font-medium">
-                                🇨🇦 <span id="max-prov-text">1 winning ticket in Quebec won the $55 Million jackpot (Aug 21 draw)</span>
+                            <p id="max-draw-date" class="text-xs text-slate-400 mt-1">Last verified draw: —</p>
+                            <div class="mt-4 bg-slate-800/80 border border-slate-700/80 p-2.5 rounded-xl max-w-md mx-auto text-xs text-amber-200 font-medium leading-relaxed">
+                                🇨🇦 <span id="max-prov-text">Loading verified draw status…</span>
                             </div>
                         </div>
                         
@@ -99,6 +133,7 @@
                             <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200">
                                 <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider block mb-3">⚡ Official Winning Numbers</span>
                                 <div id="max-win-balls" class="ball-flex-container"></div>
+                                <p class="text-[10px] text-slate-400 mt-2">Dashed ring = official Bonus number</p>
                             </div>
 
                             <div>
@@ -118,7 +153,7 @@
                             <span class="bg-blue-400 text-slate-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-widest block w-max mx-auto mb-2">Lotto 6/49 Draw Breakdown</span>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
                                 <div class="bg-white/10 p-3 rounded-2xl backdrop-blur">
-                                    <span class="text-xs text-slate-300 block">Gold Ball Jackpot</span>
+                                    <span class="text-xs text-slate-300 block">Next Gold Ball Jackpot</span>
                                     <span id="goldball-amount" class="text-2xl font-black text-amber-300">$18 Million</span>
                                 </div>
                                 <div class="bg-white/10 p-3 rounded-2xl backdrop-blur">
@@ -126,8 +161,9 @@
                                     <span class="text-2xl font-black text-blue-300">$5 Million</span>
                                 </div>
                             </div>
-                            <div class="mt-4 bg-slate-800/80 border border-slate-700/80 p-2.5 rounded-xl max-w-md mx-auto text-xs text-blue-200 font-medium">
-                                🇨🇦 <span id="l649-prov-text">Guaranteed $1M won (Aug 22 draw). Gold Ball jackpot rolled over to $18M</span>
+                            <p id="l649-draw-date" class="text-xs text-slate-400 mt-2">Last verified draw: —</p>
+                            <div class="mt-4 bg-slate-800/80 border border-slate-700/80 p-2.5 rounded-xl max-w-md mx-auto text-xs text-blue-200 font-medium leading-relaxed">
+                                🇨🇦 <span id="l649-prov-text">Loading verified draw status…</span>
                             </div>
                         </div>
 
@@ -135,6 +171,7 @@
                             <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200">
                                 <span class="text-xs font-extrabold text-slate-500 uppercase tracking-wider block mb-3">⚡ Official Winning Numbers</span>
                                 <div id="l649-win-balls" class="ball-flex-container"></div>
+                                <p class="text-[10px] text-slate-400 mt-2">Dashed ring = official Bonus number</p>
                             </div>
 
                             <div>
@@ -185,6 +222,10 @@
                         <h3 class="text-base font-bold text-slate-800">2. How Statistical Frequency Modeling Works</h3>
                         <p>Every lottery draw is an independent random event governed by strict mathematical odds. Analysts track empirical distribution patterns to evaluate hot, mid, and cold clusters over a rolling 6-month window.</p>
                     </div>
+                    <div class="space-y-3">
+                        <h3 class="text-base font-bold text-slate-800">3. Data Sourcing & Verification</h3>
+                        <p>Winning numbers, bonus numbers, and jackpot amounts on this site are scraped directly from WCLC's official published draw results and validated against the expected draw schedule before publishing. Winning ticket location details are not independently verified by this site — please refer to the official WCLC prize breakdown link shown next to each draw for confirmed regional winner information.</p>
+                    </div>
                 </section>
 
             </div>
@@ -205,8 +246,8 @@
                             <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Official Draw Results</h3>
                             <span id="post-jackpot" class="text-base font-black text-emerald-700 block">Jackpot</span>
                             <div id="post-win-balls" class="ball-flex-container"></div>
-                            <div class="bg-white p-3 rounded-xl text-xs font-medium text-slate-700 border">
-                                📍 <strong>Status / Winning Locations:</strong> <span id="post-prov">Checking...</span>
+                            <div class="bg-white p-3 rounded-xl text-xs font-medium text-slate-700 border leading-relaxed">
+                                📍 <strong>Status:</strong> <span id="post-prov">Checking...</span>
                             </div>
                         </div>
                         <div class="bg-emerald-50/60 p-5 rounded-2xl border border-emerald-100 space-y-3">
@@ -242,6 +283,25 @@
         let globalDisplayData = null;
         let currentGame = 'max';
 
+        // 텍스트 안의 https:// URL을 안전하게 <a> 링크로 변환 (fabrication 없이 실제 공식 링크만 클릭 가능하게)
+        function linkifyText(rawText) {
+            if (!rawText) return '';
+            const escaped = rawText
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+            return escaped.replace(/(https?:\/\/[^\s]+)/g, (url) => {
+                return `<a href="${url}" target="_blank" rel="noopener" class="underline decoration-dotted hover:text-white">${url}</a>`;
+            });
+        }
+
+        // "[STALE - scrape failed this run]" 플래그가 텍스트에 있으면 배너를 노출
+        function checkStaleFlag(rawText) {
+            if (rawText && rawText.includes('[STALE')) {
+                document.getElementById('stale-banner').classList.remove('hidden');
+            }
+        }
+
         // 빈도 데이터 기준에 따라 완벽히 동일한 색상 클래스를 반환하는 함수
         function getFrequencyColorClass(num, game = currentGame) {
             let freqData = {};
@@ -269,10 +329,13 @@
         }
 
         // 상단/추천 볼 렌더링 (하단 빈도표 색상과 100% 동일하게 매칭)
-        function renderBalls(containerId, numbers, game = currentGame) {
+        // bonusNumber가 주어지면 해당 볼에 점선 테두리 + "B" 배지를 추가하고,
+        // 메인 번호들과 구분선을 넣어 시각적으로 분리한다.
+        function renderBalls(containerId, numbers, game = currentGame, bonusNumber = null) {
             const container = document.getElementById(containerId);
             if (!container) return;
             container.innerHTML = '';
+
             (numbers || []).forEach(num => {
                 const colorClass = getFrequencyColorClass(num, game);
                 const ball = document.createElement('div');
@@ -280,6 +343,19 @@
                 ball.innerText = num;
                 container.appendChild(ball);
             });
+
+            if (bonusNumber !== null && bonusNumber !== undefined) {
+                const divider = document.createElement('div');
+                divider.className = 'ball-divider';
+                container.appendChild(divider);
+
+                const bonusColorClass = getFrequencyColorClass(bonusNumber, game);
+                const bonusBall = document.createElement('div');
+                bonusBall.className = `lotto-ball lotto-ball-bonus ${bonusColorClass}`;
+                bonusBall.innerText = bonusNumber;
+                bonusBall.title = 'Official Bonus Number';
+                container.appendChild(bonusBall);
+            }
         }
 
         // 하단 빈도수 매트릭스 렌더링
@@ -353,9 +429,9 @@
             // 탭 전환 시 상단 볼 색상도 해당 게임 빈도에 맞춰 즉시 갱신
             if (globalDisplayData) {
                 if (isMax && globalDisplayData.lotto_max) {
-                    renderBalls('max-win-balls', globalDisplayData.lotto_max.winning_numbers, 'max');
+                    renderBalls('max-win-balls', globalDisplayData.lotto_max.winning_numbers, 'max', globalDisplayData.lotto_max.bonus);
                 } else if (!isMax && globalDisplayData.lotto_649) {
-                    renderBalls('l649-win-balls', globalDisplayData.lotto_649.winning_numbers, '649');
+                    renderBalls('l649-win-balls', globalDisplayData.lotto_649.winning_numbers, '649', globalDisplayData.lotto_649.bonus);
                 }
             }
         }
@@ -389,10 +465,10 @@
                 document.getElementById('post-game-badge').innerText = post.game || "Lotto";
                 document.getElementById('post-date').innerText = post.display_date || post.date;
                 document.getElementById('post-jackpot').innerText = post.jackpot || "";
-                document.getElementById('post-prov').innerText = post.winner_province || "";
+                document.getElementById('post-prov').innerHTML = linkifyText(post.winner_province || "");
                 document.getElementById('post-ai-note').innerText = post.ai_note || "";
 
-                renderBalls('post-win-balls', post.winning_numbers || [], postGame);
+                renderBalls('post-win-balls', post.winning_numbers || [], postGame, post.bonus);
                 renderBalls('post-ai-balls', post.ai_recommended || [], postGame);
 
                 document.getElementById('view-main').classList.add('hidden');
@@ -409,18 +485,25 @@
                 globalDisplayData = await response.json();
 
                 if (globalDisplayData.lotto_max) {
-                    document.getElementById('max-jackpot').innerText = "EST. " + globalDisplayData.lotto_max.jackpot;
-                    document.getElementById('max-prov-text').innerText = globalDisplayData.lotto_max.winner_province;
-                    renderBalls('max-win-balls', globalDisplayData.lotto_max.winning_numbers, 'max');
+                    const m = globalDisplayData.lotto_max;
+                    document.getElementById('max-jackpot').innerText = "EST. " + (m.jackpot || "Unavailable");
+                    document.getElementById('max-draw-date').innerText = "Last verified draw: " + (m.draw_date || "unknown");
+                    document.getElementById('max-prov-text').innerHTML = linkifyText(m.winner_province || "");
+                    checkStaleFlag(m.winner_province);
+                    renderBalls('max-win-balls', m.winning_numbers, 'max', m.bonus);
                 }
                 if (globalDisplayData.lotto_649) {
-                    document.getElementById('goldball-amount').innerText = globalDisplayData.lotto_649.gold_ball;
-                    document.getElementById('l649-prov-text').innerText = globalDisplayData.lotto_649.winner_province;
-                    renderBalls('l649-win-balls', globalDisplayData.lotto_649.winning_numbers, '649');
+                    const g = globalDisplayData.lotto_649;
+                    document.getElementById('goldball-amount').innerText = g.gold_ball || "Unavailable";
+                    document.getElementById('l649-draw-date').innerText = "Last verified draw: " + (g.draw_date || "unknown");
+                    document.getElementById('l649-prov-text').innerHTML = linkifyText(g.winner_province || "");
+                    checkStaleFlag(g.winner_province);
+                    renderBalls('l649-win-balls', g.winning_numbers, '649', g.bonus);
                 }
             } catch (e) {
-                renderBalls('max-win-balls', [1, 4, 15, 18, 24, 25, 51], 'max');
-                renderBalls('l649-win-balls', [11, 13, 21, 31, 34, 45], '649');
+                renderBalls('max-win-balls', [1, 4, 15, 18, 24, 25, 51], 'max', 13);
+                renderBalls('l649-win-balls', [11, 13, 21, 31, 34, 45], '649', 5);
+                document.getElementById('stale-banner').classList.remove('hidden');
             }
 
             renderFrequencyGrid(currentGame);
