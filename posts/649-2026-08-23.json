@@ -3,11 +3,11 @@
     "game": "Lotto 6/49",
     "date": "2026-08-23",
     "display_date": "August 23, 2026",
-    "draw_date": "August 22, 2026",
-    "title": "Lotto 6/49 Official Draw Results & Analysis (Draw Date: August 22, 2026)",
-    "summary": "Official verified results for the Lotto 6/49 draw on August 22, 2026. Gold Ball jackpot: $18 Million. Prize status: Guaranteed $1M won (Aug 22 draw). Gold Ball jackpot rolled over to $18M.",
+    "draw_date": "Saturday, August 22, 2026",
+    "title": "Lotto 6/49 Official Draw Results & Analysis (Draw Date: Saturday, August 22, 2026)",
+    "summary": "Verified results for the Lotto 6/49 draw on Saturday, August 22, 2026. Draw confirmed for Saturday, August 22, 2026. Guaranteed $1,000,000 prize won (White ball drawn). Next Gold Ball jackpot (Wednesday, August 26, 2026): $18 Million. Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-649-extra.htm",
     "jackpot": "$18 Million",
-    "winner_province": "Guaranteed $1M won (Aug 22 draw). Gold Ball jackpot rolled over to $18M",
+    "winner_province": "Draw confirmed for Saturday, August 22, 2026. Guaranteed $1,000,000 prize won (White ball drawn). Next Gold Ball jackpot (Wednesday, August 26, 2026): $18 Million. Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-649-extra.htm",
     "winning_numbers": [
         11,
         13,
@@ -16,13 +16,14 @@
         34,
         45
     ],
+    "bonus": 5,
     "ai_recommended": [
-        3,
-        4,
+        12,
         18,
-        38,
-        40,
-        49
+        34,
+        37,
+        46,
+        48
     ],
-    "ai_note": "### 1. Official Draw Breakdown (Draw Date: August 22, 2026)\nIn the official Lotto 6/49 drawing conducted on August 22, 2026, the verified winning combination was 11, 13, 21, 31, 34, 45. Active jackpot pool: $18 Million. Prize status: Guaranteed $1M won (Aug 22 draw). Gold Ball jackpot rolled over to $18M.\n\n### 2. Parity & Distribution Matrix Analysis\nEvaluating the official combination yields 5 Odd numbers and 1 Even numbers, with 3 higher-bracket numbers and 3 lower-bracket numbers. Balanced parity distributions historically occur in over 68% of Canadian draws.\n\n### 3. AI Frequency-Weighted Line Strategy\nOur algorithmic model evaluated historical frequency clusters over a rolling 180-day cycle to formulate the recommended line: 3, 4, 18, 38, 40, 49. This combination maintains a balanced 2:4 Odd/Even parity distribution.\n\n### 4. Strategic Observations\nWhen selecting lines, players should maintain diverse decade spreads. Please play responsibly for analytical and entertainment purposes only."
+    "ai_note": "### 1. Official Draw Breakdown (Draw Date: Saturday, August 22, 2026)\nIn the official Lotto 6/49 drawing conducted on Saturday, August 22, 2026, the verified winning combination was 11, 13, 21, 31, 34, 45. Jackpot: $18 Million. Status: Draw confirmed for Saturday, August 22, 2026. Guaranteed $1,000,000 prize won (White ball drawn). Next Gold Ball jackpot (Wednesday, August 26, 2026): $18 Million. Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-649-extra.htm.\n\n### 2. Parity & Distribution Matrix Analysis\nEvaluating the official combination yields 5 Odd numbers and 1 Even numbers, with 3 higher-bracket numbers and 3 lower-bracket numbers.\n\n### 3. AI Frequency-Weighted Line Strategy\nOur algorithmic model evaluated historical frequency clusters to formulate the recommended line: 12, 18, 34, 37, 46, 48. This combination maintains a 1:5 Odd/Even parity distribution.\n\n### 4. Strategic Observations\nNumbers are drawn independently and randomly. Historical frequency does not predict future outcomes. Please play responsibly. For analytical and entertainment purposes only."
 }

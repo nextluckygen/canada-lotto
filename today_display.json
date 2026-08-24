@@ -3,7 +3,7 @@
     "display_date": "August 23, 2026",
     "lotto_max": {
         "jackpot": "$10 Million",
-        "winner_province": "1 winning ticket in Quebec won the $55 Million jackpot (Aug 21 draw)",
+        "winner_province": "Draw confirmed for Friday, August 21, 2026. Next jackpot (Tuesday, August 25, 2026): $10 Million (10 x $100,000 MaxPlus prizes). Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-max-extra.htm",
         "winning_numbers": [
             1,
             4,
@@ -13,6 +13,8 @@
             25,
             51
         ],
+        "bonus": 13,
+        "draw_date": "Friday, August 21, 2026",
         "frequencies": {
             "1": 8,
             "2": 6,
@@ -70,7 +72,7 @@
     },
     "lotto_649": {
         "gold_ball": "$18 Million",
-        "winner_province": "Guaranteed $1M won (Aug 22 draw). Gold Ball jackpot rolled over to $18M",
+        "winner_province": "Draw confirmed for Saturday, August 22, 2026. Guaranteed $1,000,000 prize won (White ball drawn). Next Gold Ball jackpot (Wednesday, August 26, 2026): $18 Million. Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-649-extra.htm",
         "winning_numbers": [
             11,
             13,
@@ -79,6 +81,8 @@
             34,
             45
         ],
+        "bonus": 5,
+        "draw_date": "Saturday, August 22, 2026",
         "frequencies": {
             "1": 7,
             "2": 9,
