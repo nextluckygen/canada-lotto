@@ -26,12 +26,18 @@ WEEKDAY_NAMES = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturd
 DATE_PATTERN = r'((?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+\w+\s+\d{1,2},\s+\d{4})'
 
 # ==========================================
-# 1. 최근 6개월 공식 실제 빈도 데이터 (고정 시드값 - 별도 갱신 스크립트 필요)
-#    주의: 이 값은 "6개월 롤링 윈도우"가 아니라 특정 시점의 스냅샷이다.
-#    실제 서비스에서는 회차마다 가장 오래된 회차를 빼고 최신 회차를 더하는
-#    롤링 집계 로직이 별도로 필요하다 (이 파일 범위 밖).
+# 1. 빈도 데이터
+#    - draw_history.json에 실제 회차 결과를 계속 누적하고, 6개월(HISTORY_WINDOW_DAYS)이
+#      지난 회차는 자동으로 제거한 뒤 그 시점 기준으로 빈도를 "직접 계산"한다.
+#    - 서비스 초기(누적 회차가 너무 적을 때)는 계산값이 통계적으로 의미가 없으므로,
+#      MIN_DRAWS_FOR_LIVE_STATS 미만이면 아래 SEED_* 값(참고용 시드 스냅샷)을 대신 쓴다.
+#      이 시드값은 실제 6개월 데이터가 쌓이면 자동으로 안 쓰이게 된다.
 # ==========================================
-OFFICIAL_MAX_FREQUENCIES = {
+HISTORY_FILE = "draw_history.json"
+HISTORY_WINDOW_DAYS = 183  # 약 6개월
+MIN_DRAWS_FOR_LIVE_STATS = 15  # 이 회차 수 미만이면 시드값 사용 (통계적으로 불안정하므로)
+
+SEED_MAX_FREQUENCIES = {
     "1": 8, "2": 6, "3": 9, "4": 11, "5": 7, "6": 10, "7": 8, "8": 5, "9": 7, "10": 9,
     "11": 6, "12": 8, "13": 7, "14": 10, "15": 12, "16": 8, "17": 9, "18": 11, "19": 13, "20": 6,
     "21": 10, "22": 7, "23": 8, "24": 9, "25": 11, "26": 8, "27": 6, "28": 10, "29": 7, "30": 9,
@@ -40,7 +46,7 @@ OFFICIAL_MAX_FREQUENCIES = {
     "51": 7, "52": 6
 }
 
-OFFICIAL_649_FREQUENCIES = {
+SEED_649_FREQUENCIES = {
     "1": 7, "2": 9, "3": 6, "4": 8, "5": 10, "6": 8, "7": 9, "8": 5, "9": 7, "10": 11,
     "11": 8, "12": 6, "13": 9, "14": 7, "15": 10, "16": 6, "17": 8, "18": 7, "19": 9, "20": 5,
     "21": 8, "22": 11, "23": 6, "24": 7, "25": 9, "26": 8, "27": 10, "28": 7, "29": 8, "30": 6,
@@ -113,6 +119,74 @@ def validate_draw_date(draw_dt, today_dt, expected_weekdays, max_age_days=4):
             f"{WEEKDAY_NAMES[draw_dt.weekday()]}, expected one of "
             f"{[WEEKDAY_NAMES[d] for d in expected_weekdays]}"
         )
+
+
+# ==========================================
+# 3b. draw_history.json 롤링 누적 관리
+#     -> 이 파일이 "6개월 빈도표"의 실제 데이터 소스가 된다.
+# ==========================================
+def load_history():
+    if not os.path.exists(HISTORY_FILE):
+        return {"lotto_max": [], "lotto_649": []}
+    try:
+        with open(HISTORY_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception:
+        return {"lotto_max": [], "lotto_649": []}
+    data.setdefault("lotto_max", [])
+    data.setdefault("lotto_649", [])
+    return data
+
+
+def save_history(history):
+    with open(HISTORY_FILE, "w", encoding="utf-8") as f:
+        json.dump(history, f, indent=2, ensure_ascii=False)
+
+
+def prune_history(records, today_dt, window_days=HISTORY_WINDOW_DAYS):
+    kept = []
+    for rec in records:
+        try:
+            rec_dt = parse_draw_date(rec["date"])
+        except Exception:
+            continue  # 형식이 깨진 과거 레코드는 버린다
+        if (today_dt.date() - rec_dt.date()).days <= window_days:
+            kept.append(rec)
+    kept.sort(key=lambda r: parse_draw_date(r["date"]))
+    return kept
+
+
+def add_draw_to_history(history, game_key, draw_date_str, numbers, bonus, today_dt):
+    """오늘 새로 검증된 회차를 히스토리에 추가(같은 날짜가 이미 있으면 덮어쓰기)하고,
+    6개월이 지난 회차는 정리한다."""
+    records = history.get(game_key, [])
+    records = [r for r in records if r.get("date") != draw_date_str]
+    records.append({"date": draw_date_str, "numbers": numbers, "bonus": bonus})
+    history[game_key] = prune_history(records, today_dt)
+    return history
+
+
+def compute_frequencies_from_history(records, total_numbers, include_bonus=False):
+    """records: [{"date":..., "numbers":[...], "bonus":...}, ...] -> {"1": count, ...}"""
+    counts = {str(n): 0 for n in range(1, total_numbers + 1)}
+    for rec in records:
+        for n in rec.get("numbers", []):
+            key = str(n)
+            if key in counts:
+                counts[key] += 1
+        if include_bonus and rec.get("bonus") is not None:
+            key = str(rec["bonus"])
+            if key in counts:
+                counts[key] += 1
+    return counts
+
+
+def resolve_frequencies(history_records, total_numbers, seed_frequencies):
+    """실제 누적 회차가 충분하면 계산값을, 부족하면 시드값을 사용한다.
+    두 경우 모두 어떤 값을 썼는지 함께 반환해 로그/디버깅에 활용한다."""
+    if len(history_records) >= MIN_DRAWS_FOR_LIVE_STATS:
+        return compute_frequencies_from_history(history_records, total_numbers), "live", len(history_records)
+    return dict(seed_frequencies), "seed", len(history_records)
 
 
 # ==========================================
@@ -208,6 +282,91 @@ def parse_max(text, today_dt):
         "bonus": bonus_num,
         "draw_date": draw_date_str,
     }
+
+
+# ==========================================
+# 5a. 히스토리 누적용: 페이지에 보이는 "모든" 회차를 관대하게 파싱
+#     (메인 표시용 parse_649/parse_max는 최신 1개 회차만 엄격하게 검증하지만,
+#      이 함수들은 draw_history.json을 채우기 위해 여러 회차를 최대한 수집한다.
+#      개별 회차가 이상하면 그 회차만 건너뛰고 나머지는 계속 수집한다.)
+# ==========================================
+def parse_649_all(text, today_dt):
+    results = []
+    classic_positions = [m.start() for m in re.finditer("CLASSIC DRAW", text)]
+    ball_events_all = re.findall(r"Ball Drawn:\s*(White|Gold)", text)
+
+    for idx, classic_idx in enumerate(classic_positions):
+        date_matches = list(re.finditer(DATE_PATTERN, text[:classic_idx]))
+        if not date_matches:
+            continue
+        draw_date_str = date_matches[-1].group(1)
+        try:
+            draw_dt = parse_draw_date(draw_date_str)
+        except Exception:
+            continue
+        if draw_dt.weekday() not in (2, 5) or draw_dt.date() > today_dt.date():
+            continue
+
+        gold_idx = text.find("GOLD BALL DRAW", classic_idx)
+        segment_end = gold_idx if gold_idx != -1 else classic_idx + 400
+        segment = text[classic_idx:segment_end]
+
+        bonus_match = re.search(r"Bonus\s*(\d{1,2})", segment)
+        if not bonus_match:
+            continue
+        bonus_num = int(bonus_match.group(1))
+
+        segment_wo_bonus = re.sub(r"Bonus\s*\d{1,2}", "", segment)
+        nums = [int(n) for n in re.findall(r"\b(\d{1,2})\b", segment_wo_bonus) if 1 <= int(n) <= 49]
+        winning_numbers = nums[:6]
+        if len(winning_numbers) != 6 or len(set(winning_numbers)) != 6:
+            continue
+
+        outcome = ball_events_all[idx] if idx < len(ball_events_all) else None
+
+        results.append({
+            "draw_date": draw_date_str,
+            "winning_numbers": sorted(winning_numbers),
+            "bonus": bonus_num,
+            "ball_outcome": outcome,
+        })
+    return results
+
+
+def parse_max_all(text, today_dt):
+    results = []
+    date_matches = list(re.finditer(DATE_PATTERN, text))
+
+    for dm in date_matches:
+        draw_date_str = dm.group(1)
+        try:
+            draw_dt = parse_draw_date(draw_date_str)
+        except Exception:
+            continue
+        if draw_dt.weekday() not in (1, 4) or draw_dt.date() > today_dt.date():
+            continue
+
+        end_idx = text.find("Exact Match Only", dm.end())
+        segment_end = end_idx if end_idx != -1 else dm.end() + 400
+        segment = text[dm.end():segment_end]
+
+        bonus_match = re.search(r"Bonus\s*(\d{1,2})", segment)
+        if not bonus_match:
+            continue
+        bonus_num = int(bonus_match.group(1))
+
+        segment_wo_bonus = re.sub(r"Bonus\s*\d{1,2}", "", segment)
+        nums = [int(n) for n in re.findall(r"\b(\d{1,2})\b", segment_wo_bonus) if 1 <= int(n) <= 52]
+        winning_numbers = nums[:7]
+        if len(winning_numbers) != 7 or len(set(winning_numbers)) != 7:
+            continue
+
+        results.append({
+            "draw_date": draw_date_str,
+            "winning_numbers": sorted(winning_numbers),
+            "bonus": bonus_num,
+        })
+    return results
 
 
 # ==========================================
@@ -345,6 +504,46 @@ def main():
         l649_error = str(e)
         print(f"[WARN] Lotto 6/49 scrape/validation failed: {l649_error}", file=sys.stderr)
 
+    # ---- draw_history.json 갱신 (6개월 롤링 빈도표의 실제 데이터 소스) ----
+    # 페이지에 보이는 "모든" 회차(각 게임당 최근 8~10회차)를 매번 훑어서 누적한다.
+    # 최신 1회차만 넣으면 서비스 초반 몇 달은 데이터가 거의 없어 시드값에 계속
+    # 의존하게 되므로, 이미 그 페이지에 실려있는 실제 과거 회차도 함께 백필한다.
+    # (날짜 기준 중복 제거되므로 여러 번 실행해도 안전하다.)
+    history = load_history()
+    if max_result:
+        try:
+            for draw in parse_max_all(max_text, today_dt):
+                history = add_draw_to_history(
+                    history, "lotto_max", draw["draw_date"],
+                    draw["winning_numbers"], draw["bonus"], today_dt,
+                )
+        except Exception as e:
+            print(f"[WARN] Max history backfill parse failed (non-fatal): {e}", file=sys.stderr)
+    if l649_result:
+        try:
+            for draw in parse_649_all(l649_text, today_dt):
+                history = add_draw_to_history(
+                    history, "lotto_649", draw["draw_date"],
+                    draw["winning_numbers"], draw["bonus"], today_dt,
+                )
+        except Exception as e:
+            print(f"[WARN] 649 history backfill parse failed (non-fatal): {e}", file=sys.stderr)
+    # 스크래핑 실패 여부와 무관하게, 이미 저장된 회차 중 6개월 지난 것은 정리한다.
+    history["lotto_max"] = prune_history(history.get("lotto_max", []), today_dt)
+    history["lotto_649"] = prune_history(history.get("lotto_649", []), today_dt)
+    save_history(history)
+
+    max_frequencies, max_freq_source, max_draw_count = resolve_frequencies(
+        history["lotto_max"], 52, SEED_MAX_FREQUENCIES
+    )
+    l649_frequencies, l649_freq_source, l649_draw_count = resolve_frequencies(
+        history["lotto_649"], 49, SEED_649_FREQUENCIES
+    )
+    print(
+        f"[INFO] Frequency source — Max: {max_freq_source} ({max_draw_count} draws in window), "
+        f"6/49: {l649_freq_source} ({l649_draw_count} draws in window)"
+    )
+
     try:
         home_text = fetch_text(WCLC_HOME_URL)
         home_jackpots = fetch_home_jackpots(home_text, today_dt)
@@ -445,7 +644,9 @@ def main():
             "winning_numbers": max_win_nums,
             "bonus": max_bonus,
             "draw_date": max_draw_date,
-            "frequencies": OFFICIAL_MAX_FREQUENCIES,
+            "frequencies": max_frequencies,
+            "frequency_source": max_freq_source,
+            "frequency_draws_counted": max_draw_count,
         },
         "lotto_649": {
             "gold_ball": l649_gb_display,
@@ -453,7 +654,9 @@ def main():
             "winning_numbers": l649_win_nums,
             "bonus": l649_bonus,
             "draw_date": l649_draw_date,
-            "frequencies": OFFICIAL_649_FREQUENCIES,
+            "frequencies": l649_frequencies,
+            "frequency_source": l649_freq_source,
+            "frequency_draws_counted": l649_draw_count,
         },
     }
 
