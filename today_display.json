@@ -68,7 +68,9 @@
             "50": 8,
             "51": 7,
             "52": 6
-        }
+        },
+        "frequency_source": "seed",
+        "frequency_draws_counted": 8
     },
     "lotto_649": {
         "gold_ball": "$18 Million",
@@ -133,6 +135,8 @@
             "47": 8,
             "48": 6,
             "49": 7
-        }
+        },
+        "frequency_source": "seed",
+        "frequency_draws_counted": 8
     }
 }

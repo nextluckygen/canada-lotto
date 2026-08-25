@@ -1,0 +1,206 @@
+{
+  "lotto_max": [
+    {
+      "date": "Tuesday, July 28, 2026",
+      "numbers": [
+        3,
+        5,
+        15,
+        21,
+        27,
+        38,
+        49
+      ],
+      "bonus": 18
+    },
+    {
+      "date": "Friday, July 31, 2026",
+      "numbers": [
+        3,
+        28,
+        32,
+        37,
+        40,
+        44,
+        47
+      ],
+      "bonus": 23
+    },
+    {
+      "date": "Tuesday, August 04, 2026",
+      "numbers": [
+        1,
+        13,
+        24,
+        34,
+        46,
+        50,
+        51
+      ],
+      "bonus": 36
+    },
+    {
+      "date": "Friday, August 07, 2026",
+      "numbers": [
+        6,
+        11,
+        23,
+        31,
+        35,
+        43,
+        48
+      ],
+      "bonus": 9
+    },
+    {
+      "date": "Tuesday, August 11, 2026",
+      "numbers": [
+        9,
+        26,
+        35,
+        39,
+        43,
+        44,
+        47
+      ],
+      "bonus": 11
+    },
+    {
+      "date": "Friday, August 14, 2026",
+      "numbers": [
+        13,
+        29,
+        36,
+        39,
+        46,
+        49,
+        50
+      ],
+      "bonus": 1
+    },
+    {
+      "date": "Tuesday, August 18, 2026",
+      "numbers": [
+        4,
+        13,
+        21,
+        26,
+        39,
+        43,
+        48
+      ],
+      "bonus": 5
+    },
+    {
+      "date": "Friday, August 21, 2026",
+      "numbers": [
+        1,
+        4,
+        15,
+        18,
+        24,
+        25,
+        51
+      ],
+      "bonus": 13
+    }
+  ],
+  "lotto_649": [
+    {
+      "date": "Wednesday, July 29, 2026",
+      "numbers": [
+        6,
+        8,
+        13,
+        15,
+        20,
+        37
+      ],
+      "bonus": 10
+    },
+    {
+      "date": "Saturday, August 01, 2026",
+      "numbers": [
+        8,
+        22,
+        37,
+        41,
+        43,
+        44
+      ],
+      "bonus": 12
+    },
+    {
+      "date": "Wednesday, August 05, 2026",
+      "numbers": [
+        12,
+        30,
+        31,
+        35,
+        41,
+        48
+      ],
+      "bonus": 21
+    },
+    {
+      "date": "Saturday, August 08, 2026",
+      "numbers": [
+        3,
+        7,
+        18,
+        24,
+        45,
+        48
+      ],
+      "bonus": 29
+    },
+    {
+      "date": "Wednesday, August 12, 2026",
+      "numbers": [
+        6,
+        13,
+        28,
+        34,
+        45,
+        48
+      ],
+      "bonus": 46
+    },
+    {
+      "date": "Saturday, August 15, 2026",
+      "numbers": [
+        1,
+        9,
+        17,
+        34,
+        36,
+        43
+      ],
+      "bonus": 24
+    },
+    {
+      "date": "Wednesday, August 19, 2026",
+      "numbers": [
+        6,
+        7,
+        10,
+        32,
+        33,
+        36
+      ],
+      "bonus": 11
+    },
+    {
+      "date": "Saturday, August 22, 2026",
+      "numbers": [
+        11,
+        13,
+        21,
+        31,
+        34,
+        45
+      ],
+      "bonus": 5
+    }
+  ]
+}
