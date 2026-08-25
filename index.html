@@ -191,7 +191,7 @@
                             <h2 class="text-base font-black text-slate-900 flex items-center gap-1.5">
                                 📊 <span id="freq-title">Lotto Max</span> Frequency (Past 6 Months)
                             </h2>
-                            <p class="text-xs text-slate-500">Occurrence counts based on official national records</p>
+                            <p id="freq-subtitle" class="text-xs text-slate-500">Occurrence counts based on official national records</p>
                         </div>
                         <div class="flex items-center gap-1.5 text-[11px] font-bold">
                             <span class="px-2.5 py-1 bg-red-100 text-red-700 rounded-lg border border-red-300">🔥 Hot (High)</span>
@@ -366,10 +366,24 @@
 
             titleElem.innerText = game === 'max' ? 'Lotto Max (1-52)' : 'Lotto 6/49 (1-49)';
             let freqData = {};
+            let freqSource = null;
+            let freqDrawCount = 0;
             if (globalDisplayData) {
-                freqData = (game === 'max') 
-                    ? (globalDisplayData.lotto_max?.frequencies || {})
-                    : (globalDisplayData.lotto_649?.frequencies || {});
+                const gameData = (game === 'max') ? globalDisplayData.lotto_max : globalDisplayData.lotto_649;
+                freqData = gameData?.frequencies || {};
+                freqSource = gameData?.frequency_source || null;
+                freqDrawCount = gameData?.frequency_draws_counted || 0;
+            }
+
+            const subtitle = document.getElementById('freq-subtitle');
+            if (subtitle) {
+                if (freqSource === 'live') {
+                    subtitle.innerText = `Live-calculated from the last ${freqDrawCount} verified draws (rolling ~6 months)`;
+                } else if (freqSource === 'seed') {
+                    subtitle.innerText = `Reference snapshot — only ${freqDrawCount} verified draws recorded so far; switches to live data once enough draws accumulate`;
+                } else {
+                    subtitle.innerText = 'Occurrence counts based on official national records';
+                }
             }
 
             const totalNumbers = game === 'max' ? 52 : 49;
