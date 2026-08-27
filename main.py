@@ -760,6 +760,8 @@ def main():
     with open(index_filename, "w", encoding="utf-8") as f:
         json.dump(valid_posts, f, indent=4, ensure_ascii=False)
 
+    build_index_html(home_display, valid_posts)
+
     print(f"Build finished for {today_date}.")
     print(f"  Max: {'OK' if max_result else 'FALLBACK/UNAVAILABLE - ' + str(max_error)}")
     print(f"  649: {'OK' if l649_result else 'FALLBACK/UNAVAILABLE - ' + str(l649_error)}")
@@ -769,6 +771,201 @@ def main():
     if max_error and l649_error:
         print("[FATAL] Both games failed scrape/validation this run.", file=sys.stderr)
         sys.exit(1)
+
+
+# ==========================================
+# 6. index.html 빌드타임 렌더링
+#    - AdSense가 "Google-served ads on screens without publisher-content"로
+#      반려한 핵심 원인: 홈페이지 핵심 콘텐츠가 클라이언트 JS의 비동기 fetch가
+#      끝나야 채워지는 구조라, 크롤러가 그 fetch 완료 전에 스냅샷을 찍으면
+#      "Loading..." 같은 빈 화면이 캡처될 수 있었다.
+#    - 해결책: 매 실행마다 실제 데이터를 index.html에 직접 구워 넣는다.
+#      JS 색상 로직(Hot/Mid/Cold 임계값)을 Python으로 1:1 동일하게 재구현해서
+#      서버 렌더링 결과와 클라이언트 JS 재렌더링 결과가 항상 일치하게 만든다.
+# ==========================================
+import html as html_escape_module
+
+TEMPLATE_PATH = "index_template.html"
+INDEX_OUTPUT_PATH = "index.html"
+
+
+def get_freq_thresholds(freq_dict):
+    counts = [int(v) for v in freq_dict.values()] if freq_dict else []
+    max_val = max(counts) if counts else 13
+    min_val = min(counts) if counts else 5
+    rng = (max_val - min_val) / 3
+    return max_val - rng, min_val + rng
+
+
+def freq_color_class(num, freq_dict, hot_thresh, cold_thresh):
+    count = freq_dict.get(str(num), 7)
+    if count >= hot_thresh:
+        return "bg-red-600"
+    if count <= cold_thresh:
+        return "bg-sky-600"
+    return "bg-emerald-600"
+
+
+def render_balls_html(numbers, freq_dict, bonus=None):
+    if not numbers:
+        return ""
+    hot_thresh, cold_thresh = get_freq_thresholds(freq_dict or {})
+    parts = []
+    for n in numbers:
+        cls = freq_color_class(n, freq_dict or {}, hot_thresh, cold_thresh)
+        parts.append(f'<div class="lotto-ball {cls}">{n}</div>')
+    if bonus is not None:
+        parts.append('<div class="ball-divider"></div>')
+        cls = freq_color_class(bonus, freq_dict or {}, hot_thresh, cold_thresh)
+        parts.append(
+            f'<div class="lotto-ball lotto-ball-bonus {cls}" title="Official Bonus Number">{bonus}</div>'
+        )
+    return "".join(parts)
+
+
+def render_freq_grid_html(freq_dict, total_numbers):
+    freq_dict = freq_dict or {}
+    hot_thresh, cold_thresh = get_freq_thresholds(freq_dict)
+    tiles = []
+    for i in range(1, total_numbers + 1):
+        count = freq_dict.get(str(i), 7)
+        if count >= hot_thresh:
+            card_style, ball_color, badge_style = "border-red-300 bg-red-50/70", "bg-red-600", "bg-red-600 text-white"
+        elif count <= cold_thresh:
+            card_style, ball_color, badge_style = "border-sky-300 bg-sky-50/70", "bg-sky-600", "bg-sky-600 text-white"
+        else:
+            card_style, ball_color, badge_style = "border-emerald-300 bg-emerald-50/70", "bg-emerald-600", "bg-emerald-600 text-white"
+        tiles.append(
+            f'<div class="p-1.5 rounded-xl border flex flex-col items-center justify-center {card_style}">'
+            f'<div class="lotto-ball-xs {ball_color} mb-1">{i}</div>'
+            f'<span class="text-[10px] font-black px-1.5 py-0.5 rounded-md {badge_style}">{count}x</span></div>'
+        )
+    return "".join(tiles)
+
+
+def linkify_html(text):
+    if not text:
+        return ""
+    escaped = html_escape_module.escape(text, quote=False)
+    return re.sub(
+        r"(https?://[^\s]+)",
+        r'<a href="\1" target="_blank" rel="noopener" class="underline decoration-dotted hover:text-white">\1</a>',
+        escaped,
+    )
+
+
+def render_freq_subtitle(freq_source, freq_count):
+    if freq_source == "live":
+        return f"Live-calculated from the last {freq_count} verified draws (rolling ~6 months)"
+    if freq_source == "seed":
+        return (
+            f"Reference snapshot — only {freq_count} verified draws recorded so far; "
+            "switches to live data once enough draws accumulate"
+        )
+    return "Occurrence counts based on official national records"
+
+
+def render_post_card_html(post):
+    game = html_escape_module.escape(post.get("game", "Lotto"))
+    title = html_escape_module.escape(post.get("title", ""))
+    summary = html_escape_module.escape(post.get("summary", ""))
+    post_id = html_escape_module.escape(post.get("id", ""))
+    return (
+        f'<div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition cursor-pointer" '
+        f'onclick="openPost(\'{post_id}\')">'
+        f'<div class="flex items-center justify-between text-xs text-slate-400 font-medium mb-1.5">'
+        f'<span class="bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded font-bold">{game}</span>'
+        f'<span class="text-teal-600 font-bold">Read Analysis →</span></div>'
+        f'<h3 class="text-base font-bold text-slate-800 mb-1 hover:text-teal-700 transition">{title}</h3>'
+        f'<p class="text-xs text-slate-500 leading-relaxed line-clamp-2">{summary}</p></div>'
+    )
+
+
+def replace_element_html(html_str, element_id, new_inner_html):
+    """<tag id="element_id" ...>OLD</tag> 의 OLD 부분만 교체한다."""
+    pattern = re.compile(
+        r'(<([a-zA-Z0-9]+)([^>]*\bid="' + re.escape(element_id) + r'"[^>]*)>)(.*?)(</\2>)',
+        re.DOTALL,
+    )
+    new_html, count = pattern.subn(lambda m: m.group(1) + new_inner_html + m.group(5), html_str, count=1)
+    if count == 0:
+        raise ValueError(f"index_template.html: id={element_id!r} 요소를 찾지 못함")
+    return new_html
+
+
+def set_element_class(html_str, element_id, new_class_value):
+    pattern = re.compile(r'(<[a-zA-Z0-9]+\s+id="' + re.escape(element_id) + r'"\s+class=")([^"]*)(")')
+    new_html, count = pattern.subn(lambda m: m.group(1) + new_class_value + m.group(3), html_str, count=1)
+    if count == 0:
+        raise ValueError(f"index_template.html: id={element_id!r} class 속성을 찾지 못함")
+    return new_html
+
+
+def render_index_html(template_html, home_display, posts_list):
+    out = template_html
+    max_data = home_display["lotto_max"]
+    l649_data = home_display["lotto_649"]
+
+    is_stale = "[STALE" in (max_data.get("winner_province") or "") or "[STALE" in (l649_data.get("winner_province") or "")
+    out = set_element_class(
+        out, "stale-banner",
+        "bg-amber-100 border-b border-amber-300 text-amber-900 text-xs sm:text-sm font-semibold text-center py-2 px-4"
+        + ("" if is_stale else " hidden"),
+    )
+
+    out = replace_element_html(out, "max-jackpot", "EST. " + html_escape_module.escape(str(max_data.get("jackpot") or "Unavailable")))
+    out = replace_element_html(out, "max-draw-date", "Last verified draw: " + html_escape_module.escape(str(max_data.get("draw_date") or "unknown")))
+    out = replace_element_html(out, "max-prov-text", linkify_html(max_data.get("winner_province")))
+    out = replace_element_html(out, "max-win-balls", render_balls_html(max_data.get("winning_numbers"), max_data.get("frequencies"), max_data.get("bonus")))
+    out = replace_element_html(out, "max-balls", render_balls_html(generate_ai_numbers(52, 7), max_data.get("frequencies")))
+
+    out = replace_element_html(out, "goldball-amount", html_escape_module.escape(str(l649_data.get("gold_ball") or "Unavailable")))
+    out = replace_element_html(out, "l649-draw-date", "Last verified draw: " + html_escape_module.escape(str(l649_data.get("draw_date") or "unknown")))
+    out = replace_element_html(out, "l649-prov-text", linkify_html(l649_data.get("winner_province")))
+    out = replace_element_html(out, "l649-win-balls", render_balls_html(l649_data.get("winning_numbers"), l649_data.get("frequencies"), l649_data.get("bonus")))
+    out = replace_element_html(out, "l649-balls", render_balls_html(generate_ai_numbers(49, 6), l649_data.get("frequencies")))
+
+    # 기본 활성 탭은 Lotto Max
+    out = replace_element_html(out, "freq-title", "Lotto Max (1-52)")
+    out = replace_element_html(
+        out, "freq-subtitle",
+        html_escape_module.escape(render_freq_subtitle(max_data.get("frequency_source"), max_data.get("frequency_draws_counted", 0))),
+    )
+    out = replace_element_html(out, "freq-grid-container", render_freq_grid_html(max_data.get("frequencies"), 52))
+
+    if posts_list:
+        posts_html = "".join(render_post_card_html(p) for p in posts_list[:12])
+    else:
+        posts_html = '<div class="p-6 text-center text-slate-400 text-xs">No draw posts available.</div>'
+    out = replace_element_html(out, "posts-container", posts_html)
+
+    # 클라이언트 JS가 fetch 없이 바로 쓸 수 있도록 실제 데이터를 그대로 심어둔다.
+    # (초기 화면 콘텐츠는 이미 위에서 정적으로 완성됐고, 이건 탭 전환/번호 생성
+    #  같은 상호작용 기능이 fetch 경쟁 상태 없이 즉시 동작하게 하기 위함이다.)
+    embedded_data = json.dumps(home_display, ensure_ascii=False).replace("</", "<\\/")
+    embedded_posts = json.dumps(posts_list, ensure_ascii=False).replace("</", "<\\/")
+    injection = (
+        f"<script>window.__INITIAL_DISPLAY_DATA__ = {embedded_data}; "
+        f"window.__INITIAL_POSTS__ = {embedded_posts};</script>\n    <script>"
+    )
+    out = out.replace("<script>", injection, 1)
+
+    return out
+
+
+def build_index_html(home_display, posts_list):
+    if not os.path.exists(TEMPLATE_PATH):
+        print(f"[WARN] {TEMPLATE_PATH} not found — skipping index.html rebuild (existing index.html left untouched).", file=sys.stderr)
+        return
+    try:
+        with open(TEMPLATE_PATH, "r", encoding="utf-8") as f:
+            template_html = f.read()
+        rendered = render_index_html(template_html, home_display, posts_list)
+        with open(INDEX_OUTPUT_PATH, "w", encoding="utf-8") as f:
+            f.write(rendered)
+        print("[INFO] index.html rebuilt with real data baked in (no client-fetch dependency for initial content).")
+    except Exception as e:
+        print(f"[WARN] index.html rebuild failed (existing index.html left untouched): {e}", file=sys.stderr)
 
 
 if __name__ == "__main__":
