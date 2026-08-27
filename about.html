@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About & Statistical Methodology | lottohelper.ca</title>
+    <meta name="description" content="How lottohelper.ca sources, verifies, and analyzes official Lotto Max and Lotto 6/49 draw data — methodology, disclaimers, and responsible play resources.">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5048509015899303" crossorigin="anonymous"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -21,25 +22,48 @@
     <main class="max-w-3xl mx-auto px-4 py-10 space-y-8 text-slate-700 leading-relaxed text-sm">
         <div class="bg-white rounded-3xl shadow-xl border border-slate-200 p-8 space-y-6">
             <h1 class="text-2xl font-black text-slate-900 border-b pb-3">About lottohelper.ca & Analysis Methodology</h1>
-            
+
             <section class="space-y-3">
-                <h2 class="text-lg font-bold text-slate-800">Our Analytical Mission</h2>
-                <p><strong>lottohelper.ca</strong> is an independent statistical intelligence portal engineered for Canadian lottery enthusiasts. Our system automatically aggregates, filters, and analyzes historical drawing outcomes for Canada's major nationwide lottery games: Lotto Max and Lotto 6/49.</p>
+                <h2 class="text-lg font-bold text-slate-800">What This Site Is</h2>
+                <p><strong>lottohelper.ca</strong> is an independent statistics and analysis portal built for Canadian Lotto Max and Lotto 6/49 players who want a clear, up-to-date view of official draw history. Every day, our system pulls the latest published results directly from WCLC (the Western Canada Lottery Corporation, which also publishes the interprovincial results for both games), checks them against the expected draw schedule, and updates the site — winning numbers, bonus numbers, current jackpot amounts, and a rolling six-month frequency table.</p>
+                <p>The site is run by a single independent operator, not a lottery corporation or licensed gaming operator. We don't sell tickets, take bets, or have any way to affect draw outcomes — we simply organize and present publicly available results in a more readable form.</p>
             </section>
 
             <section class="space-y-3">
-                <h2 class="text-lg font-bold text-slate-800">Mathematical Framework & AI Modeling</h2>
-                <p>While every lottery draw is strictly an independent probabilistic event, historical pattern analysis provides valuable mathematical insight. Our statistical engines evaluate:</p>
+                <h2 class="text-lg font-bold text-slate-800">How the Daily Data Pipeline Works</h2>
+                <ol class="list-decimal pl-5 space-y-2">
+                    <li>Shortly after midnight Pacific time following each draw, an automated job fetches WCLC's official results page for the relevant game.</li>
+                    <li>The winning numbers, bonus number, and draw date are extracted and checked: the date must fall on the correct day of the week for that game (Tuesday/Friday for Lotto Max, Wednesday/Saturday for Lotto 6/49) and within a recent, expected date range.</li>
+                    <li>Jackpot and Gold Ball amounts are read from WCLC's own live jackpot figures and cross-checked against the game's published prize-growth rules.</li>
+                    <li>If any check fails, that day's data is <strong>not</strong> published — the site keeps showing the last successfully verified draw rather than guessing. This is a deliberate design choice: we would rather show slightly older confirmed data than fresh but unverified data.</li>
+                    <li>Once verified, the new draw is added to a running history file, which feeds the six-month Hot/Mid/Cold frequency table shown on the homepage.</li>
+                </ol>
+            </section>
+
+            <section class="space-y-3">
+                <h2 class="text-lg font-bold text-slate-800">Mathematical Framework Behind the Statistics</h2>
+                <p>While every lottery draw is strictly an independent probabilistic event — past results have no influence on future ones — historical pattern tracking is still a common and legitimate interest for players who enjoy following the numbers. Our statistical tools track:</p>
                 <ul class="list-disc pl-5 space-y-2 mt-2">
-                    <li><strong>Moving Average Frequency:</strong> Measuring draw frequencies over a rolling 180-day cycle to identify hot, mid, and cold clusters.</li>
-                    <li><strong>Even/Odd Parity Distribution:</strong> Combinatorial filtering to maintain historically optimal ratio distributions across generated lines.</li>
-                    <li><strong>Consecutive Number Spans:</strong> Analyzing number clustering tendencies to generate balanced statistical distributions.</li>
+                    <li><strong>Rolling Frequency (Hot/Mid/Cold):</strong> How often each number has appeared across roughly the last six months of official draws, bucketed by relative frequency.</li>
+                    <li><strong>Even/Odd Parity:</strong> The balance of even versus odd numbers in a given combination, which some players use as a rough sanity check on generated lines.</li>
+                    <li><strong>High/Low Number Spread:</strong> Whether a combination leans toward the lower or upper half of the number field.</li>
                 </ul>
+                <p>None of these statistics change the true odds of any individual play. They're presented as a way to explore historical patterns, not as a prediction system.</p>
             </section>
 
             <section class="space-y-3">
-                <h2 class="text-lg font-bold text-slate-800">Important Disclaimer</h2>
-                <p>We are completely independent and not affiliated with the Interprovincial Lottery Corporation (ILC), BCLC, WCLC, OLG, or Loto-Québec. Content provided is for entertainment and statistical evaluation only. Please play responsibly.</p>
+                <h2 class="text-lg font-bold text-slate-800">What We Are Not</h2>
+                <p>We are completely independent and not affiliated with, endorsed by, or operated on behalf of the Interprovincial Lottery Corporation (ILC), BCLC, WCLC, OLG, Loto-Québec, or any other provincial or territorial lottery operator. Ticket purchases, prize claims, and official results always go through your provincial lottery corporation — never through this site.</p>
+            </section>
+
+            <section class="space-y-3">
+                <h2 class="text-lg font-bold text-slate-800">Play Responsibly</h2>
+                <p>Lottery tickets are a form of entertainment spending with long, fixed odds — not an investment or income strategy. If you or someone you know is concerned about their gambling habits, free and confidential help is available across Canada through the <a href="https://www.responsiblegambling.org/" class="underline text-teal-700 font-semibold" target="_blank" rel="noopener">Responsible Gambling Council</a> and provincial resources such as BCResponsibleGambling.ca in British Columbia.</p>
+            </section>
+
+            <section class="space-y-3">
+                <h2 class="text-lg font-bold text-slate-800">Contact & Corrections</h2>
+                <p>Spotted something that looks off? Our automated pipeline is designed to avoid publishing unverified data, but if you believe a figure on this site doesn't match WCLC's official results, please cross-check directly with <a href="https://www.wclc.com" class="underline text-teal-700 font-semibold" target="_blank" rel="noopener">wclc.com</a>, which remains the authoritative source for all draw results and prize information.</p>
             </section>
         </div>
     </main>
