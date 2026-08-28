@@ -5,6 +5,7 @@ import re
 import sys
 import urllib.request
 from datetime import datetime, timezone, timedelta
+from zoneinfo import ZoneInfo
 from html.parser import HTMLParser
 
 # ==========================================
@@ -470,8 +471,8 @@ def build_deep_analysis_note(game_name, draw_date_str, winning_nums, ai_nums, ja
 # 6. 메인 실행
 # ==========================================
 def main():
-    pst_offset = timedelta(hours=-7)
-    today_dt = datetime.now(timezone.utc) + pst_offset
+    # America/Vancouver는 PST(UTC-8, 11월~3월)/PDT(UTC-7, 3월~11월)를 자동으로 처리한다.
+    today_dt = datetime.now(ZoneInfo("America/Vancouver"))
     today_date = today_dt.strftime("%Y-%m-%d")
     display_date = today_dt.strftime("%B %d, %Y")
     weekday = today_dt.weekday()
