@@ -1,20 +1,20 @@
 {
-    "date": "2026-08-28",
-    "display_date": "August 28, 2026",
+    "date": "2026-08-29",
+    "display_date": "August 29, 2026",
     "lotto_max": {
-        "jackpot": "$10 Million",
-        "winner_province": "Draw confirmed for Tuesday, August 25, 2026. Next jackpot (Friday, August 28, 2026): $10 Million (10 x $100,000 MaxPlus prizes). Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-max-extra.htm",
+        "jackpot": "$15 Million",
+        "winner_province": "Draw confirmed for Friday, August 28, 2026. Next jackpot (Tuesday, September 1, 2026): $15 Million (15 x $100,000 MaxPlus prizes). Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-max-extra.htm",
         "winning_numbers": [
+            1,
+            7,
+            8,
             10,
-            15,
-            23,
-            25,
-            28,
-            31,
-            52
+            41,
+            42,
+            48
         ],
-        "bonus": 43,
-        "draw_date": "Tuesday, August 25, 2026",
+        "bonus": 29,
+        "draw_date": "Friday, August 28, 2026",
         "frequencies": {
             "1": 8,
             "2": 6,
@@ -70,7 +70,7 @@
             "52": 6
         },
         "frequency_source": "seed",
-        "frequency_draws_counted": 9
+        "frequency_draws_counted": 10
     },
     "lotto_649": {
         "gold_ball": "$20 Million",
