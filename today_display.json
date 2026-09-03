@@ -1,6 +1,6 @@
 {
-    "date": "2026-09-02",
-    "display_date": "September 02, 2026",
+    "date": "2026-09-03",
+    "display_date": "September 03, 2026",
     "lotto_max": {
         "jackpot": "$20 Million",
         "winner_province": "Draw confirmed for Tuesday, September 01, 2026. Next jackpot (Friday, September 4, 2026): $20 Million (20 x $100,000 MaxPlus prizes). Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-max-extra.htm",
@@ -73,18 +73,18 @@
         "frequency_draws_counted": 11
     },
     "lotto_649": {
-        "gold_ball": "$22 Million",
-        "winner_province": "Draw confirmed for Saturday, August 29, 2026. Guaranteed $1,000,000 prize won (White ball drawn). Next Gold Ball jackpot (Wednesday, September 2, 2026): $22 Million. Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-649-extra.htm",
+        "gold_ball": "$24 Million",
+        "winner_province": "Draw confirmed for Wednesday, September 02, 2026. Guaranteed $1,000,000 prize won (White ball drawn). Next Gold Ball jackpot (Saturday, September 5, 2026): $24 Million. Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-649-extra.htm",
         "winning_numbers": [
-            16,
-            20,
-            23,
-            24,
-            25,
-            33
+            6,
+            8,
+            9,
+            14,
+            17,
+            25
         ],
-        "bonus": 21,
-        "draw_date": "Saturday, August 29, 2026",
+        "bonus": 16,
+        "draw_date": "Wednesday, September 02, 2026",
         "frequencies": {
             "1": 7,
             "2": 9,
@@ -137,6 +137,6 @@
             "49": 7
         },
         "frequency_source": "seed",
-        "frequency_draws_counted": 10
+        "frequency_draws_counted": 11
     }
 }

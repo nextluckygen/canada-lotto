@@ -264,6 +264,18 @@
         33
       ],
       "bonus": 21
+    },
+    {
+      "date": "Wednesday, September 02, 2026",
+      "numbers": [
+        6,
+        8,
+        9,
+        14,
+        17,
+        25
+      ],
+      "bonus": 16
     }
   ]
 }
