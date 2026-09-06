@@ -438,11 +438,30 @@ def fetch_home_jackpots(text, today_dt):
     }
 
 
-def generate_ai_numbers(total, count):
-    return sorted(random.sample(range(1, total + 1), count))
+def generate_ai_numbers(total, count, freq_dict=None):
+    """Hot/Cold 빈도 가중 추첨. freq_dict가 없으면 균등 추첨(기존 동작)으로 폴백.
+    가중치 = 빈도 + 1 (콜드 번호도 0이 되지 않게). 매 회차 결과는 완전히 독립적인
+    무작위 사건이므로 이 가중치가 실제 당첨 확률을 바꾸지는 않는다 — 다만 사이트가
+    스스로 설명하는 'Hot/Cold weighting'이라는 문구를 실제 동작과 일치시키기 위함이다."""
+    if not freq_dict:
+        return sorted(random.sample(range(1, total + 1), count))
+
+    pool = [(n, freq_dict.get(str(n), 7) + 1) for n in range(1, total + 1)]
+    chosen = []
+    for _ in range(count):
+        total_weight = sum(w for _, w in pool)
+        r = random.uniform(0, total_weight)
+        upto = 0
+        for i, (n, w) in enumerate(pool):
+            upto += w
+            if upto >= r:
+                chosen.append(n)
+                pool.pop(i)
+                break
+    return sorted(chosen)
 
 
-def build_deep_analysis_note(game_name, draw_date_str, winning_nums, ai_nums, jackpot_text, prov_status):
+def build_deep_analysis_note(game_name, draw_date_str, winning_nums, ai_nums, jackpot_text, prov_status, previous_pick_result=None):
     even_count = sum(1 for n in winning_nums if n % 2 == 0)
     odd_count = len(winning_nums) - even_count
     ai_even = sum(1 for n in ai_nums if n % 2 == 0)
@@ -451,7 +470,7 @@ def build_deep_analysis_note(game_name, draw_date_str, winning_nums, ai_nums, ja
     low_count = sum(1 for n in winning_nums if n <= low_bound)
     high_count = len(winning_nums) - low_count
 
-    return (
+    note = (
         f"### 1. Official Draw Breakdown (Draw Date: {draw_date_str})\n"
         f"In the official {game_name} drawing conducted on {draw_date_str}, the verified winning combination was {', '.join(map(str, winning_nums))}. "
         f"Jackpot: {jackpot_text}. Status: {prov_status}.\n\n"
@@ -461,10 +480,131 @@ def build_deep_analysis_note(game_name, draw_date_str, winning_nums, ai_nums, ja
         f"### 3. AI Frequency-Weighted Line Strategy\n"
         f"Our algorithmic model evaluated historical frequency clusters to formulate the recommended line: {', '.join(map(str, ai_nums))}. "
         f"This combination maintains a {ai_odd}:{ai_even} Odd/Even parity distribution.\n\n"
-        f"### 4. Strategic Observations\n"
+    )
+
+    if previous_pick_result:
+        matched = previous_pick_result.get("matched_numbers") or []
+        matched_text = ", ".join(map(str, matched)) if matched else "none"
+        note += (
+            f"### 4. How Last Draw's AI Pick Performed\n"
+            f"Our previous recommended line for {game_name} ({', '.join(map(str, previous_pick_result.get('predicted', [])))}, "
+            f"from the {previous_pick_result.get('source_draw_date', 'previous')} draw) matched "
+            f"{previous_pick_result.get('match_count', 0)} of {len(winning_nums)} official winning numbers this time "
+            f"(matched: {matched_text}). This is tracked purely for transparency — see the Track Record section "
+            f"below for how this compares to pure chance.\n\n"
+        )
+
+    note += (
+        f"### {5 if previous_pick_result else 4}. Strategic Observations\n"
         f"Numbers are drawn independently and randomly. Historical frequency does not predict future outcomes. "
         f"Please play responsibly. For analytical and entertainment purposes only."
     )
+    return note
+
+
+# ==========================================
+# 5d. 지난 AI 추천 라인 적중 여부 추적 (투명성 목적 — "더 나은 번호"를 만든다는
+#     주장이 아니라, 실제로 몇 개 맞았는지 정직하게 기록/공개하는 트래커다.
+#     로또는 완전 독립 사건이라 이 기록이 다음 회차 추천을 실제로 "개선"하지는
+#     않는다 — 그렇게 주장하지 않는 것이 핵심 설계 원칙이다.)
+# ==========================================
+EXPECTED_MATCHES = {
+    # 초기하분포 기댓값: count * (draw_size / total_numbers)
+    "Lotto Max": 7 * 7 / 52,      # ≈ 0.942
+    "Lotto 6/49": 6 * 6 / 49,     # ≈ 0.735
+}
+
+
+def compute_match_result(predicted, actual):
+    predicted = predicted or []
+    actual = actual or []
+    matched = sorted(set(predicted) & set(actual))
+    return {
+        "predicted": sorted(predicted),
+        "match_count": len(matched),
+        "matched_numbers": matched,
+    }
+
+
+def find_previous_post(posts_list, game):
+    """posts_list(현재 posts_index.json 내용, 이번 회차 추가 전)에서 같은 게임의
+    가장 최근 포스트를 찾아 그 전체 JSON을 읽어 반환한다."""
+    candidates = [p for p in posts_list if p.get("game") == game]
+    if not candidates:
+        return None
+    candidates.sort(key=lambda p: p.get("date", ""), reverse=True)
+    prev_id = candidates[0].get("id")
+    if not prev_id:
+        return None
+    path = os.path.join("posts", f"{prev_id}.json")
+    if not os.path.exists(path):
+        return None
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return None
+
+
+def backfill_previous_pick_results():
+    """previous_pick_result가 없는 기존 포스트들을 채운다. 이미 있으면 건드리지
+    않으므로(멱등) 매일 실행돼도 안전하고, 신규 포스트도 자연스럽게 채워진다."""
+    if not os.path.isdir("posts"):
+        return
+    by_game = {"Lotto Max": [], "Lotto 6/49": []}
+    for file_name in os.listdir("posts"):
+        if not file_name.endswith(".json"):
+            continue
+        path = os.path.join("posts", file_name)
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+        except Exception:
+            continue
+        if data.get("game") in by_game:
+            by_game[data["game"]].append((path, data))
+
+    for game, items in by_game.items():
+        items.sort(key=lambda pair: pair[1].get("date", ""))
+        for i in range(1, len(items)):
+            path, data = items[i]
+            if "previous_pick_result" in data:
+                continue
+            prev_path, prev_data = items[i - 1]
+            result = compute_match_result(prev_data.get("ai_recommended"), data.get("winning_numbers"))
+            result["source_post_id"] = prev_data.get("id")
+            result["source_draw_date"] = prev_data.get("draw_date")
+            data["previous_pick_result"] = result
+            try:
+                with open(path, "w", encoding="utf-8") as f:
+                    json.dump(data, f, indent=4, ensure_ascii=False)
+            except Exception as e:
+                print(f"[WARN] Could not write backfilled previous_pick_result to {path}: {e}", file=sys.stderr)
+
+
+def compute_track_record():
+    """게임별 all-time 평균 적중 개수와 순수 확률상 기댓값을 비교해서 반환."""
+    record = {}
+    for game in ("Lotto Max", "Lotto 6/49"):
+        total_matches, draws_compared = 0, 0
+        if os.path.isdir("posts"):
+            for file_name in os.listdir("posts"):
+                if not file_name.endswith(".json"):
+                    continue
+                try:
+                    with open(os.path.join("posts", file_name), "r", encoding="utf-8") as f:
+                        data = json.load(f)
+                except Exception:
+                    continue
+                if data.get("game") == game and "previous_pick_result" in data:
+                    total_matches += data["previous_pick_result"].get("match_count", 0)
+                    draws_compared += 1
+        record[game] = {
+            "draws_compared": draws_compared,
+            "average_matches": round(total_matches / draws_compared, 2) if draws_compared else None,
+            "expected_by_chance": round(EXPECTED_MATCHES[game], 2),
+        }
+    return record
 
 
 # ==========================================
@@ -685,8 +825,14 @@ def main():
     new_post = None
 
     if weekday in [2, 5] and max_result:  # 수/토 자정, Max 검증 성공시에만 게시
-        ai_nums = generate_ai_numbers(52, 7)
-        note = build_deep_analysis_note("Lotto Max", max_draw_date, max_win_nums, ai_nums, max_jp, max_prov)
+        ai_nums = generate_ai_numbers(52, 7, max_frequencies)
+        prev_post = find_previous_post(posts_list, "Lotto Max")
+        previous_pick_result = None
+        if prev_post:
+            previous_pick_result = compute_match_result(prev_post.get("ai_recommended"), max_win_nums)
+            previous_pick_result["source_post_id"] = prev_post.get("id")
+            previous_pick_result["source_draw_date"] = prev_post.get("draw_date")
+        note = build_deep_analysis_note("Lotto Max", max_draw_date, max_win_nums, ai_nums, max_jp, max_prov, previous_pick_result)
         new_post = {
             "id": f"max-{today_date}",
             "game": "Lotto Max",
@@ -702,12 +848,20 @@ def main():
             "ai_recommended": ai_nums,
             "ai_note": note,
         }
+        if previous_pick_result:
+            new_post["previous_pick_result"] = previous_pick_result
     elif weekday in [2, 5] and not max_result:
         print("[SKIP] No new Lotto Max post published today — scrape/validation failed.", file=sys.stderr)
 
     if weekday in [3, 6] and l649_result:  # 목/일 자정, 6/49 검증 성공시에만 게시
-        ai_nums = generate_ai_numbers(49, 6)
-        note = build_deep_analysis_note("Lotto 6/49", l649_draw_date, l649_win_nums, ai_nums, l649_gb_display, l649_prov)
+        ai_nums = generate_ai_numbers(49, 6, l649_frequencies)
+        prev_post = find_previous_post(posts_list, "Lotto 6/49")
+        previous_pick_result = None
+        if prev_post:
+            previous_pick_result = compute_match_result(prev_post.get("ai_recommended"), l649_win_nums)
+            previous_pick_result["source_post_id"] = prev_post.get("id")
+            previous_pick_result["source_draw_date"] = prev_post.get("draw_date")
+        note = build_deep_analysis_note("Lotto 6/49", l649_draw_date, l649_win_nums, ai_nums, l649_gb_display, l649_prov, previous_pick_result)
         new_post = {
             "id": f"649-{today_date}",
             "game": "Lotto 6/49",
@@ -723,6 +877,8 @@ def main():
             "ai_recommended": ai_nums,
             "ai_note": note,
         }
+        if previous_pick_result:
+            new_post["previous_pick_result"] = previous_pick_result
     elif weekday in [3, 6] and not l649_result:
         print("[SKIP] No new Lotto 6/49 post published today — scrape/validation failed.", file=sys.stderr)
 
@@ -764,6 +920,14 @@ def main():
 
     with open(index_filename, "w", encoding="utf-8") as f:
         json.dump(valid_posts, f, indent=4, ensure_ascii=False)
+
+    # 새 포스트를 만들지 않은 게임(스크래핑 실패 등)이나 기존 옛날 포스트들도
+    # previous_pick_result를 갖도록 멱등하게 채워준다.
+    backfill_previous_pick_results()
+
+    home_display["track_record"] = compute_track_record()
+    with open(display_path, "w", encoding="utf-8") as f:
+        json.dump(home_display, f, indent=4, ensure_ascii=False)
 
     build_index_html(home_display, valid_posts)
     build_all_post_pages(home_display)
@@ -872,6 +1036,16 @@ def render_freq_subtitle(freq_source, freq_count):
     return "Occurrence counts based on official national records"
 
 
+def render_track_record_text(record):
+    if not record or not record.get("draws_compared"):
+        return "Track record: not enough data yet — check back after the next draw."
+    return (
+        f"Track record: past AI lines averaged {record['average_matches']} matches over "
+        f"{record['draws_compared']} draw(s) (pure-chance expectation: {record['expected_by_chance']}) — "
+        f"draws are independent, so this can't improve future odds."
+    )
+
+
 def render_post_card_html(post):
     game = html_escape_module.escape(post.get("game", "Lotto"))
     title = html_escape_module.escape(post.get("title", ""))
@@ -922,6 +1096,17 @@ def render_post_page_html(template_html, post_data, freq_dict=None):
     badge_class = "bg-amber-400 text-slate-950" if is_max else "bg-blue-400 text-slate-950"
     freq_dict = freq_dict or {}
 
+    prev_result = post_data.get("previous_pick_result")
+    if prev_result:
+        total_num = len(post_data.get("winning_numbers") or [])
+        prev_badge_html = (
+            '<div class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-600">'
+            f'📊 <strong>Previous AI line ({html_escape_module.escape(str(prev_result.get("source_draw_date", "")))})</strong>: '
+            f'matched <strong>{prev_result.get("match_count", 0)}</strong> of {total_num} numbers this draw.</div>'
+        )
+    else:
+        prev_badge_html = ""
+
     replacements = {
         "__TITLE__": html_escape_module.escape(post_data.get("title", "")),
         "__META_DESCRIPTION__": html_escape_module.escape((post_data.get("summary") or "")[:300]),
@@ -933,6 +1118,7 @@ def render_post_page_html(template_html, post_data, freq_dict=None):
         "__WIN_BALLS_HTML__": render_balls_html(post_data.get("winning_numbers"), freq_dict, post_data.get("bonus")),
         "__PROV_HTML__": linkify_html(post_data.get("winner_province", "")),
         "__AI_BALLS_HTML__": render_balls_html(post_data.get("ai_recommended"), freq_dict),
+        "__PREV_PICK_BADGE__": prev_badge_html,
         "__AI_NOTE_HTML__": render_ai_note_html(post_data.get("ai_note", "")),
     }
     out = template_html
@@ -1031,13 +1217,17 @@ def render_index_html(template_html, home_display, posts_list):
     out = replace_element_html(out, "max-draw-date", "Last verified draw: " + html_escape_module.escape(str(max_data.get("draw_date") or "unknown")))
     out = replace_element_html(out, "max-prov-text", linkify_html(max_data.get("winner_province")))
     out = replace_element_html(out, "max-win-balls", render_balls_html(max_data.get("winning_numbers"), max_data.get("frequencies"), max_data.get("bonus")))
-    out = replace_element_html(out, "max-balls", render_balls_html(generate_ai_numbers(52, 7), max_data.get("frequencies")))
+    out = replace_element_html(out, "max-balls", render_balls_html(generate_ai_numbers(52, 7, max_data.get("frequencies")), max_data.get("frequencies")))
+
+    track_record = home_display.get("track_record") or {}
+    out = replace_element_html(out, "max-track-record", html_escape_module.escape(render_track_record_text(track_record.get("Lotto Max"))))
+    out = replace_element_html(out, "l649-track-record", html_escape_module.escape(render_track_record_text(track_record.get("Lotto 6/49"))))
 
     out = replace_element_html(out, "goldball-amount", html_escape_module.escape(str(l649_data.get("gold_ball") or "Unavailable")))
     out = replace_element_html(out, "l649-draw-date", "Last verified draw: " + html_escape_module.escape(str(l649_data.get("draw_date") or "unknown")))
     out = replace_element_html(out, "l649-prov-text", linkify_html(l649_data.get("winner_province")))
     out = replace_element_html(out, "l649-win-balls", render_balls_html(l649_data.get("winning_numbers"), l649_data.get("frequencies"), l649_data.get("bonus")))
-    out = replace_element_html(out, "l649-balls", render_balls_html(generate_ai_numbers(49, 6), l649_data.get("frequencies")))
+    out = replace_element_html(out, "l649-balls", render_balls_html(generate_ai_numbers(49, 6, l649_data.get("frequencies")), l649_data.get("frequencies")))
 
     # 기본 활성 탭은 Lotto Max
     out = replace_element_html(out, "freq-title", "Lotto Max (1-52)")
