@@ -26,5 +26,23 @@
         44,
         50
     ],
-    "ai_note": "### 1. Official Draw Breakdown (Draw Date: August 18, 2026)\nIn the official Lotto Max drawing conducted on August 18, 2026, the verified winning sequence was 4, 13, 21, 26, 39, 43, 48. The active jackpot pool stands at $55 Million. Prize status: No main jackpot winner on Aug 18 (Rolled over to $55M). 1 Maxmillions ($1M) won in Alberta..\n\n### 2. Parity & Distribution Matrix Analysis\nThe drawn combination features a parity distribution of 4 Odd and 3 Even numbers, with 3 higher-bracket numbers and 4 lower-bracket numbers. Balanced parity distributions historically occur in over 68% of Canadian draws.\n\n### 3. AI Frequency-Weighted Line Strategy\nOur algorithmic model analyzed rolling 180-day historical frequencies to generate the recommended line: 2, 13, 22, 32, 34, 44, 50. This combination maintains a balanced 1:6 parity profile.\n\n### 4. Strategic Observations\nMaintain balanced decade coverage when selecting lines. Please play responsibly for analytical and entertainment purposes only."
+    "ai_note": "### 1. Official Draw Breakdown (Draw Date: August 18, 2026)\nIn the official Lotto Max drawing conducted on August 18, 2026, the verified winning sequence was 4, 13, 21, 26, 39, 43, 48. The active jackpot pool stands at $55 Million. Prize status: No main jackpot winner on Aug 18 (Rolled over to $55M). 1 Maxmillions ($1M) won in Alberta..\n\n### 2. Parity & Distribution Matrix Analysis\nThe drawn combination features a parity distribution of 4 Odd and 3 Even numbers, with 3 higher-bracket numbers and 4 lower-bracket numbers. Balanced parity distributions historically occur in over 68% of Canadian draws.\n\n### 3. AI Frequency-Weighted Line Strategy\nOur algorithmic model analyzed rolling 180-day historical frequencies to generate the recommended line: 2, 13, 22, 32, 34, 44, 50. This combination maintains a balanced 1:6 parity profile.\n\n### 4. Strategic Observations\nMaintain balanced decade coverage when selecting lines. Please play responsibly for analytical and entertainment purposes only.",
+    "previous_pick_result": {
+        "predicted": [
+            4,
+            18,
+            22,
+            27,
+            33,
+            41,
+            48
+        ],
+        "match_count": 2,
+        "matched_numbers": [
+            4,
+            48
+        ],
+        "source_post_id": "max-2026-08-15",
+        "source_draw_date": null
+    }
 }

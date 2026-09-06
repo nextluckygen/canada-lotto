@@ -7,7 +7,38 @@
     "summary": "Detailed statistical review of the August 14 Lotto Max draw ($40 Million), winning status, number distribution matrix, and AI-optimized selections.",
     "jackpot": "$40 Million",
     "winner_province": "No jackpot winner on Aug 14 (Rolled over to $50M)",
-    "winning_numbers": [13, 29, 36, 39, 46, 49, 50],
-    "ai_recommended": [4, 18, 22, 27, 33, 41, 48],
-    "ai_note": "### 1. Official Draw Breakdown & Jackpot Dynamics\nIn the official Lotto Max drawing for August 14, 2026, the winning sequence was verified as 13, 29, 36, 39, 46, 49, 50. The $40 Million main jackpot went unclaimed and rolled over to $50 Million for the subsequent draw.\n\n### 2. Parity & Distribution Matrix Analysis\nEvaluating the drawn combination reveals a high-tier concentration with 6 Odd numbers and 1 Even number, alongside 7 numbers in the upper bracket (26-52). Such extreme high-end distributions are historically rare.\n\n### 3. AI Frequency-Weighted Line Strategy\nOur model formulated a balanced 4:3 parity line (4, 18, 22, 27, 33, 41, 48) blending historical frequency weights across all decades.\n\n### 4. Strategic Observations\nPlayers should maintain balanced decade spreads. Please play responsibly for entertainment purposes."
+    "winning_numbers": [
+        13,
+        29,
+        36,
+        39,
+        46,
+        49,
+        50
+    ],
+    "ai_recommended": [
+        4,
+        18,
+        22,
+        27,
+        33,
+        41,
+        48
+    ],
+    "ai_note": "### 1. Official Draw Breakdown & Jackpot Dynamics\nIn the official Lotto Max drawing for August 14, 2026, the winning sequence was verified as 13, 29, 36, 39, 46, 49, 50. The $40 Million main jackpot went unclaimed and rolled over to $50 Million for the subsequent draw.\n\n### 2. Parity & Distribution Matrix Analysis\nEvaluating the drawn combination reveals a high-tier concentration with 6 Odd numbers and 1 Even number, alongside 7 numbers in the upper bracket (26-52). Such extreme high-end distributions are historically rare.\n\n### 3. AI Frequency-Weighted Line Strategy\nOur model formulated a balanced 4:3 parity line (4, 18, 22, 27, 33, 41, 48) blending historical frequency weights across all decades.\n\n### 4. Strategic Observations\nPlayers should maintain balanced decade spreads. Please play responsibly for entertainment purposes.",
+    "previous_pick_result": {
+        "predicted": [
+            3,
+            14,
+            21,
+            28,
+            32,
+            40,
+            51
+        ],
+        "match_count": 0,
+        "matched_numbers": [],
+        "source_post_id": "max-2026-08-12",
+        "source_draw_date": "August 11, 2026"
+    }
 }

@@ -18,12 +18,28 @@
     ],
     "bonus": 44,
     "ai_recommended": [
-        12,
-        16,
-        18,
-        24,
+        13,
+        17,
+        21,
         31,
-        49
+        37,
+        44
     ],
-    "ai_note": "### 1. Official Draw Breakdown (Draw Date: Saturday, September 05, 2026)\nIn the official Lotto 6/49 drawing conducted on Saturday, September 05, 2026, the verified winning combination was 5, 10, 17, 34, 42, 49. Jackpot: $26 Million. Status: Draw confirmed for Saturday, September 05, 2026. Guaranteed $1,000,000 prize won (White ball drawn). Next Gold Ball jackpot (Wednesday, September 9, 2026): $26 Million. Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-649-extra.htm.\n\n### 2. Parity & Distribution Matrix Analysis\nEvaluating the official combination yields 3 Odd numbers and 3 Even numbers, with 3 higher-bracket numbers and 3 lower-bracket numbers.\n\n### 3. AI Frequency-Weighted Line Strategy\nOur algorithmic model evaluated historical frequency clusters to formulate the recommended line: 12, 16, 18, 24, 31, 49. This combination maintains a 2:4 Odd/Even parity distribution.\n\n### 4. Strategic Observations\nNumbers are drawn independently and randomly. Historical frequency does not predict future outcomes. Please play responsibly. For analytical and entertainment purposes only."
+    "ai_note": "### 1. Official Draw Breakdown (Draw Date: Saturday, September 05, 2026)\nIn the official Lotto 6/49 drawing conducted on Saturday, September 05, 2026, the verified winning combination was 5, 10, 17, 34, 42, 49. Jackpot: $26 Million. Status: Draw confirmed for Saturday, September 05, 2026. Guaranteed $1,000,000 prize won (White ball drawn). Next Gold Ball jackpot (Wednesday, September 9, 2026): $26 Million. Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-649-extra.htm.\n\n### 2. Parity & Distribution Matrix Analysis\nEvaluating the official combination yields 3 Odd numbers and 3 Even numbers, with 3 higher-bracket numbers and 3 lower-bracket numbers.\n\n### 3. AI Frequency-Weighted Line Strategy\nOur algorithmic model evaluated historical frequency clusters to formulate the recommended line: 13, 17, 21, 31, 37, 44. This combination maintains a 5:1 Odd/Even parity distribution.\n\n### 4. How Last Draw's AI Pick Performed\nOur previous recommended line for Lotto 6/49 (12, 16, 18, 24, 31, 49, from the Saturday, September 05, 2026 draw) matched 1 of 6 official winning numbers this time (matched: 49). This is tracked purely for transparency — see the Track Record section below for how this compares to pure chance.\n\n### 5. Strategic Observations\nNumbers are drawn independently and randomly. Historical frequency does not predict future outcomes. Please play responsibly. For analytical and entertainment purposes only.",
+    "previous_pick_result": {
+        "predicted": [
+            12,
+            16,
+            18,
+            24,
+            31,
+            49
+        ],
+        "match_count": 1,
+        "matched_numbers": [
+            49
+        ],
+        "source_post_id": "649-2026-09-06",
+        "source_draw_date": "Saturday, September 05, 2026"
+    }
 }

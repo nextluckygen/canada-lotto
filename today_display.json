@@ -138,5 +138,17 @@
         },
         "frequency_source": "seed",
         "frequency_draws_counted": 12
+    },
+    "track_record": {
+        "Lotto Max": {
+            "draws_compared": 7,
+            "average_matches": 0.29,
+            "expected_by_chance": 0.94
+        },
+        "Lotto 6/49": {
+            "draws_compared": 7,
+            "average_matches": 0.71,
+            "expected_by_chance": 0.73
+        }
     }
 }
