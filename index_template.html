@@ -138,7 +138,8 @@
 
                             <div>
                                 <h3 class="text-lg font-bold text-slate-800 mb-1">🤖 AI Recommended Line Strategy</h3>
-                                <p class="text-xs text-slate-500 mb-4">7 Numbers generated with Hot/Cold historical frequency weighting</p>
+                                <p class="text-xs text-slate-500 mb-2">7 Numbers generated with Hot/Cold historical frequency weighting</p>
+                                <p id="max-track-record" class="text-[11px] text-slate-400 mb-3 italic">Track record: —</p>
                                 <div id="max-balls" class="ball-flex-container mb-4"></div>
                                 <button onclick="generateNewNumbers('max')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-6 rounded-xl shadow transition text-xs sm:text-sm">🎲 Generate New Numbers</button>
                             </div>
@@ -176,7 +177,8 @@
 
                             <div>
                                 <h3 class="text-lg font-bold text-slate-800 mb-1">🤖 AI Recommended Line Strategy</h3>
-                                <p class="text-xs text-slate-500 mb-4">6 Numbers generated with Hot/Cold historical frequency weighting</p>
+                                <p class="text-xs text-slate-500 mb-2">6 Numbers generated with Hot/Cold historical frequency weighting</p>
+                                <p id="l649-track-record" class="text-[11px] text-slate-400 mb-3 italic">Track record: —</p>
                                 <div id="l649-balls" class="ball-flex-container mb-4"></div>
                                 <button onclick="generateNewNumbers('649')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-6 rounded-xl shadow transition text-xs sm:text-sm">🎲 Generate New Numbers</button>
                             </div>
@@ -345,6 +347,17 @@
             }
         }
 
+        // main.py의 render_track_record_text()와 동일한 문구를 클라이언트에서도 재현한다.
+        function renderTrackRecord(elementId, record) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            if (!record || !record.draws_compared) {
+                el.innerText = 'Track record: not enough data yet — check back after the next draw.';
+                return;
+            }
+            el.innerText = `Track record: past AI lines averaged ${record.average_matches} matches over ${record.draws_compared} draw(s) (pure-chance expectation: ${record.expected_by_chance}) — draws are independent, so this can't improve future odds.`;
+        }
+
         // 빈도 데이터 기준에 따라 완벽히 동일한 색상 클래스를 반환하는 함수
         function getFrequencyColorClass(num, game = currentGame) {
             let freqData = {};
@@ -493,15 +506,39 @@
             }
         }
 
+        // 서버(main.py)의 generate_ai_numbers()와 동일한 가중치 방식.
+        // 가중치 = 빈도 + 1 (콜드 번호 확률이 0이 되지 않게). 실제 당첨 확률에는
+        // 영향이 없다 — 이 버튼이 스스로 설명하는 'Hot/Cold weighting' 문구를
+        // 실제 동작과 일치시키기 위한 것일 뿐이다.
+        function weightedSample(total, count, freqData) {
+            const pool = [];
+            for (let n = 1; n <= total; n++) {
+                pool.push({ n, weight: (freqData[n] || 7) + 1 });
+            }
+            const chosen = [];
+            for (let i = 0; i < count; i++) {
+                const totalWeight = pool.reduce((s, p) => s + p.weight, 0);
+                let r = Math.random() * totalWeight;
+                for (let j = 0; j < pool.length; j++) {
+                    r -= pool[j].weight;
+                    if (r <= 0) {
+                        chosen.push(pool[j].n);
+                        pool.splice(j, 1);
+                        break;
+                    }
+                }
+            }
+            return chosen.sort((a, b) => a - b);
+        }
+
         function generateNewNumbers(game) {
+            const freqData = (game === 'max')
+                ? (globalDisplayData?.lotto_max?.frequencies || {})
+                : (globalDisplayData?.lotto_649?.frequencies || {});
             if (game === 'max') {
-                const numbers = new Set();
-                while (numbers.size < 7) numbers.add(Math.floor(Math.random() * 52) + 1);
-                renderBalls('max-balls', Array.from(numbers).sort((a, b) => a - b), 'max');
+                renderBalls('max-balls', weightedSample(52, 7, freqData), 'max');
             } else {
-                const numbers = new Set();
-                while (numbers.size < 6) numbers.add(Math.floor(Math.random() * 49) + 1);
-                renderBalls('l649-balls', Array.from(numbers).sort((a, b) => a - b), '649');
+                renderBalls('l649-balls', weightedSample(49, 6, freqData), '649');
             }
         }
 
@@ -563,6 +600,8 @@
                     checkStaleFlag(g.winner_province);
                     renderBalls('l649-win-balls', g.winning_numbers, '649', g.bonus);
                 }
+                renderTrackRecord('max-track-record', globalDisplayData.track_record?.['Lotto Max']);
+                renderTrackRecord('l649-track-record', globalDisplayData.track_record?.['Lotto 6/49']);
             } catch (e) {
                 renderBalls('max-win-balls', [1, 4, 15, 18, 24, 25, 51], 'max', 13);
                 renderBalls('l649-win-balls', [11, 13, 21, 31, 34, 45], '649', 5);
