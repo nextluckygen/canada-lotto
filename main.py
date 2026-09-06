@@ -766,6 +766,8 @@ def main():
         json.dump(valid_posts, f, indent=4, ensure_ascii=False)
 
     build_index_html(home_display, valid_posts)
+    build_all_post_pages()
+    build_sitemap(valid_posts)
 
     print(f"Build finished for {today_date}.")
     print(f"  Max: {'OK' if max_result else 'FALLBACK/UNAVAILABLE - ' + str(max_error)}")
@@ -876,14 +878,117 @@ def render_post_card_html(post):
     summary = html_escape_module.escape(post.get("summary", ""))
     post_id = html_escape_module.escape(post.get("id", ""))
     return (
-        f'<div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition cursor-pointer" '
-        f'onclick="openPost(\'{post_id}\')">'
+        f'<a href="posts/{post_id}.html" class="block bg-white p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition">'
         f'<div class="flex items-center justify-between text-xs text-slate-400 font-medium mb-1.5">'
         f'<span class="bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded font-bold">{game}</span>'
         f'<span class="text-teal-600 font-bold">Read Analysis →</span></div>'
         f'<h3 class="text-base font-bold text-slate-800 mb-1 hover:text-teal-700 transition">{title}</h3>'
-        f'<p class="text-xs text-slate-500 leading-relaxed line-clamp-2">{summary}</p></div>'
+        f'<p class="text-xs text-slate-500 leading-relaxed line-clamp-2">{summary}</p></a>'
     )
+
+
+# ==========================================
+# 6b. 회차별 정적 상세 페이지 렌더링
+#    - "Low value content" 재반려 원인 추정: 매일 생성되는 ai_note(4단락짜리
+#      실제 고유 분석글)가 지금까지는 클릭해야 JS가 JSON을 fetch해서 보여주는
+#      구조라, 크롤러가 보는 정적 HTML에는 이 콘텐츠가 전혀 없었다.
+#    - 해결: 회차마다 진짜 정적 페이지(posts/<id>.html)를 만들어 전체 분석글을
+#      HTML에 그대로 노출하고, 홈페이지 카드도 실제 <a href>로 연결한다.
+# ==========================================
+POST_TEMPLATE_PATH = "post_template.html"
+POSTS_HTML_DIR = "posts"
+
+
+def render_ai_note_html(ai_note):
+    if not ai_note:
+        return ""
+    blocks = [b.strip() for b in ai_note.strip().split("\n\n") if b.strip()]
+    parts = []
+    for block in blocks:
+        if block.startswith("#"):
+            lines = block.split("\n", 1)
+            heading = lines[0].lstrip("#").strip()
+            parts.append(f'<h3 class="text-sm font-black text-slate-800 mt-3">{html_escape_module.escape(heading)}</h3>')
+            if len(lines) > 1 and lines[1].strip():
+                parts.append(f"<p>{html_escape_module.escape(lines[1].strip())}</p>")
+        else:
+            parts.append(f"<p>{html_escape_module.escape(block)}</p>")
+    return "".join(parts)
+
+
+def render_post_page_html(template_html, post_data):
+    game = post_data.get("game", "Lotto")
+    is_max = "max" in game.lower()
+    badge_class = "bg-amber-400 text-slate-950" if is_max else "bg-blue-400 text-slate-950"
+
+    replacements = {
+        "__TITLE__": html_escape_module.escape(post_data.get("title", "")),
+        "__META_DESCRIPTION__": html_escape_module.escape((post_data.get("summary") or "")[:300]),
+        "__GAME__": html_escape_module.escape(game),
+        "__BADGE_CLASS__": badge_class,
+        "__DISPLAY_DATE__": html_escape_module.escape(post_data.get("display_date", "")),
+        "__JACKPOT__": html_escape_module.escape(str(post_data.get("jackpot", ""))),
+        # 회차 기록 페이지는 "지금 시점 Hot/Cold"가 아니라 그날의 사실 기록이므로
+        # 빈도 색상 없이 중립적으로만 표시한다 (freq_dict={}).
+        "__WIN_BALLS_HTML__": render_balls_html(post_data.get("winning_numbers"), {}, post_data.get("bonus")),
+        "__PROV_HTML__": linkify_html(post_data.get("winner_province", "")),
+        "__AI_BALLS_HTML__": render_balls_html(post_data.get("ai_recommended"), {}),
+        "__AI_NOTE_HTML__": render_ai_note_html(post_data.get("ai_note", "")),
+    }
+    out = template_html
+    for token, value in replacements.items():
+        out = out.replace(token, value)
+    return out
+
+
+def build_all_post_pages():
+    if not os.path.exists(POST_TEMPLATE_PATH):
+        print(f"[WARN] {POST_TEMPLATE_PATH} not found — skipping post page generation.", file=sys.stderr)
+        return
+    if not os.path.isdir(POSTS_HTML_DIR):
+        return
+
+    with open(POST_TEMPLATE_PATH, "r", encoding="utf-8") as f:
+        template_html = f.read()
+
+    built, failed = 0, 0
+    for file_name in os.listdir(POSTS_HTML_DIR):
+        if not file_name.endswith(".json"):
+            continue
+        json_path = os.path.join(POSTS_HTML_DIR, file_name)
+        try:
+            with open(json_path, "r", encoding="utf-8") as f:
+                post_data = json.load(f)
+            rendered = render_post_page_html(template_html, post_data)
+            html_path = os.path.join(POSTS_HTML_DIR, file_name[:-5] + ".html")
+            with open(html_path, "w", encoding="utf-8") as f:
+                f.write(rendered)
+            built += 1
+        except Exception as e:
+            failed += 1
+            print(f"[WARN] Failed to render post page for {file_name}: {e}", file=sys.stderr)
+    print(f"[INFO] Post pages rebuilt: {built} succeeded, {failed} failed.")
+
+
+def build_sitemap(posts_list):
+    base = "https://lottohelper.ca"
+    today = datetime.now().strftime("%Y-%m-%d")
+    urls = [f"{base}/index.html", f"{base}/about.html", f"{base}/privacy.html"]
+    for p in posts_list:
+        pid = p.get("id")
+        if pid:
+            urls.append(f"{base}/posts/{pid}.html")
+    entries = "\n".join(
+        f"  <url><loc>{u}</loc><lastmod>{today}</lastmod></url>" for u in urls
+    )
+    xml = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        f"{entries}\n"
+        "</urlset>\n"
+    )
+    with open("sitemap.xml", "w", encoding="utf-8") as f:
+        f.write(xml)
 
 
 def replace_element_html(html_str, element_id, new_inner_html):
