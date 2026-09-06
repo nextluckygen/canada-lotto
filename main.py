@@ -766,7 +766,7 @@ def main():
         json.dump(valid_posts, f, indent=4, ensure_ascii=False)
 
     build_index_html(home_display, valid_posts)
-    build_all_post_pages()
+    build_all_post_pages(home_display)
     build_sitemap(valid_posts)
 
     print(f"Build finished for {today_date}.")
@@ -916,10 +916,11 @@ def render_ai_note_html(ai_note):
     return "".join(parts)
 
 
-def render_post_page_html(template_html, post_data):
+def render_post_page_html(template_html, post_data, freq_dict=None):
     game = post_data.get("game", "Lotto")
     is_max = "max" in game.lower()
     badge_class = "bg-amber-400 text-slate-950" if is_max else "bg-blue-400 text-slate-950"
+    freq_dict = freq_dict or {}
 
     replacements = {
         "__TITLE__": html_escape_module.escape(post_data.get("title", "")),
@@ -928,11 +929,10 @@ def render_post_page_html(template_html, post_data):
         "__BADGE_CLASS__": badge_class,
         "__DISPLAY_DATE__": html_escape_module.escape(post_data.get("display_date", "")),
         "__JACKPOT__": html_escape_module.escape(str(post_data.get("jackpot", ""))),
-        # 회차 기록 페이지는 "지금 시점 Hot/Cold"가 아니라 그날의 사실 기록이므로
-        # 빈도 색상 없이 중립적으로만 표시한다 (freq_dict={}).
-        "__WIN_BALLS_HTML__": render_balls_html(post_data.get("winning_numbers"), {}, post_data.get("bonus")),
+        # 홈페이지와 동일하게 해당 게임의 최신 Hot/Mid/Cold 빈도 기준으로 색칠한다.
+        "__WIN_BALLS_HTML__": render_balls_html(post_data.get("winning_numbers"), freq_dict, post_data.get("bonus")),
         "__PROV_HTML__": linkify_html(post_data.get("winner_province", "")),
-        "__AI_BALLS_HTML__": render_balls_html(post_data.get("ai_recommended"), {}),
+        "__AI_BALLS_HTML__": render_balls_html(post_data.get("ai_recommended"), freq_dict),
         "__AI_NOTE_HTML__": render_ai_note_html(post_data.get("ai_note", "")),
     }
     out = template_html
@@ -941,7 +941,7 @@ def render_post_page_html(template_html, post_data):
     return out
 
 
-def build_all_post_pages():
+def build_all_post_pages(home_display):
     if not os.path.exists(POST_TEMPLATE_PATH):
         print(f"[WARN] {POST_TEMPLATE_PATH} not found — skipping post page generation.", file=sys.stderr)
         return
@@ -951,6 +951,9 @@ def build_all_post_pages():
     with open(POST_TEMPLATE_PATH, "r", encoding="utf-8") as f:
         template_html = f.read()
 
+    max_freq = (home_display.get("lotto_max") or {}).get("frequencies") or {}
+    l649_freq = (home_display.get("lotto_649") or {}).get("frequencies") or {}
+
     built, failed = 0, 0
     for file_name in os.listdir(POSTS_HTML_DIR):
         if not file_name.endswith(".json"):
@@ -959,7 +962,8 @@ def build_all_post_pages():
         try:
             with open(json_path, "r", encoding="utf-8") as f:
                 post_data = json.load(f)
-            rendered = render_post_page_html(template_html, post_data)
+            freq_dict = max_freq if "max" in post_data.get("game", "").lower() else l649_freq
+            rendered = render_post_page_html(template_html, post_data, freq_dict)
             html_path = os.path.join(POSTS_HTML_DIR, file_name[:-5] + ".html")
             with open(html_path, "w", encoding="utf-8") as f:
                 f.write(rendered)
