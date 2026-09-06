@@ -74,17 +74,17 @@
     },
     "lotto_649": {
         "gold_ball": "$24 Million",
-        "winner_province": "Draw confirmed for Wednesday, September 02, 2026. Guaranteed $1,000,000 prize won (White ball drawn). Next Gold Ball jackpot (Saturday, September 5, 2026): $24 Million. Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-649-extra.htm",
+        "winner_province": "Draw confirmed for Saturday, September 05, 2026. Guaranteed $1,000,000 prize won (White ball drawn). Next Gold Ball jackpot (Saturday, September 5, 2026): $24 Million. Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-649-extra.htm",
         "winning_numbers": [
-            6,
-            8,
-            9,
-            14,
+            5,
+            10,
             17,
-            25
+            34,
+            42,
+            49
         ],
-        "bonus": 16,
-        "draw_date": "Wednesday, September 02, 2026",
+        "bonus": 44,
+        "draw_date": "Saturday, September 05, 2026",
         "frequencies": {
             "1": 7,
             "2": 9,
@@ -137,6 +137,6 @@
             "49": 7
         },
         "frequency_source": "seed",
-        "frequency_draws_counted": 11
+        "frequency_draws_counted": 12
     }
 }
