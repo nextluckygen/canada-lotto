@@ -583,9 +583,9 @@
 
                 container.innerHTML = '';
                 posts.forEach(item => {
-                    const card = document.createElement('div');
-                    card.className = "bg-white p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition cursor-pointer";
-                    card.onclick = () => openPost(item.id);
+                    const card = document.createElement('a');
+                    card.href = `posts/${item.id}.html`;
+                    card.className = "block bg-white p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition";
                     card.innerHTML = `
                         <div class="flex items-center justify-between text-xs text-slate-400 font-medium mb-1.5">
                             <span class="bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded font-bold">${item.game || 'Lotto'}</span>
