@@ -1,23 +1,77 @@
 {
-    "date": "2026-09-08",
-    "display_date": "September 08, 2026",
+    "date": "2026-09-09",
+    "display_date": "September 09, 2026",
     "lotto_max": {
         "jackpot": "$30 Million",
-        "winner_province": "Draw confirmed for Tuesday, September 8, 2026. Next jackpot (Friday, September 11, 2026): $30 Million (30 x $100,000 MaxPlus prizes). No jackpot winner (Rolled over). Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-max-extra.htm",
-        "winning_numbers": [12, 18, 19, 35, 43, 49, 52],
+        "winner_province": "Draw confirmed for Tuesday, September 08, 2026. Next jackpot (Friday, September 11, 2026): $30 Million (30 x $100,000 MaxPlus prizes). No jackpot winner (Rolled over). Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-max-extra.htm",
+        "winning_numbers": [
+            12,
+            18,
+            19,
+            35,
+            43,
+            49,
+            52
+        ],
         "bonus": 26,
-        "draw_date": "Tuesday, September 8, 2026",
+        "draw_date": "Tuesday, September 08, 2026",
         "frequencies": {
-            "1": 8, "2": 6, "3": 9, "4": 11, "5": 7, "6": 10, "7": 8, "8": 5, "9": 7, "10": 9,
-            "11": 7, "12": 9, "13": 7, "14": 10, "15": 12, "16": 8, "17": 9, "18": 12, "19": 14, "20": 6,
-            "21": 10, "22": 7, "23": 8, "24": 9, "25": 11, "26": 8, "27": 6, "28": 10, "29": 7, "30": 9,
-            "31": 8, "32": 5, "33": 7, "34": 6, "35": 11, "36": 8, "37": 7, "38": 9, "39": 8, "40": 11,
-            "41": 6, "42": 7, "43": 9, "44": 10, "45": 9, "46": 6, "47": 7, "48": 8, "49": 6, "50": 8,
-            "51": 7, "52": 7
+            "1": 8,
+            "2": 6,
+            "3": 9,
+            "4": 11,
+            "5": 7,
+            "6": 10,
+            "7": 8,
+            "8": 5,
+            "9": 7,
+            "10": 9,
+            "11": 6,
+            "12": 8,
+            "13": 7,
+            "14": 10,
+            "15": 12,
+            "16": 8,
+            "17": 9,
+            "18": 11,
+            "19": 13,
+            "20": 6,
+            "21": 10,
+            "22": 7,
+            "23": 8,
+            "24": 9,
+            "25": 11,
+            "26": 8,
+            "27": 6,
+            "28": 10,
+            "29": 7,
+            "30": 9,
+            "31": 8,
+            "32": 5,
+            "33": 7,
+            "34": 6,
+            "35": 10,
+            "36": 8,
+            "37": 7,
+            "38": 9,
+            "39": 8,
+            "40": 11,
+            "41": 6,
+            "42": 7,
+            "43": 8,
+            "44": 10,
+            "45": 9,
+            "46": 6,
+            "47": 7,
+            "48": 8,
+            "49": 5,
+            "50": 8,
+            "51": 7,
+            "52": 6
         },
-        "frequency_source": "live",
-        "frequency_draws_counted": 16
-    }
+        "frequency_source": "seed",
+        "frequency_draws_counted": 13
+    },
     "lotto_649": {
         "gold_ball": "$26 Million",
         "winner_province": "Draw confirmed for Saturday, September 05, 2026. Guaranteed $1,000,000 prize won (White ball drawn). Next Gold Ball jackpot (Wednesday, September 9, 2026): $26 Million. Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-649-extra.htm",
@@ -84,17 +138,5 @@
         },
         "frequency_source": "seed",
         "frequency_draws_counted": 12
-    },
-    "track_record": {
-        "Lotto Max": {
-            "draws_compared": 7,
-            "average_matches": 0.29,
-            "expected_by_chance": 0.94
-        },
-        "Lotto 6/49": {
-            "draws_compared": 7,
-            "average_matches": 0.71,
-            "expected_by_chance": 0.73
-        }
     }
 }
