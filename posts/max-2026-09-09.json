@@ -5,11 +5,44 @@
     "display_date": "September 09, 2026",
     "draw_date": "Tuesday, September 08, 2026",
     "title": "Lotto Max Official Draw Results & Analysis (Draw Date: Tuesday, September 08, 2026)",
-    "summary": "Verified results for the Lotto Max draw on Tuesday, September 08, 2026. Draw confirmed for Tuesday, September 08, 2026. Next jackpot (Friday, September 11, 2026): $30 Million (30 x $100,000 MaxPlus prizes). No jackpot winner (Rolled over). Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-max-extra.htm",
+    "summary": "Verified results for the Lotto Max draw on Tuesday, September 08, 2026. Draw confirmed for Tuesday, September 08, 2026. Next jackpot (Friday, September 11, 2026): $30 Million (30 x $100,000 MaxPlus prizes). Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-max-extra.htm",
     "jackpot": "$30 Million",
-    "winner_province": "Draw confirmed for Tuesday, September 08, 2026. Next jackpot (Friday, September 11, 2026): $30 Million (30 x $100,000 MaxPlus prizes). No jackpot winner (Rolled over). Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-max-extra.htm",
-    "winning_numbers": [12, 18, 19, 35, 43, 49, 52],
+    "winner_province": "Draw confirmed for Tuesday, September 08, 2026. Next jackpot (Friday, September 11, 2026): $30 Million (30 x $100,000 MaxPlus prizes). Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-max-extra.htm",
+    "winning_numbers": [
+        12,
+        18,
+        19,
+        35,
+        43,
+        49,
+        52
+    ],
     "bonus": 26,
-    "ai_recommended": [4, 11, 23, 28, 34, 42, 50],
-    "ai_note": "### 1. Official Draw Breakdown (Draw Date: Tuesday, September 08, 2026)\nIn the official Lotto Max drawing conducted on Tuesday, September 08, 2026, the verified winning combination was 12, 18, 19, 35, 43, 49, 52 (Bonus 26). The main jackpot rolled over to $30 Million (with 30 MaxPlus $100,000 prizes) for Friday, September 11.\n\n### 2. Parity & Distribution Matrix Analysis\nEvaluating the official combination yields 4 Odd numbers (19, 35, 43, 49) and 3 Even numbers (12, 18, 52), with 5 numbers concentrated in the upper bracket (26-52).\n\n### 3. AI Frequency-Weighted Line Strategy\nOur algorithmic model evaluated historical frequency clusters to formulate the recommended line: 4, 11, 23, 28, 34, 42, 50.\n\n### 4. Strategic Observations\nNumbers are drawn independently and randomly. Historical frequency does not predict future outcomes. Please play responsibly for analytical and entertainment purposes only."
+    "ai_recommended": [
+        12,
+        13,
+        14,
+        17,
+        21,
+        29,
+        30
+    ],
+    "ai_note": "### 1. Official Draw Breakdown (Draw Date: Tuesday, September 08, 2026)\nIn the official Lotto Max drawing conducted on Tuesday, September 08, 2026, the verified winning combination was 12, 18, 19, 35, 43, 49, 52. Jackpot: $30 Million. Status: Draw confirmed for Tuesday, September 08, 2026. Next jackpot (Friday, September 11, 2026): $30 Million (30 x $100,000 MaxPlus prizes). Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-max-extra.htm.\n\n### 2. Parity & Distribution Matrix Analysis\nEvaluating the official combination yields 4 Odd numbers and 3 Even numbers, with 4 higher-bracket numbers and 3 lower-bracket numbers.\n\n### 3. AI Frequency-Weighted Line Strategy\nOur algorithmic model evaluated historical frequency clusters to formulate the recommended line: 12, 13, 14, 17, 21, 29, 30. This combination maintains a 4:3 Odd/Even parity distribution.\n\n### 4. How Last Draw's AI Pick Performed\nOur previous recommended line for Lotto Max (1, 12, 30, 34, 47, 48, 50, from the Friday, September 04, 2026 draw) matched 1 of 7 official winning numbers this time (matched: 12). This is tracked purely for transparency — see the Track Record section below for how this compares to pure chance.\n\n### 5. Strategic Observations\nNumbers are drawn independently and randomly. Historical frequency does not predict future outcomes. Please play responsibly. For analytical and entertainment purposes only.",
+    "previous_pick_result": {
+        "predicted": [
+            1,
+            12,
+            30,
+            34,
+            47,
+            48,
+            50
+        ],
+        "match_count": 1,
+        "matched_numbers": [
+            12
+        ],
+        "source_post_id": "max-2026-09-05",
+        "source_draw_date": "Friday, September 04, 2026"
+    }
 }

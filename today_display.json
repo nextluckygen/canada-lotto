@@ -3,7 +3,7 @@
     "display_date": "September 09, 2026",
     "lotto_max": {
         "jackpot": "$30 Million",
-        "winner_province": "Draw confirmed for Tuesday, September 08, 2026. Next jackpot (Friday, September 11, 2026): $30 Million (30 x $100,000 MaxPlus prizes). No jackpot winner (Rolled over). Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-max-extra.htm",
+        "winner_province": "Draw confirmed for Tuesday, September 08, 2026. Next jackpot (Friday, September 11, 2026): $30 Million (30 x $100,000 MaxPlus prizes). Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-max-extra.htm",
         "winning_numbers": [
             12,
             18,
@@ -138,5 +138,17 @@
         },
         "frequency_source": "seed",
         "frequency_draws_counted": 12
+    },
+    "track_record": {
+        "Lotto Max": {
+            "draws_compared": 9,
+            "average_matches": 0.44,
+            "expected_by_chance": 0.94
+        },
+        "Lotto 6/49": {
+            "draws_compared": 7,
+            "average_matches": 0.71,
+            "expected_by_chance": 0.73
+        }
     }
 }
