@@ -1,6 +1,6 @@
 {
-    "date": "2026-09-12",
-    "display_date": "September 12, 2026",
+    "date": "2026-09-13",
+    "display_date": "September 13, 2026",
     "lotto_max": {
         "jackpot": "$40 Million",
         "winner_province": "Draw confirmed for Friday, September 11, 2026. Next jackpot (Tuesday, September 15, 2026): $40 Million (40 x $100,000 MaxPlus prizes). Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-max-extra.htm",
@@ -73,18 +73,18 @@
         "frequency_draws_counted": 14
     },
     "lotto_649": {
-        "gold_ball": "$28 Million",
-        "winner_province": "Draw confirmed for Wednesday, September 09, 2026. Guaranteed $1,000,000 prize won (White ball drawn). Next Gold Ball jackpot (Saturday, September 12, 2026): $28 Million. Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-649-extra.htm",
+        "gold_ball": "$30 Million",
+        "winner_province": "Draw confirmed for Saturday, September 12, 2026. Guaranteed $1,000,000 prize won (White ball drawn). Next Gold Ball jackpot (Wednesday, September 16, 2026): $30 Million. Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-649-extra.htm",
         "winning_numbers": [
-            14,
-            18,
-            27,
-            35,
-            41,
-            47
+            1,
+            3,
+            17,
+            20,
+            26,
+            32
         ],
-        "bonus": 17,
-        "draw_date": "Wednesday, September 09, 2026",
+        "bonus": 5,
+        "draw_date": "Saturday, September 12, 2026",
         "frequencies": {
             "1": 7,
             "2": 9,
@@ -137,7 +137,7 @@
             "49": 7
         },
         "frequency_source": "seed",
-        "frequency_draws_counted": 13
+        "frequency_draws_counted": 14
     },
     "track_record": {
         "Lotto Max": {
@@ -146,8 +146,8 @@
             "expected_by_chance": 0.94
         },
         "Lotto 6/49": {
-            "draws_compared": 8,
-            "average_matches": 0.62,
+            "draws_compared": 9,
+            "average_matches": 0.56,
             "expected_by_chance": 0.73
         }
     }
