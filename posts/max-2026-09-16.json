@@ -1,0 +1,46 @@
+{
+    "id": "max-2026-09-16",
+    "game": "Lotto Max",
+    "date": "2026-09-16",
+    "display_date": "September 16, 2026",
+    "draw_date": "Tuesday, September 15, 2026",
+    "title": "Lotto Max Official Draw Results & Analysis (Draw Date: Tuesday, September 15, 2026)",
+    "summary": "Verified results for the Lotto Max draw on Tuesday, September 15, 2026. Draw confirmed for Tuesday, September 15, 2026. Jackpot/winner details unavailable this run (Home: Lotto Max jackpot ticker block not found). See https://www.wclc.com/winning-numbers/lotto-max-extra.htm",
+    "jackpot": "Jackpot amount unavailable this run — see official WCLC site",
+    "winner_province": "Draw confirmed for Tuesday, September 15, 2026. Jackpot/winner details unavailable this run (Home: Lotto Max jackpot ticker block not found). See https://www.wclc.com/winning-numbers/lotto-max-extra.htm",
+    "winning_numbers": [
+        2,
+        23,
+        30,
+        38,
+        40,
+        44,
+        49
+    ],
+    "bonus": 18,
+    "ai_recommended": [
+        8,
+        11,
+        12,
+        15,
+        23,
+        29,
+        38
+    ],
+    "ai_note": "### 1. Official Draw Breakdown (Draw Date: Tuesday, September 15, 2026)\nIn the official Lotto Max drawing conducted on Tuesday, September 15, 2026, the verified winning combination was 2, 23, 30, 38, 40, 44, 49. Jackpot: Jackpot amount unavailable this run — see official WCLC site. Status: Draw confirmed for Tuesday, September 15, 2026. Jackpot/winner details unavailable this run (Home: Lotto Max jackpot ticker block not found). See https://www.wclc.com/winning-numbers/lotto-max-extra.htm.\n\n### 2. Parity & Distribution Matrix Analysis\nEvaluating the official combination yields 2 Odd numbers and 5 Even numbers, with 5 higher-bracket numbers and 2 lower-bracket numbers.\n\n### 3. AI Frequency-Weighted Line Strategy\nOur algorithmic model evaluated historical frequency clusters to formulate the recommended line: 8, 11, 12, 15, 23, 29, 38. This combination maintains a 4:3 Odd/Even parity distribution.\n\n### 4. How Last Draw's AI Pick Performed\nOur previous recommended line for Lotto Max (6, 15, 17, 21, 24, 27, 48, from the Friday, September 11, 2026 draw) matched 0 of 7 official winning numbers this time (matched: none). This is tracked purely for transparency — see the Track Record section below for how this compares to pure chance.\n\n### 5. Strategic Observations\nNumbers are drawn independently and randomly. Historical frequency does not predict future outcomes. Please play responsibly. For analytical and entertainment purposes only.",
+    "previous_pick_result": {
+        "predicted": [
+            6,
+            15,
+            17,
+            21,
+            24,
+            27,
+            48
+        ],
+        "match_count": 0,
+        "matched_numbers": [],
+        "source_post_id": "max-2026-09-12",
+        "source_draw_date": "Friday, September 11, 2026"
+    }
+}
