@@ -364,6 +364,18 @@
         32
       ],
       "bonus": 5
+    },
+    {
+      "date": "Wednesday, September 16, 2026",
+      "numbers": [
+        3,
+        5,
+        19,
+        32,
+        46,
+        48
+      ],
+      "bonus": 9
     }
   ]
 }
