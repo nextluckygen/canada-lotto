@@ -402,20 +402,25 @@ def fetch_home_jackpots(text, today_dt):
     if not (1 <= balls_remaining <= 26):
         raise ScrapeError(f"Home: implausible Balls Remaining value: {balls_remaining}")
 
-    # "N x $100,000" MaxPlus 문구가 항상 붙어있지 않을 수 있어서(WCLC 포맷 변동),
-    # 그 부분은 선택적으로 매칭한다. 단, 금액/날짜 자체를 못 찾으면 여전히
-    # ScrapeError를 내고 절대 숫자를 지어내지 않는다 (이전에 겪었던 실패 원인이
-    # 바로 이 부분을 필수로 요구해서 홈페이지 파싱 전체가 막힌 것이었다).
+    # 잭팟 금액과 날짜 사이에 다른 문구(MaxPlus "N x $100,000", 그리고 잭팟이
+    # $50M을 넘으면 붙는 MaxMillions "N x $1 Million Prize" 등)가 껴 있을 수
+    # 있고 그 구성이 계속 바뀌어왔다. 그래서 "$ N Million" 바로 뒤에 정확히
+    # 무엇이 오는지는 요구하지 않고, 그 다음에 나오는 첫 날짜까지를 통째로
+    # 잡은 뒤 그 안에서 MaxPlus 개수만 있으면 찾아 쓴다. 금액/날짜 자체를
+    # 못 찾으면 여전히 ScrapeError를 내고 절대 숫자를 지어내지 않는다.
     max_pattern = re.compile(
-        r"\$\s*(\d+)\s*Million(?:\s*(\d+)\s*x\s*\$100,000)?\s*" + date_re
+        r"\$\s*(\d+)\s*Million\b(.{0,200}?)" + date_re,
+        re.DOTALL,
     )
     max_match = max_pattern.search(text, gb_match.end())
     if not max_match:
         raise ScrapeError("Home: Lotto Max jackpot ticker block not found")
 
     max_millions = int(max_match.group(1))
-    maxplus_count = int(max_match.group(2)) if max_match.group(2) else None
+    between_text = max_match.group(2)
     max_next_date_str = max_match.group(3)
+    maxplus_search = re.search(r"(\d+)\s*x\s*\$100,000", between_text)
+    maxplus_count = int(maxplus_search.group(1)) if maxplus_search else None
     max_next_dt = parse_draw_date(max_next_date_str)
 
     if max_next_dt.date() < today_dt.date():
