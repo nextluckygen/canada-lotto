@@ -2,8 +2,8 @@
     "date": "2026-09-17",
     "display_date": "September 17, 2026",
     "lotto_max": {
-        "jackpot": "Jackpot amount unavailable this run — see official WCLC site",
-        "winner_province": "Draw confirmed for Tuesday, September 15, 2026. Jackpot/winner details unavailable this run (Home: Lotto Max jackpot ticker block not found). See https://www.wclc.com/winning-numbers/lotto-max-extra.htm",
+        "jackpot": "$50 Million",
+        "winner_province": "Draw confirmed for Tuesday, September 15, 2026. Next jackpot (Friday, September 18, 2026): $50 Million (50 x $100,000 MaxPlus prizes). Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-max-extra.htm",
         "winning_numbers": [
             2,
             23,
@@ -73,8 +73,8 @@
         "frequency_draws_counted": 15
     },
     "lotto_649": {
-        "gold_ball": "$26 Million",
-        "winner_province": "Draw confirmed for Wednesday, September 16, 2026. Guaranteed $1,000,000 prize won (White ball drawn). Next Gold Ball jackpot (next draw): $26 Million. Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-649-extra.htm",
+        "gold_ball": "$32 Million",
+        "winner_province": "Draw confirmed for Wednesday, September 16, 2026. Guaranteed $1,000,000 prize won (White ball drawn). Next Gold Ball jackpot (Saturday, September 19, 2026): $32 Million. Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-649-extra.htm",
         "winning_numbers": [
             3,
             5,
