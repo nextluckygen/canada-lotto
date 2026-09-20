@@ -1,75 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-CA">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About & Statistical Methodology | lottohelper.ca</title>
-    <meta name="description" content="How lottohelper.ca sources, verifies, and analyzes official Lotto Max and Lotto 6/49 draw data — methodology, disclaimers, and responsible play resources.">
+    <title>About and methodology | lottohelper.ca</title>
+    <meta name="description" content="How lottohelper.ca verifies public WCLC results, what we refuse to invent, and why we stopped publishing a new analysis article after every draw.">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5048509015899303" crossorigin="anonymous"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-50 min-h-screen text-slate-900 font-sans flex flex-col justify-between">
-    <header class="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-700 text-white shadow-lg sticky top-0 z-50">
+<body class="bg-slate-50 min-h-screen text-slate-900 font-sans">
+    <div class="bg-slate-900 text-amber-100 text-[11px] text-center py-2">19+ · Unofficial · We do not sell tickets · <a class="underline text-white" href="responsible-play.html">Responsible play</a></div>
+    <header class="bg-gradient-to-r from-emerald-700 via-teal-700 to-cyan-800 text-white">
         <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-2 font-bold text-lg">
-                <span class="bg-amber-400 text-slate-900 px-2 py-0.5 rounded text-xs">CANADA LOTTO</span>
-                Helper Portal
-            </a>
-            <a href="index.html" class="text-xs bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-lg text-white">← Return Home</a>
+            <a href="index.html" class="font-bold">lottohelper.ca</a>
+            <a href="index.html" class="text-xs bg-white/20 px-3 py-1.5 rounded-lg">Home</a>
         </div>
     </header>
-
-    <main class="max-w-3xl mx-auto px-4 py-10 space-y-8 text-slate-700 leading-relaxed text-sm">
+    <main class="max-w-3xl mx-auto px-4 py-10 text-slate-700 leading-relaxed text-sm space-y-6">
         <div class="bg-white rounded-3xl shadow-xl border border-slate-200 p-8 space-y-6">
-            <h1 class="text-2xl font-black text-slate-900 border-b pb-3">About lottohelper.ca & Analysis Methodology</h1>
-
-            <section class="space-y-3">
-                <h2 class="text-lg font-bold text-slate-800">What This Site Is</h2>
-                <p><strong>lottohelper.ca</strong> is an independent statistics and analysis portal built for Canadian Lotto Max and Lotto 6/49 players who want a clear, up-to-date view of official draw history. Every day, our system pulls the latest published results directly from WCLC (the Western Canada Lottery Corporation, which also publishes the interprovincial results for both games), checks them against the expected draw schedule, and updates the site — winning numbers, bonus numbers, current jackpot amounts, and a rolling six-month frequency table.</p>
-                <p>The site is run by a single independent operator, not a lottery corporation or licensed gaming operator. We don't sell tickets, take bets, or have any way to affect draw outcomes — we simply organize and present publicly available results in a more readable form.</p>
-            </section>
-
-            <section class="space-y-3">
-                <h2 class="text-lg font-bold text-slate-800">How the Daily Data Pipeline Works</h2>
-                <ol class="list-decimal pl-5 space-y-2">
-                    <li>Shortly after midnight Pacific time following each draw, an automated job fetches WCLC's official results page for the relevant game.</li>
-                    <li>The winning numbers, bonus number, and draw date are extracted and checked: the date must fall on the correct day of the week for that game (Tuesday/Friday for Lotto Max, Wednesday/Saturday for Lotto 6/49) and within a recent, expected date range.</li>
-                    <li>Jackpot and Gold Ball amounts are read from WCLC's own live jackpot figures and cross-checked against the game's published prize-growth rules.</li>
-                    <li>If any check fails, that day's data is <strong>not</strong> published — the site keeps showing the last successfully verified draw rather than guessing. This is a deliberate design choice: we would rather show slightly older confirmed data than fresh but unverified data.</li>
-                    <li>Once verified, the new draw is added to a running history file, which feeds the six-month Hot/Mid/Cold frequency table shown on the homepage.</li>
-                </ol>
-            </section>
-
-            <section class="space-y-3">
-                <h2 class="text-lg font-bold text-slate-800">Mathematical Framework Behind the Statistics</h2>
-                <p>While every lottery draw is strictly an independent probabilistic event — past results have no influence on future ones — historical pattern tracking is still a common and legitimate interest for players who enjoy following the numbers. Our statistical tools track:</p>
-                <ul class="list-disc pl-5 space-y-2 mt-2">
-                    <li><strong>Rolling Frequency (Hot/Mid/Cold):</strong> How often each number has appeared across roughly the last six months of official draws, bucketed by relative frequency.</li>
-                    <li><strong>Even/Odd Parity:</strong> The balance of even versus odd numbers in a given combination, which some players use as a rough sanity check on generated lines.</li>
-                    <li><strong>High/Low Number Spread:</strong> Whether a combination leans toward the lower or upper half of the number field.</li>
-                </ul>
-                <p>None of these statistics change the true odds of any individual play. They're presented as a way to explore historical patterns, not as a prediction system.</p>
-            </section>
-
-            <section class="space-y-3">
-                <h2 class="text-lg font-bold text-slate-800">What We Are Not</h2>
-                <p>We are completely independent and not affiliated with, endorsed by, or operated on behalf of the Interprovincial Lottery Corporation (ILC), BCLC, WCLC, OLG, Loto-Québec, or any other provincial or territorial lottery operator. Ticket purchases, prize claims, and official results always go through your provincial lottery corporation — never through this site.</p>
-            </section>
-
-            <section class="space-y-3">
-                <h2 class="text-lg font-bold text-slate-800">Play Responsibly</h2>
-                <p>Lottery tickets are a form of entertainment spending with long, fixed odds — not an investment or income strategy. If you or someone you know is concerned about their gambling habits, free and confidential help is available across Canada through the <a href="https://www.responsiblegambling.org/" class="underline text-teal-700 font-semibold" target="_blank" rel="noopener">Responsible Gambling Council</a> and provincial resources such as BCResponsibleGambling.ca in British Columbia.</p>
-            </section>
-
-            <section class="space-y-3">
-                <h2 class="text-lg font-bold text-slate-800">Contact & Corrections</h2>
-                <p>Spotted something that looks off? Our automated pipeline is designed to avoid publishing unverified data, but if you believe a figure on this site doesn't match WCLC's official results, please cross-check directly with <a href="https://www.wclc.com" class="underline text-teal-700 font-semibold" target="_blank" rel="noopener">wclc.com</a>, which remains the authoritative source for all draw results and prize information.</p>
-            </section>
+            <h1 class="text-2xl font-black text-slate-900 border-b pb-3">About lottohelper.ca</h1>
+            <p>This is an independent, unofficial reference. It reprints publicly posted Lotto Max and Lotto 6/49 numbers and explains the odds in ordinary language. It is not a lottery corporation, not a ticket shop, and not a prediction desk.</p>
+            <h2 class="text-lg font-bold text-slate-800">How the nightly job works</h2>
+            <ol class="list-decimal pl-5 space-y-2">
+                <li>After midnight Pacific time on a draw night, a script fetches the public WCLC result pages.</li>
+                <li>Date, main numbers and bonus must parse cleanly and match the expected weekday for that game.</li>
+                <li>Jackpot tickers are read only when the homepage block looks complete. If Gold Ball “balls remaining” is an unexpected number, we still keep the certified combination and send you to WCLC for the live jackpot — we do not invent a dollar figure.</li>
+                <li>Failed checks leave yesterday’s verified row on screen. Guessing is not allowed.</li>
+                <li>Verified draws accumulate in <code>draw_history.json</code> and feed the frequency grid. That grid is a description of a short sample, not a forecast.</li>
+            </ol>
+            <h2 class="text-lg font-bold text-slate-800">What changed for content quality</h2>
+            <p>We no longer create a new “Official Draw Results &amp; Analysis” page after every draw. Those pages repeated the same five headings with new digits. That pattern is thin content. New results now update the homepage and the history file. Longer explainers live on separate pages that do not expire every 48 hours.</p>
+            <h2 class="text-lg font-bold text-slate-800">What the numbers mean</h2>
+            <p>Every draw is independent. Hot/cold counts, odd/even splits and the shuffle button do not change 1-in-13,983,816 (6/49) or 1-in-33,294,800 (Max). See <a class="text-teal-700 underline font-semibold" href="odds.html">Odds explained</a> and <a class="text-teal-700 underline font-semibold" href="hot-cold-explained.html">Hot and cold</a>.</p>
+            <h2 class="text-lg font-bold text-slate-800">What we are not</h2>
+            <p>Not affiliated with ILC, BCLC, WCLC, OLG, Loto-Québec or any other Canadian lottery operator. Game names belong to their owners and are used only to identify public draws.</p>
+            <h2 class="text-lg font-bold text-slate-800">Corrections</h2>
+            <p>If a row here disagrees with WCLC, trust WCLC and <a class="text-teal-700 underline font-semibold" href="contact.html">email us</a>.</p>
         </div>
     </main>
-
-    <footer class="bg-slate-900 text-slate-400 text-xs py-6 border-t border-slate-800 text-center">
-        <p>© 2026 lottohelper.ca. All rights reserved.</p>
-    </footer>
+    <footer class="bg-slate-900 text-slate-400 text-xs py-6 text-center">© 2026 lottohelper.ca</footer>
 </body>
 </html>
