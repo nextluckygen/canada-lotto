@@ -1,22 +1,22 @@
 {
-    "date": "2026-09-22",
-    "display_date": "September 22, 2026",
+    "date": "2026-09-23",
+    "display_date": "September 23, 2026",
     "lotto_max": {
         "jackpot": "Jackpot amount unavailable this run — see official WCLC site",
-        "winner_province": "Draw confirmed for Friday, September 18, 2026. Jackpot/winner details unavailable this run (Home: implausible Balls Remaining value: 30). See https://www.wclc.com/winning-numbers/lotto-max-extra.htm",
+        "winner_province": "Draw confirmed for Tuesday, September 22, 2026. Jackpot/winner details unavailable this run (Home: implausible Balls Remaining value: 30). See https://www.wclc.com/winning-numbers/lotto-max-extra.htm",
         "winning_numbers": [
-            6,
-            8,
-            11,
-            14,
+            1,
+            10,
+            12,
+            17,
             30,
-            39,
-            41
+            37,
+            42
         ],
-        "bonus": 47,
-        "draw_date": "Friday, September 18, 2026",
+        "bonus": 8,
+        "draw_date": "Tuesday, September 22, 2026",
         "frequencies": {
-            "1": 4,
+            "1": 5,
             "2": 1,
             "3": 2,
             "4": 2,
@@ -25,14 +25,14 @@
             "7": 1,
             "8": 2,
             "9": 1,
-            "10": 2,
+            "10": 3,
             "11": 3,
-            "12": 3,
+            "12": 4,
             "13": 3,
             "14": 1,
             "15": 3,
             "16": 0,
-            "17": 1,
+            "17": 2,
             "18": 2,
             "19": 1,
             "20": 0,
@@ -45,19 +45,19 @@
             "27": 1,
             "28": 2,
             "29": 1,
-            "30": 3,
+            "30": 4,
             "31": 2,
             "32": 1,
             "33": 0,
             "34": 2,
             "35": 3,
             "36": 1,
-            "37": 1,
+            "37": 2,
             "38": 3,
             "39": 5,
             "40": 2,
             "41": 3,
-            "42": 1,
+            "42": 2,
             "43": 4,
             "44": 4,
             "45": 2,
@@ -70,7 +70,7 @@
             "52": 4
         },
         "frequency_source": "live",
-        "frequency_draws_counted": 16
+        "frequency_draws_counted": 17
     },
     "lotto_649": {
         "gold_ball": "$10 Million",
@@ -141,8 +141,8 @@
     },
     "track_record": {
         "Lotto Max": {
-            "draws_compared": 12,
-            "average_matches": 0.5,
+            "draws_compared": 13,
+            "average_matches": 0.46,
             "expected_by_chance": 0.94
         },
         "Lotto 6/49": {
