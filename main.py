@@ -37,6 +37,7 @@ DATE_PATTERN = r'((?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\
 HISTORY_FILE = "draw_history.json"
 HISTORY_WINDOW_DAYS = 183  # 약 6개월
 MIN_DRAWS_FOR_LIVE_STATS = 15  # 이 회차 수 미만이면 시드값 사용 (통계적으로 불안정하므로)
+GENERATE_POSTS = False  # no new thin analysis pages; homepage + history only
 
 SEED_MAX_FREQUENCIES = {
     "1": 8, "2": 6, "3": 9, "4": 11, "5": 7, "6": 10, "7": 8, "8": 5, "9": 7, "10": 9,
@@ -399,7 +400,7 @@ def fetch_home_jackpots(text, today_dt):
         raise ScrapeError(f"Home: Gold Ball next draw date {gb_next_dt.date()} is in the past")
     if gb_next_dt.weekday() not in (2, 5):
         raise ScrapeError(f"Home: Gold Ball next draw date {gb_next_dt.date()} is not Wed/Sat")
-    if not (1 <= balls_remaining <= 26):
+    if not (1 <= balls_remaining <= 75):
         raise ScrapeError(f"Home: implausible Balls Remaining value: {balls_remaining}")
 
     # 잭팟 금액과 날짜 사이에 다른 문구(MaxPlus "N x $100,000", 그리고 잭팟이
@@ -844,7 +845,9 @@ def main():
 
     new_post = None
 
-    if weekday in [2, 5] and max_result:  # 수/토 자정, Max 검증 성공시에만 게시
+    if not GENERATE_POSTS:
+        print("[INFO] GENERATE_POSTS=False — updating history/homepage only, no new posts/*.html")
+    elif weekday in [2, 5] and max_result:  # 수/토 자정, Max 검증 성공시에만 게시
         ai_nums = generate_ai_numbers(52, 7, max_frequencies)
         prev_post = find_previous_post(posts_list, "Lotto Max", today_date)
         previous_pick_result = None
@@ -1060,7 +1063,7 @@ def render_track_record_text(record):
     if not record or not record.get("draws_compared"):
         return "Track record: not enough data yet — check back after the next draw."
     return (
-        f"Track record: past AI lines averaged {record['average_matches']} matches over "
+        f"Track record: past shuffled lines averaged {record['average_matches']} matches over "
         f"{record['draws_compared']} draw(s) (pure-chance expectation: {record['expected_by_chance']}) — "
         f"draws are independent, so this can't improve future odds."
     )
@@ -1183,7 +1186,17 @@ def build_all_post_pages(home_display):
 def build_sitemap(posts_list):
     base = "https://lottohelper.ca"
     today = datetime.now().strftime("%Y-%m-%d")
-    urls = [f"{base}/index.html", f"{base}/about.html", f"{base}/privacy.html"]
+    urls = [
+        f"{base}/",
+        f"{base}/index.html",
+        f"{base}/about.html",
+        f"{base}/privacy.html",
+        f"{base}/odds.html",
+        f"{base}/hot-cold-explained.html",
+        f"{base}/how-canada-lotto-works.html",
+        f"{base}/responsible-play.html",
+        f"{base}/contact.html",
+    ]
     for p in posts_list:
         pid = p.get("id")
         if pid:
@@ -1233,7 +1246,7 @@ def render_index_html(template_html, home_display, posts_list):
         + ("" if is_stale else " hidden"),
     )
 
-    out = replace_element_html(out, "max-jackpot", "EST. " + html_escape_module.escape(str(max_data.get("jackpot") or "Unavailable")))
+    out = replace_element_html(out, "max-jackpot", html_escape_module.escape(str(max_data.get("jackpot") or "Unavailable")))
     out = replace_element_html(out, "max-draw-date", "Last verified draw: " + html_escape_module.escape(str(max_data.get("draw_date") or "unknown")))
     out = replace_element_html(out, "max-prov-text", linkify_html(max_data.get("winner_province")))
     out = replace_element_html(out, "max-win-balls", render_balls_html(max_data.get("winning_numbers"), max_data.get("frequencies"), max_data.get("bonus")))
