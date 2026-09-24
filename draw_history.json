@@ -414,6 +414,18 @@
         42
       ],
       "bonus": 29
+    },
+    {
+      "date": "Wednesday, September 23, 2026",
+      "numbers": [
+        11,
+        20,
+        32,
+        35,
+        38,
+        45
+      ],
+      "bonus": 9
     }
   ]
 }
