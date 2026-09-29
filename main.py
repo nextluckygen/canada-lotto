@@ -37,7 +37,7 @@ DATE_PATTERN = r'((?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\
 HISTORY_FILE = "draw_history.json"
 HISTORY_WINDOW_DAYS = 183  # 약 6개월
 MIN_DRAWS_FOR_LIVE_STATS = 15  # 이 회차 수 미만이면 시드값 사용 (통계적으로 불안정하므로)
-GENERATE_POSTS = True  # no new thin analysis pages; homepage + history only
+GENERATE_POSTS = True  # rotating long draw notes, not cloned AI analysis
 
 SEED_MAX_FREQUENCIES = {
     "1": 8, "2": 6, "3": 9, "4": 11, "5": 7, "6": 10, "7": 8, "8": 5, "9": 7, "10": 9,
@@ -428,10 +428,7 @@ def fetch_home_jackpots(text, today_dt):
         raise ScrapeError(f"Home: Lotto Max next draw date {max_next_dt.date()} is in the past")
     if max_next_dt.weekday() not in (1, 4):
         raise ScrapeError(f"Home: Lotto Max next draw date {max_next_dt.date()} is not Tue/Fri")
-    # 공식 규칙: MaxPlus 상품 개수 = 잭팟 금액(백만 단위). 캡처됐는데 어긋나면
-    # 페이지 구조가 바뀐 것으로 간주하고 신뢰하지 않는다. 애초에 이 문구 자체가
-    # 없었던 경우(maxplus_count is None)는 검증할 대상이 없으므로 통과시킨다.
-        if maxplus_count is not None and maxplus_count != max_millions:
+    if maxplus_count is not None and maxplus_count != max_millions:
         print(
             f"[WARN] MaxPlus count ({maxplus_count}) != jackpot millions ({max_millions}); "
             "keeping the $N Million ticker anyway.",
@@ -474,44 +471,75 @@ def generate_ai_numbers(total, count, freq_dict=None):
 
 
 def build_deep_analysis_note(game_name, draw_date_str, winning_nums, ai_nums, jackpot_text, prov_status, previous_pick_result=None):
-    even_count = sum(1 for n in winning_nums if n % 2 == 0)
-    odd_count = len(winning_nums) - even_count
-    ai_even = sum(1 for n in ai_nums if n % 2 == 0)
-    ai_odd = len(ai_nums) - ai_even
-    low_bound = 25 if game_name == "Lotto 6/49" else 26
-    low_count = sum(1 for n in winning_nums if n <= low_bound)
-    high_count = len(winning_nums) - low_count
+    nums = ", ".join(map(str, winning_nums))
+    is_max = "Max" in game_name
+    official = (
+        "https://www.wclc.com/winning-numbers/lotto-max-extra.htm"
+        if is_max
+        else "https://www.wclc.com/winning-numbers/lotto-649-extra.htm"
+    )
+    odds_line = (
+        "A Lotto Max main jackpot line is 1 in 33,294,800 (seven numbers from 1-50)."
+        if is_max
+        else "A Lotto 6/49 main jackpot line is 1 in 13,983,816 (six numbers from 1-49)."
+    )
+    try:
+        draw_dt = parse_draw_date(draw_date_str)
+        slot = draw_dt.weekday() % 4
+    except Exception:
+        slot = 0
 
-    note = (
-        f"### 1. Official Draw Breakdown (Draw Date: {draw_date_str})\n"
-        f"In the official {game_name} drawing conducted on {draw_date_str}, the verified winning combination was {', '.join(map(str, winning_nums))}. "
-        f"Jackpot: {jackpot_text}. Status: {prov_status}.\n\n"
-        f"### 2. Parity & Distribution Matrix Analysis\n"
-        f"Evaluating the official combination yields {odd_count} Odd numbers and {even_count} Even numbers, "
-        f"with {high_count} higher-bracket numbers and {low_count} lower-bracket numbers.\n\n"
-        f"### 3. AI Frequency-Weighted Line Strategy\n"
-        f"Our algorithmic model evaluated historical frequency clusters to formulate the recommended line: {', '.join(map(str, ai_nums))}. "
-        f"This combination maintains a {ai_odd}:{ai_even} Odd/Even parity distribution.\n\n"
+    facts = (
+        f"### Published combination for {draw_date_str}\n"
+        f"WCLC listed {game_name} as {nums}. {jackpot_text} {prov_status} "
+        f"Confirm the same row on {official} before you treat any figure as final. "
+        f"This page is an unofficial copy, not a claim desk and not a ticket shop.\n\n"
     )
 
-    if previous_pick_result:
-        matched = previous_pick_result.get("matched_numbers") or []
-        matched_text = ", ".join(map(str, matched)) if matched else "none"
-        note += (
-            f"### 4. How Last Draw's AI Pick Performed\n"
-            f"Our previous recommended line for {game_name} ({', '.join(map(str, previous_pick_result.get('predicted', [])))}, "
-            f"from the {previous_pick_result.get('source_draw_date', 'previous')} draw) matched "
-            f"{previous_pick_result.get('match_count', 0)} of {len(winning_nums)} official winning numbers this time "
-            f"(matched: {matched_text}). This is tracked purely for transparency — see the Track Record section "
-            f"below for how this compares to pure chance.\n\n"
+    if slot == 0:
+        lesson = (
+            f"### Why the odds did not move after this draw\n"
+            f"{odds_line} The machine does not remember last week. Drawing {nums} tonight "
+            f"does not make those balls hotter or colder tomorrow. Buying two tickets doubles "
+            f"both the cost and the chance because you bought two combinations, not because a "
+            f"system unlocked the drum. Rollovers change the prize at the top of the chart. "
+            f"They do not change the number of ways to fill a slip. Longer notes: /odds.html.\n\n"
+        )
+    elif slot == 1:
+        lesson = (
+            f"### What a hot/cold chart is actually counting\n"
+            f"After {draw_date_str}, some balls in this site's short archive will look busy and "
+            f"some will look overdue. That is what a small random sample looks like. "
+            f"Independence means the next {game_name} draw starts from the same rules, not from "
+            f"tonight's sheet. A red tile is a headline, not a model. "
+            f"Longer notes: /hot-cold-explained.html.\n\n"
+        )
+    elif slot == 2:
+        lesson = (
+            f"### Who actually runs this game\n"
+            f"You buy {game_name} from a provincial operator. The Interprovincial Lottery "
+            f"Corporation coordinates the national draw. WCLC's public pages are the feed this "
+            f"site checks. lottohelper.ca is none of those bodies. Prize claims follow the "
+            f"corporation that issued the ticket, never this website. "
+            f"Do not send ticket photos to a stranger after a draw. Longer notes: /how-canada-lotto-works.html.\n\n"
+        )
+    else:
+        lesson = (
+            f"### Play only as a small entertainment expense\n"
+            f"Legal age is 19 in most of Canada (18 in some provinces). A jackpot headline is "
+            f"a poor reason to raise a cap you already set. Do not chase {draw_date_str} with "
+            f"a larger slip next time. Help: Gambling Support BC 1-888-795-6111, ConnexOntario "
+            f"1-866-531-2600, or 9-8-8 if you are in distress. Longer notes: /responsible-play.html.\n\n"
         )
 
-    note += (
-        f"### {5 if previous_pick_result else 4}. Strategic Observations\n"
-        f"Numbers are drawn independently and randomly. Historical frequency does not predict future outcomes. "
-        f"Please play responsibly. For analytical and entertainment purposes only."
+    shuffle = (
+        f"### Entertainment shuffle for this page\n"
+        f"Archive-weighted line shown here: {', '.join(map(str, ai_nums))}. "
+        f"Weighting does not raise jackpot odds. 19+."
     )
-    return note
+    return facts + lesson + shuffle
+
+
 
 
 # ==========================================
@@ -863,8 +891,8 @@ def main():
             "date": today_date,
             "display_date": display_date,
             "draw_date": max_draw_date,
-            "title": f"Lotto Max Official Draw Results & Analysis (Draw Date: {max_draw_date})",
-            "summary": f"Verified results for the Lotto Max draw on {max_draw_date}. {max_prov}",
+            "title": f"Lotto Max results — {max_draw_date}",
+            "summary": f"Published WCLC numbers for {max_draw_date}. {max_prov} Odds do not change between draws.",
             "jackpot": max_jp,
             "winner_province": max_prov,
             "winning_numbers": max_win_nums,
@@ -892,8 +920,8 @@ def main():
             "date": today_date,
             "display_date": display_date,
             "draw_date": l649_draw_date,
-            "title": f"Lotto 6/49 Official Draw Results & Analysis (Draw Date: {l649_draw_date})",
-            "summary": f"Verified results for the Lotto 6/49 draw on {l649_draw_date}. {l649_prov}",
+            "title": f"Lotto 6/49 results — {l649_draw_date}",
+            "summary": f"Published WCLC numbers for {l649_draw_date}. {l649_prov} Odds do not change between draws.",
             "jackpot": l649_gb_display,
             "winner_province": l649_prov,
             "winning_numbers": l649_win_nums,
