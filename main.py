@@ -1107,7 +1107,7 @@ def render_post_card_html(post):
         f'<a href="posts/{post_id}.html" class="block bg-white p-5 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition">'
         f'<div class="flex items-center justify-between text-xs text-slate-400 font-medium mb-1.5">'
         f'<span class="bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded font-bold">{game}</span>'
-        f'<span class="text-teal-600 font-bold">Read Analysis →</span></div>'
+        f'<span class="text-teal-600 font-bold">View draw →</span></div>'
         f'<h3 class="text-base font-bold text-slate-800 mb-1 hover:text-teal-700 transition">{title}</h3>'
         f'<p class="text-xs text-slate-500 leading-relaxed line-clamp-2">{summary}</p></a>'
     )
@@ -1299,8 +1299,13 @@ def render_index_html(template_html, home_display, posts_list):
     )
     out = replace_element_html(out, "freq-grid-container", render_freq_grid_html(max_data.get("frequencies"), 52))
 
-    if posts_list:
-        posts_html = "".join(render_post_card_html(p) for p in posts_list[:12])
+    visible_posts = [
+        p for p in posts_list
+        if "Official Draw Results" not in (p.get("title") or "")
+        and "AI Strategy" not in (p.get("title") or "")
+    ]
+    if visible_posts:
+        posts_html = "".join(render_post_card_html(p) for p in visible_posts[:12])
     else:
         posts_html = '<div class="p-6 text-center text-slate-400 text-xs">No draw posts available.</div>'
     out = replace_element_html(out, "posts-container", posts_html)
