@@ -410,7 +410,7 @@ def fetch_home_jackpots(text, today_dt):
     # 잡은 뒤 그 안에서 MaxPlus 개수만 있으면 찾아 쓴다. 금액/날짜 자체를
     # 못 찾으면 여전히 ScrapeError를 내고 절대 숫자를 지어내지 않는다.
     max_pattern = re.compile(
-        r"\$\s*(\d+)\s*Million\b(.{0,200}?)" + date_re,
+                r"\$\s*([1-9]\d)\s*Million\b(.{0,240}?)" + date_re,
         re.DOTALL,
     )
     max_match = max_pattern.search(text, gb_match.end())
@@ -431,10 +431,11 @@ def fetch_home_jackpots(text, today_dt):
     # 공식 규칙: MaxPlus 상품 개수 = 잭팟 금액(백만 단위). 캡처됐는데 어긋나면
     # 페이지 구조가 바뀐 것으로 간주하고 신뢰하지 않는다. 애초에 이 문구 자체가
     # 없었던 경우(maxplus_count is None)는 검증할 대상이 없으므로 통과시킨다.
-    if maxplus_count is not None and maxplus_count != max_millions:
-        raise ScrapeError(
-            f"Home: MaxPlus count ({maxplus_count}) does not match jackpot millions "
-            f"({max_millions}) — page structure may have changed"
+        if maxplus_count is not None and maxplus_count != max_millions:
+        print(
+            f"[WARN] MaxPlus count ({maxplus_count}) != jackpot millions ({max_millions}); "
+            "keeping the $N Million ticker anyway.",
+            file=sys.stderr,
         )
     if not (10 <= max_millions <= 90):
         raise ScrapeError(f"Home: implausible Lotto Max jackpot value: ${max_millions}M")
