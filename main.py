@@ -37,7 +37,7 @@ DATE_PATTERN = r'((?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\
 HISTORY_FILE = "draw_history.json"
 HISTORY_WINDOW_DAYS = 183  # 약 6개월
 MIN_DRAWS_FOR_LIVE_STATS = 15  # 이 회차 수 미만이면 시드값 사용 (통계적으로 불안정하므로)
-GENERATE_POSTS = False  # no new thin analysis pages; homepage + history only
+GENERATE_POSTS = True  # no new thin analysis pages; homepage + history only
 
 SEED_MAX_FREQUENCIES = {
     "1": 8, "2": 6, "3": 9, "4": 11, "5": 7, "6": 10, "7": 8, "8": 5, "9": 7, "10": 9,
