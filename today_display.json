@@ -1,6 +1,6 @@
 {
-    "date": "2026-10-03",
-    "display_date": "October 03, 2026",
+    "date": "2026-10-04",
+    "display_date": "October 04, 2026",
     "lotto_max": {
         "jackpot": "$75 Million",
         "winner_province": "Draw confirmed for Friday, October 02, 2026. Next jackpot (Tuesday, October 6, 2026): $75 Million (75 x $100,000 MaxPlus prizes). Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-max-extra.htm",
@@ -73,26 +73,26 @@
         "frequency_draws_counted": 20
     },
     "lotto_649": {
-        "gold_ball": "$16 Million",
-        "winner_province": "Draw confirmed for Wednesday, September 30, 2026. Guaranteed $1,000,000 prize won (White ball drawn). Next Gold Ball jackpot (Saturday, October 3, 2026): $16 Million. Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-649-extra.htm",
+        "gold_ball": "$18 Million",
+        "winner_province": "Draw confirmed for Saturday, October 03, 2026. Guaranteed $1,000,000 prize won (White ball drawn). Next Gold Ball jackpot (Wednesday, October 7, 2026): $18 Million. Winning ticket location: see official WCLC prize breakdown — https://www.wclc.com/winning-numbers/lotto-649-extra.htm",
         "winning_numbers": [
+            1,
             4,
-            9,
-            12,
-            39,
-            43,
-            46
+            7,
+            23,
+            28,
+            37
         ],
-        "bonus": 28,
-        "draw_date": "Wednesday, September 30, 2026",
+        "bonus": 38,
+        "draw_date": "Saturday, October 03, 2026",
         "frequencies": {
-            "1": 3,
+            "1": 4,
             "2": 1,
             "3": 3,
-            "4": 2,
+            "4": 3,
             "5": 2,
             "6": 4,
-            "7": 2,
+            "7": 3,
             "8": 3,
             "9": 3,
             "10": 2,
@@ -108,12 +108,12 @@
             "20": 4,
             "21": 1,
             "22": 1,
-            "23": 1,
+            "23": 2,
             "24": 2,
             "25": 3,
             "26": 1,
             "27": 1,
-            "28": 1,
+            "28": 2,
             "29": 0,
             "30": 2,
             "31": 2,
@@ -122,7 +122,7 @@
             "34": 4,
             "35": 3,
             "36": 2,
-            "37": 2,
+            "37": 3,
             "38": 1,
             "39": 1,
             "40": 0,
@@ -137,7 +137,7 @@
             "49": 1
         },
         "frequency_source": "live",
-        "frequency_draws_counted": 19
+        "frequency_draws_counted": 20
     },
     "track_record": {
         "Lotto Max": {
@@ -146,8 +146,8 @@
             "expected_by_chance": 0.94
         },
         "Lotto 6/49": {
-            "draws_compared": 14,
-            "average_matches": 0.64,
+            "draws_compared": 15,
+            "average_matches": 0.6,
             "expected_by_chance": 0.73
         }
     }
