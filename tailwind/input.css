@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  a { @apply text-teal-700 underline decoration-teal-300 underline-offset-2 hover:text-teal-900; }
+}
+
+@layer components {
+  .site-header { @apply bg-gradient-to-r from-emerald-700 via-teal-700 to-cyan-800 text-white shadow; }
+  .logo-badge { @apply bg-amber-400 text-slate-900 font-black px-3 py-1 rounded-lg text-sm tracking-widest shadow; }
+  .nav-link { @apply px-3 py-1.5 rounded-lg text-teal-50 no-underline hover:bg-white/10 hover:text-white; }
+  .nav-active { @apply bg-white/20 text-white font-semibold; }
+  .site-footer { @apply bg-slate-900 text-slate-400 text-sm mt-12; }
+  .site-footer a { @apply text-slate-200 decoration-slate-500; }
+  .card { @apply bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8; }
+  .section-title { @apply text-xl font-black text-slate-900; }
+  .guide-card { @apply block bg-white rounded-2xl border border-slate-200 shadow-sm p-5 no-underline transition hover:shadow-md hover:border-teal-300; }
+  .notice { @apply mt-3 rounded-lg bg-amber-50 border border-amber-300 text-amber-900 text-sm px-3 py-2; }
+  .byline { @apply text-sm text-slate-500 -mt-2 mb-4; }
+  .lead { @apply text-lg text-slate-700; }
+
+  .prose-lh { @apply text-slate-700 leading-relaxed; }
+  .prose-lh h1 { @apply text-3xl font-black text-slate-900 mb-4 leading-tight; }
+  .prose-lh h2 { @apply text-xl font-bold text-slate-900 mt-8 mb-3; }
+  .prose-lh h3 { @apply text-lg font-bold text-slate-800 mt-6 mb-2; }
+  .prose-lh p { @apply my-3; }
+  .prose-lh ul { @apply list-disc pl-6 my-3 space-y-1; }
+  .prose-lh ol { @apply list-decimal pl-6 my-3 space-y-1; }
+  .prose-lh strong { @apply text-slate-900; }
+  .prose-lh .sources { @apply mt-8 pt-4 border-t border-slate-200 text-sm text-slate-600; }
+  .prose-lh .callout { @apply my-4 rounded-xl bg-teal-50 border border-teal-200 px-4 py-3 text-slate-800; }
+
+  .table-wrap { @apply overflow-x-auto my-4; }
+  .table-wrap table { @apply w-full text-sm border-collapse; }
+  .table-wrap th { @apply text-left font-semibold text-slate-700 bg-slate-100 px-3 py-2 border-b border-slate-200; }
+  .table-wrap td { @apply px-3 py-2 border-b border-slate-100 align-middle; }
+
+  .balls { @apply inline-flex flex-wrap items-center gap-1.5; }
+  .ball { @apply inline-flex items-center justify-center rounded-full font-extrabold text-white w-10 h-10 text-base shadow-inner; }
+  .ball-sm { @apply w-7 h-7 text-xs; }
+  .ball-max { @apply bg-emerald-600; }
+  .ball-649 { @apply bg-blue-600; }
+  .ball-neutral { @apply bg-slate-600; }
+  .ball-bonus { @apply bg-slate-400 ring-2 ring-offset-1 ring-slate-300; }
+
+  .freq-grid { @apply grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2 my-4; }
+  .freq-tile { @apply flex flex-col items-center gap-0.5 rounded-xl border border-slate-200 bg-slate-50 p-2 text-sm text-center leading-tight; }
+}

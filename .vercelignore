@@ -1,0 +1,9 @@
+# Build-time sources: not needed on the live site
+/content
+/tailwind
+/tailwind.config.js
+/build.py
+/main.py
+/lastmod.json
+/README.md
+/.github
