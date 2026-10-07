@@ -118,8 +118,12 @@ def validate_draw_date(draw_dt, today_dt, expected_weekdays, max_age_days=7):
 #      "lotto_649": [{"date": ..., "numbers": [...], "bonus": ..,
 #                     "gold_ball": {"ball": "White"|"Gold", "prize": 1000000}?,
 #                     "gold_ball_jackpot": 18000000?}, ...],
-#      "upcoming": {"lotto_max": {...}, "lotto_649": {...}}   # WCLC 잭팟 티커(다음 회차)
+#      "upcoming": {"lotto_max": {...}, "lotto_649": {...}},  # WCLC 잭팟 티커(다음 회차)
+#      "meta": {"last_checked": "2026-10-07T00:05-07:00", "backfill": {...}}
 #    }
+#    2026-10: Lotto 6/49 1982~, Lotto Max 2009~ 전체 회차를 백필했다 (tools/backfill_merge.py).
+#    Lotto Max는 번호 범위가 1-49 (2009-2019) -> 1-50 (2019-05-14~) -> 1-52 (2026-04-14~)로
+#    바뀌었으므로 통계는 build.py에서 기간(era)별로 따로 계산한다.
 # ==========================================
 def load_history():
     data = {}
@@ -132,13 +136,21 @@ def load_history():
     data.setdefault("lotto_max", [])
     data.setdefault("lotto_649", [])
     data.setdefault("upcoming", {})
+    data.setdefault("meta", {})
     return data
 
 
 def save_history(history):
+    """전체 히스토리(1982년~)가 커졌으므로 회차 1건을 한 줄로 저장한다 (여전히 유효한 JSON)."""
+    chunks = []
+    for key, value in history.items():
+        if isinstance(value, list):
+            body = ",\n".join("    " + json.dumps(r, ensure_ascii=False, separators=(",", ":")) for r in value)
+            chunks.append(f"  {json.dumps(key)}: [\n{body}\n  ]")
+        else:
+            chunks.append(f"  {json.dumps(key)}: " + json.dumps(value, ensure_ascii=False, indent=2).replace("\n", "\n  "))
     with open(HISTORY_FILE, "w", encoding="utf-8") as f:
-        json.dump(history, f, indent=2, ensure_ascii=False)
-        f.write("\n")
+        f.write("{\n" + ",\n".join(chunks) + "\n}\n")
 
 
 def normalize_records(records):
@@ -533,6 +545,8 @@ def main():
     max_error = l649_error = None
     if not build_only:
         max_error, l649_error = scrape_and_update(history, today_dt)
+        if not (max_error and l649_error):
+            history["meta"]["last_checked"] = today_dt.isoformat(timespec="minutes")
     history["lotto_max"] = normalize_records(history["lotto_max"])
     history["lotto_649"] = normalize_records(history["lotto_649"])
     save_history(history)
