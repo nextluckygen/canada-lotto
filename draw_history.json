@@ -259,6 +259,22 @@
         47
       ],
       "bonus": 26
+    },
+    {
+      "date": "Tuesday, October 06, 2026",
+      "numbers": [
+        11,
+        12,
+        22,
+        31,
+        32,
+        46,
+        50
+      ],
+      "bonus": 7,
+      "jackpot": 75000000,
+      "maxmillions": 12,
+      "maxplus": 75
     }
   ],
   "lotto_649": [
@@ -569,17 +585,17 @@
   ],
   "upcoming": {
     "lotto_max": {
-      "date": "2026-10-06",
-      "jackpot": 75000000,
-      "maxmillions": 12,
-      "maxplus": 75,
-      "fetched": "2026-10-06"
+      "date": "2026-10-09",
+      "jackpot": 80000000,
+      "maxmillions": 14,
+      "maxplus": 80,
+      "fetched": "2026-10-07"
     },
     "lotto_649": {
       "date": "2026-10-07",
       "gold_ball_jackpot": 18000000,
       "balls_remaining": 26,
-      "fetched": "2026-10-06"
+      "fetched": "2026-10-07"
     }
   }
 }
