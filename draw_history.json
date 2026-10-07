@@ -320,7 +320,11 @@
         45,
         48
       ],
-      "bonus": 46
+      "bonus": 46,
+      "gold_ball": {
+        "ball": "White",
+        "prize": 1000000
+      }
     },
     {
       "date": "Saturday, August 15, 2026",
@@ -332,7 +336,11 @@
         36,
         43
       ],
-      "bonus": 24
+      "bonus": 24,
+      "gold_ball": {
+        "ball": "White",
+        "prize": 1000000
+      }
     },
     {
       "date": "Wednesday, August 19, 2026",
@@ -344,7 +352,11 @@
         33,
         36
       ],
-      "bonus": 11
+      "bonus": 11,
+      "gold_ball": {
+        "ball": "White",
+        "prize": 1000000
+      }
     },
     {
       "date": "Saturday, August 22, 2026",
@@ -356,7 +368,11 @@
         34,
         45
       ],
-      "bonus": 5
+      "bonus": 5,
+      "gold_ball": {
+        "ball": "White",
+        "prize": 1000000
+      }
     },
     {
       "date": "Wednesday, August 26, 2026",
@@ -368,7 +384,11 @@
         41,
         45
       ],
-      "bonus": 39
+      "bonus": 39,
+      "gold_ball": {
+        "ball": "White",
+        "prize": 1000000
+      }
     },
     {
       "date": "Saturday, August 29, 2026",
@@ -380,7 +400,11 @@
         25,
         33
       ],
-      "bonus": 21
+      "bonus": 21,
+      "gold_ball": {
+        "ball": "White",
+        "prize": 1000000
+      }
     },
     {
       "date": "Wednesday, September 02, 2026",
@@ -392,7 +416,11 @@
         17,
         25
       ],
-      "bonus": 16
+      "bonus": 16,
+      "gold_ball": {
+        "ball": "White",
+        "prize": 1000000
+      }
     },
     {
       "date": "Saturday, September 05, 2026",
@@ -404,7 +432,11 @@
         42,
         49
       ],
-      "bonus": 44
+      "bonus": 44,
+      "gold_ball": {
+        "ball": "White",
+        "prize": 1000000
+      }
     },
     {
       "date": "Wednesday, September 09, 2026",
@@ -416,7 +448,11 @@
         41,
         47
       ],
-      "bonus": 17
+      "bonus": 17,
+      "gold_ball": {
+        "ball": "White",
+        "prize": 1000000
+      }
     },
     {
       "date": "Saturday, September 12, 2026",
@@ -428,7 +464,11 @@
         26,
         32
       ],
-      "bonus": 5
+      "bonus": 5,
+      "gold_ball": {
+        "ball": "White",
+        "prize": 1000000
+      }
     },
     {
       "date": "Wednesday, September 16, 2026",
@@ -440,7 +480,11 @@
         46,
         48
       ],
-      "bonus": 9
+      "bonus": 9,
+      "gold_ball": {
+        "ball": "White",
+        "prize": 1000000
+      }
     },
     {
       "date": "Saturday, September 19, 2026",
@@ -452,7 +496,11 @@
         25,
         42
       ],
-      "bonus": 29
+      "bonus": 29,
+      "gold_ball": {
+        "ball": "Gold",
+        "prize": 32000000
+      }
     },
     {
       "date": "Wednesday, September 23, 2026",
@@ -464,7 +512,11 @@
         38,
         45
       ],
-      "bonus": 9
+      "bonus": 9,
+      "gold_ball": {
+        "ball": "White",
+        "prize": 1000000
+      }
     },
     {
       "date": "Saturday, September 26, 2026",
@@ -476,7 +528,11 @@
         45,
         46
       ],
-      "bonus": 38
+      "bonus": 38,
+      "gold_ball": {
+        "ball": "White",
+        "prize": 1000000
+      }
     },
     {
       "date": "Wednesday, September 30, 2026",
@@ -488,7 +544,11 @@
         43,
         46
       ],
-      "bonus": 28
+      "bonus": 28,
+      "gold_ball": {
+        "ball": "White",
+        "prize": 1000000
+      }
     },
     {
       "date": "Saturday, October 03, 2026",
@@ -500,7 +560,26 @@
         28,
         37
       ],
-      "bonus": 38
+      "bonus": 38,
+      "gold_ball": {
+        "ball": "White",
+        "prize": 1000000
+      }
     }
-  ]
+  ],
+  "upcoming": {
+    "lotto_max": {
+      "date": "2026-10-06",
+      "jackpot": 75000000,
+      "maxmillions": 12,
+      "maxplus": 75,
+      "fetched": "2026-10-06"
+    },
+    "lotto_649": {
+      "date": "2026-10-07",
+      "gold_ball_jackpot": 18000000,
+      "balls_remaining": 26,
+      "fetched": "2026-10-06"
+    }
+  }
 }
