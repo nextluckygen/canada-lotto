@@ -1,43 +1,101 @@
 <!DOCTYPE html>
 <html lang="en-CA">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About and methodology | lottohelper.ca</title>
-    <meta name="description" content="How lottohelper.ca verifies public WCLC results, what we refuse to invent, and why we stopped publishing a new analysis article after every draw.">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5048509015899303" crossorigin="anonymous"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About lottohelper.ca | lottohelper.ca</title>
+  <meta name="description" content="Who runs lottohelper.ca, how the results archive is built, how guides are researched, and what this independent BC-based site will never do.">
+  <link rel="canonical" href="https://lottohelper.ca/about.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="lottohelper.ca">
+  <meta property="og:title" content="About lottohelper.ca">
+  <meta property="og:description" content="Who runs lottohelper.ca, how the results archive is built, how guides are researched, and what this independent BC-based site will never do.">
+  <meta property="og:url" content="https://lottohelper.ca/about.html">
+  <link rel="stylesheet" href="/assets/site.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5048509015899303" crossorigin="anonymous"></script>
 </head>
-<body class="bg-slate-50 min-h-screen text-slate-900 font-sans">
-    <div class="bg-slate-900 text-amber-100 text-[11px] text-center py-2">19+ · Unofficial · We do not sell tickets · <a class="underline text-white" href="responsible-play.html">Responsible play</a></div>
-    <header class="bg-gradient-to-r from-emerald-700 via-teal-700 to-cyan-800 text-white">
-        <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-            <a href="index.html" class="font-bold">lottohelper.ca</a>
-            <a href="index.html" class="text-xs bg-white/20 px-3 py-1.5 rounded-lg">Home</a>
-        </div>
-    </header>
-    <main class="max-w-3xl mx-auto px-4 py-10 text-slate-700 leading-relaxed text-sm space-y-6">
-        <div class="bg-white rounded-3xl shadow-xl border border-slate-200 p-8 space-y-6">
-            <h1 class="text-2xl font-black text-slate-900 border-b pb-3">About lottohelper.ca</h1>
-            <p>This is an independent, unofficial reference. It reprints publicly posted Lotto Max and Lotto 6/49 numbers and explains the odds in ordinary language. It is not a lottery corporation, not a ticket shop, and not a prediction desk.</p>
-            <h2 class="text-lg font-bold text-slate-800">How the nightly job works</h2>
-            <ol class="list-decimal pl-5 space-y-2">
-                <li>After midnight Pacific time on a draw night, a script fetches the public WCLC result pages.</li>
-                <li>Date, main numbers and bonus must parse cleanly and match the expected weekday for that game.</li>
-                <li>Jackpot tickers are read only when the homepage block looks complete. If Gold Ball “balls remaining” is an unexpected number, we still keep the certified combination and send you to WCLC for the live jackpot — we do not invent a dollar figure.</li>
-                <li>Failed checks leave yesterday’s verified row on screen. Guessing is not allowed.</li>
-                <li>Verified draws accumulate in <code>draw_history.json</code> and feed the frequency grid. That grid is a description of a short sample, not a forecast.</li>
-            </ol>
-            <h2 class="text-lg font-bold text-slate-800">What changed for content quality</h2>
-            <p>We no longer create a new “Official Draw Results &amp; Analysis” page after every draw. Those pages repeated the same five headings with new digits. That pattern is thin content. New results now update the homepage and the history file. Longer explainers live on separate pages that do not expire every 48 hours.</p>
-            <h2 class="text-lg font-bold text-slate-800">What the numbers mean</h2>
-            <p>Every draw is independent. Hot/cold counts, odd/even splits and the shuffle button do not change 1-in-13,983,816 (6/49) or 1-in-33,294,800 (Max). See <a class="text-teal-700 underline font-semibold" href="odds.html">Odds explained</a> and <a class="text-teal-700 underline font-semibold" href="hot-cold-explained.html">Hot and cold</a>.</p>
-            <h2 class="text-lg font-bold text-slate-800">What we are not</h2>
-            <p>Not affiliated with ILC, BCLC, WCLC, OLG, Loto-Québec or any other Canadian lottery operator. Game names belong to their owners and are used only to identify public draws.</p>
-            <h2 class="text-lg font-bold text-slate-800">Corrections</h2>
-            <p>If a row here disagrees with WCLC, trust WCLC and <a class="text-teal-700 underline font-semibold" href="contact.html">email us</a>.</p>
-        </div>
-    </main>
-    <footer class="bg-slate-900 text-slate-400 text-xs py-6 text-center">© 2026 lottohelper.ca</footer>
+<body class="bg-slate-50 text-slate-800 antialiased">
+  <a href="#main" class="sr-only focus:not-sr-only">Skip to content</a>
+  <div class="bg-slate-900 text-amber-100 text-xs text-center py-2 px-3">
+    19+ · Unofficial independent site · Not BCLC, WCLC, OLG, Loto-Québec or ILC · We do not sell tickets ·
+    <a href="/responsible-play.html" class="underline font-semibold text-white">Play responsibly</a>
+  </div>
+  <header class="site-header">
+    <div class="mx-auto max-w-5xl px-4 py-4 flex flex-wrap items-center justify-between gap-3">
+      <a href="/" class="flex items-center gap-3 no-underline">
+        <span class="logo-badge">LOTTOHELPER.CA</span>
+        <span class="hidden sm:block text-sm text-teal-50">Canadian lotto results &amp; plain-language guides</span>
+      </a>
+      <nav class="flex flex-wrap gap-1 text-sm" aria-label="Main">
+<a href="/" class="nav-link">Home</a>
+<a href="/lotto-max-results.html" class="nav-link">Lotto Max results</a>
+<a href="/lotto-649-results.html" class="nav-link">Lotto 6/49 results</a>
+<a href="/guides.html" class="nav-link">Guides</a>
+<a href="/responsible-play.html" class="nav-link">Responsible play</a>
+<a href="/about.html" class="nav-link nav-active">About</a>
+<a href="/contact.html" class="nav-link">Contact</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main" class="mx-auto max-w-5xl px-4 py-8">
+<article class="card prose-lh"><h1>About lottohelper.ca</h1>
+<p class="lead">lottohelper.ca is a small, independent reference site about Canada's two national lotto games, Lotto Max and Lotto 6/49. It is written and maintained by <strong>NextGen</strong>, an independent publisher based in British Columbia, Canada.</p>
+
+<h2>Why this site exists</h2>
+<p>Search for lotto results and you will find two kinds of pages: the official lottery sites, which are accurate but scattered across provinces, and "helper" sites that wrap the same numbers in hot-number charts, lucky-number generators and promises of a system. This site tries to be the useful middle: an honest, easy-to-read archive of results, plus guides that answer practical questions — how the games and prizes work, how to claim, what is taxed, and how to avoid scams — with the official sources linked so you can check every claim yourself.</p>
+
+<h2>Who writes it</h2>
+<p>The site is run by NextGen from British Columbia. Guides are researched from the rules, game conditions and help pages published by BCLC, the Western Canada Lottery Corporation (WCLC), OLG, the Canada Revenue Agency and the Canadian Anti-Fraud Centre, and each guide lists the sources it relies on. NextGen is not a lawyer, accountant or employee of any lottery corporation; where a question needs professional advice (large prizes, taxes on investment income, estate planning) the guides say so.</p>
+
+<h2>How the results archive is built</h2>
+<p>After midnight Pacific time each night, a script reads WCLC's public winning-number pages for Lotto Max and Lotto 6/49. A draw is added to the archive only if:</p>
+<ul>
+  <li>the draw date parses cleanly and falls on the right weekday (Tuesday or Friday for Lotto Max, Wednesday or Saturday for Lotto 6/49);</li>
+  <li>the right count of distinct main numbers and a bonus number are present; and</li>
+  <li>the draw is recent enough to be the result being reported.</li>
+</ul>
+<p>If a check fails, the previous verified data stays on the site and the run is flagged for a human to look at. Jackpot amounts are taken from what WCLC advertises; they are never estimated or invented. The archive pages then recalculate simple descriptive statistics — frequencies, odd/even splits, sums — and compare them with the exact long-run probabilities, so readers can see how ordinary "streaks" look.</p>
+
+<h2>What changed in October 2026</h2>
+<p>Earlier versions of this site created a separate page after every draw. Those pages repeated the same layout with new numbers and included a "suggested line" of numbers. Neither was useful: the pages added nothing the official sites do not already show, and no method can suggest better numbers for an independent random draw. They have been retired. All results now live in two archives — <a href="/lotto-max-results.html">Lotto Max</a> and <a href="/lotto-649-results.html">Lotto 6/49</a> — and the effort goes into guides instead.</p>
+
+<h2>What this site will never do</h2>
+<ul>
+  <li>Sell lottery tickets, take bets or link to offshore ticket resellers.</li>
+  <li>Claim that any number, pattern or tool improves your chance of winning.</li>
+  <li>Ask for your ticket, ticket photo, barcode or personal information.</li>
+  <li>Encourage you to spend more than you planned — see <a href="/responsible-play.html">responsible play</a>.</li>
+</ul>
+
+<h2>Independence and advertising</h2>
+<p>lottohelper.ca is not affiliated with, endorsed by or paid by BCLC, WCLC, OLG, Loto-Québec, Atlantic Lottery or the Interprovincial Lottery Corporation. "Lotto Max", "Lotto 6/49", "Gold Ball", "MaxMillions", "Extra" and "Encore" are names belonging to their respective owners and are used only to identify the games being described. The site may display advertising served by Google AdSense to cover hosting costs; advertisers have no say over content. How advertising cookies work is explained in the <a href="/privacy.html">privacy policy</a>.</p>
+
+<h2>Corrections and contact</h2>
+<p>If a result, rule or figure here disagrees with an official source, the official source is correct — and we want to know. The <a href="/contact.html">contact page</a> explains how to reach NextGen and how corrections are handled.</p></article>
+  </main>
+<footer class="site-footer">
+  <div class="mx-auto max-w-5xl px-4 py-10 grid gap-8 md:grid-cols-3">
+    <div class="space-y-2">
+      <p class="font-bold text-white">lottohelper.ca</p>
+      <p>An independent, unofficial reference for Lotto Max and Lotto 6/49 results and plain-language guides. Run by NextGen from British Columbia, Canada.</p>
+      <p>Not affiliated with BCLC, WCLC, OLG, Loto-Québec, Atlantic Lottery or the Interprovincial Lottery Corporation. We do not sell tickets or predict draws. 19+ in most provinces (18+ in Alberta, Manitoba and Quebec).</p>
+    </div>
+    <div>
+      <p class="font-bold text-white mb-2">Results &amp; guides</p>
+      <ul class="space-y-1">
+        <li><a href="/lotto-max-results.html">Lotto Max results archive</a></li>
+        <li><a href="/lotto-649-results.html">Lotto 6/49 results archive</a></li>
+        <li><a href="/guides.html">All guides</a></li>
+        <li><a href="/lotto-max-maxmillions-explained.html">How Lotto Max, MaxPlus and MaxMillions work</a></li><li><a href="/lotto-649-gold-ball-explained.html">How the Lotto 6/49 Gold Ball draw works</a></li><li><a href="/how-to-claim-lottery-prize-bc.html">How to check and claim a lottery prize in BC and Western Canada</a></li><li><a href="/are-lottery-winnings-taxed-canada.html">Are lottery winnings taxed in Canada?</a></li><li><a href="/extra-and-encore-explained.html">Extra and Encore explained</a></li><li><a href="/lottery-scams-canada.html">Common lottery scams in Canada and how to spot them</a></li><li><a href="/odds.html">Lotto 6/49 and Lotto Max odds explained</a></li><li><a href="/hot-cold-explained.html">Why hot and cold numbers do not predict the next draw</a></li><li><a href="/how-canada-lotto-works.html">Who runs Lotto 6/49 and Lotto Max in Canada</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="font-bold text-white mb-2">Site information</p>
+      <p class="leading-7"><a href="/about.html">About</a> · <a href="/contact.html">Contact</a> · <a href="/privacy.html">Privacy policy</a> · <a href="/terms.html">Terms of use</a> · <a href="/disclaimer.html">Disclaimer</a> · <a href="/responsible-play.html">Responsible play</a></p>
+      <p class="mt-4">Official results and prize claims: your provincial lottery corporation. If anything here disagrees with an official source, the official source is correct.</p>
+      <p class="mt-4">© 2026 lottohelper.ca</p>
+    </div>
+  </div>
+</footer>
 </body>
 </html>
