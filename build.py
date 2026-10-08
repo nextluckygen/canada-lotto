@@ -65,7 +65,7 @@ DRAW_TIME_ET = (22, 30)
 # Never put made-up ids here. Empty id -> a placeholder box (or nothing if SHOW_EMPTY_AD_SLOTS=False).
 # ---------------------------------------------------------------------------
 AD_SLOT_IDS = {"H1": "", "H2": "", "H3": "", "A1": "", "A2": "", "A3": ""}
-SHOW_EMPTY_AD_SLOTS = True
+SHOW_EMPTY_AD_SLOTS = False  # False: an empty slot renders only its TODO comment plus normal section spacing
 
 HOT_WINDOW = 50          # homepage hot/warm/cold + generator hot/cold lists use the last 50 draws
 DEFAULT_WINDOW = "last50"
@@ -590,7 +590,7 @@ def ad_slot(key):
     todo = (f"<!-- TODO(owner): ad slot {key}. Create a responsive display unit in AdSense and put its "
             f"data-ad-slot id in AD_SLOT_IDS['{key}'] in build.py (no made-up ids). -->")
     if not SHOW_EMPTY_AD_SLOTS:
-        return todo
+        return todo + '<div class="h-10" aria-hidden="true"></div>'
     return f'<aside class="ad-slot" aria-label="Advertisement" data-slot="{key}">{todo}<p class="ad-label">Advertisement</p></aside>'
 
 
