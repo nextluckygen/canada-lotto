@@ -43,6 +43,11 @@ CONTENT_DIR = "content"
 LASTMOD_FILE = "lastmod.json"
 JACKPOT_FILE = "jackpot_history.json"
 DATA_DIR = "data"
+OG_IMAGE = SITE + "/assets/og/lottohelper-og.png"
+OG_IMAGE_ALT = "lottohelper.ca: Lotto Max and Lotto 6/49 results, number stats and free tools"
+LOGO_URL = SITE + "/assets/icons/icon-512.png"
+ORG_ID = SITE + "/#organization"
+WEBSITE_ID = SITE + "/#website"
 
 GOLD_BALL_START = 10_000_000
 GOLD_BALL_STEP = 2_000_000
@@ -636,29 +641,104 @@ def footer_html():
 </footer>"""
 
 
-def layout(path, title, description, body, active=None, noindex=False, scripts=()):
-    full_title = f"{title} | {SITE_NAME}" if path != "/" else title
+def ld_json(obj):
+    text = json.dumps(obj, ensure_ascii=False, separators=(",", ":"))
+    return '<script type="application/ld+json">' + text.replace("</", "<\\/") + "</script>"
+
+
+def ld_org(full=True):
+    org = {"@type": "Organization", "@id": ORG_ID, "name": SITE_NAME, "url": SITE + "/",
+           "logo": {"@type": "ImageObject", "url": LOGO_URL, "width": 512, "height": 512}}
+    if full:
+        org.update({
+            "@context": "https://schema.org",
+            "alternateName": "LottoHelper",
+            "description": "Independent, unofficial reference for Lotto Max and Lotto 6/49 results, number statistics and plain-language guides, run from British Columbia, Canada.",
+            "founder": {"@type": "Person", "name": "NextGen"},
+            "areaServed": {"@type": "Country", "name": "Canada"},
+        })
+    return org
+
+
+def ld_website():
+    return {"@context": "https://schema.org", "@type": "WebSite", "@id": WEBSITE_ID, "name": SITE_NAME,
+            "alternateName": "LottoHelper", "url": SITE + "/", "inLanguage": "en-CA", "publisher": {"@id": ORG_ID}}
+
+
+def ld_breadcrumbs(crumbs):
+    return {"@context": "https://schema.org", "@type": "BreadcrumbList",
+            "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": n, "item": SITE + p}
+                                for i, (n, p) in enumerate(crumbs)]}
+
+
+TAG_RE = re.compile(r"<[^>]+>")
+
+
+def plain(html_text):
+    return html.unescape(TAG_RE.sub("", html_text)).strip()
+
+
+def ld_faq(faqs):
+    return {"@context": "https://schema.org", "@type": "FAQPage",
+            "mainEntity": [{"@type": "Question", "name": plain(q),
+                            "acceptedAnswer": {"@type": "Answer", "text": plain(a)}} for q, a in faqs]}
+
+
+def faq_section(faqs, heading, card_cls="card-violet"):
+    items = "".join(f"<h3>{q}</h3><p>{a}</p>" for q, a in faqs)
+    return f'<section class="card {card_cls} prose-lh" id="faq" style="scroll-margin-top:70px"><h2>{heading}</h2>{items}</section>'
+
+
+def crumbs_html(crumbs, dark=False):
+    items = []
+    for i, (n, p) in enumerate(crumbs):
+        if i == len(crumbs) - 1:
+            items.append(f'<li aria-current="page">{esc(n)}</li>')
+        else:
+            items.append(f'<li><a href="{p}">{esc(n)}</a></li>')
+    cls = "crumbs crumbs-dark" if dark else "crumbs"
+    return f'<nav aria-label="Breadcrumb" class="{cls}"><ol>{"".join(items)}</ol></nav>'
+
+
+def layout(path, title, description, body, active=None, noindex=False, scripts=(), crumbs=None, jsonld=(), og_type="website"):
+    """title is the complete <title> text (no automatic suffix)."""
     canonical = SITE + path
     robots = '<meta name="robots" content="noindex">\n  ' if noindex else ""
     canonical_tag = "" if noindex else f'<link rel="canonical" href="{canonical}">\n  '
     act = active if active is not None else path
     script_tags = "".join(f'\n  <script src="{s}" defer></script>' for s in scripts)
+    blocks = list(jsonld)
+    if crumbs and not noindex:
+        blocks.append(ld_breadcrumbs(crumbs))
+    ld = "".join("\n  " + ld_json(b) for b in blocks)
     return f"""<!DOCTYPE html>
 <html lang="en-CA">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{esc(full_title)}</title>
+  <title>{esc(title)}</title>
   <meta name="description" content="{esc(description)}">
   {robots}{canonical_tag}<meta name="theme-color" content="#0B1033">
-  <meta property="og:type" content="website">
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" href="/assets/icons/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:type" content="{og_type}">
   <meta property="og:site_name" content="{SITE_NAME}">
+  <meta property="og:locale" content="en_CA">
   <meta property="og:title" content="{esc(title)}">
   <meta property="og:description" content="{esc(description)}">
   <meta property="og:url" content="{canonical}">
+  <meta property="og:image" content="{OG_IMAGE}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="{esc(OG_IMAGE_ALT)}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{esc(title)}">
+  <meta name="twitter:description" content="{esc(description)}">
+  <meta name="twitter:image" content="{OG_IMAGE}">
   <link rel="preload" href="{FONT_HREF}" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="{CSS_HREF}">
-  {ADSENSE_TAG}{script_tags}
+  {ADSENSE_TAG}{script_tags}{ld}
 </head>
 <body class="antialiased">
   <a href="#main" class="skip">Skip to content</a>
@@ -706,7 +786,56 @@ def load_content_pages():
 
 def guide_byline(meta):
     updated = meta.get("updated", "October 2026")
-    return f'<p class="byline">Written by NextGen, British Columbia · Last updated {esc(updated)}</p>'
+    return f'<p class="byline">Written by <a href="/about.html">NextGen</a>, British Columbia · Last updated {esc(updated)}</p>'
+
+
+# Descriptive links from each guide to the tools and results pages that put it into practice.
+GUIDE_TOOL_LINKS = {
+    "lotto-max-maxmillions-explained": [
+        ("/lotto-max-results.html#tracker", "Track the current Lotto Max jackpot and MaxMillions count"),
+        ("/lotto-max-results.html", "See the latest Lotto Max winning numbers"),
+        ("/lotto-odds-calculator.html", "Work out your Lotto Max odds for a year of play")],
+    "lotto-649-gold-ball-explained": [
+        ("/lotto-649-results.html#tracker", "See how many balls are left in the Gold Ball drum"),
+        ("/lotto-649-results.html", "Check the latest Lotto 6/49 winning numbers and Gold Ball results"),
+        ("/lotto-odds-calculator.html", "Compare Lotto 6/49 odds in the odds calculator")],
+    "how-to-claim-lottery-prize-bc": [
+        ("/lotto-max-results.html", "Lotto Max winning numbers for the latest draws"),
+        ("/lotto-649-results.html", "Lotto 6/49 winning numbers for the latest draws"),
+        ("/check-my-numbers.html", "Check your regular numbers against every past draw")],
+    "are-lottery-winnings-taxed-canada": [
+        ("/how-to-claim-lottery-prize-bc.html", "How to claim a lottery prize in BC and Western Canada"),
+        ("/lotto-odds-calculator.html", "What a year of lotto play really costs, in the odds calculator"),
+        ("/lottery-scams-canada.html", "Why a 'tax' you must pay before collecting a prize is a scam")],
+    "extra-and-encore-explained": [
+        ("/lotto-max-results.html", "Latest Lotto Max winning numbers"),
+        ("/lotto-649-results.html", "Latest Lotto 6/49 winning numbers"),
+        ("/how-to-claim-lottery-prize-bc.html", "How to check and claim a prize in BC")],
+    "lottery-scams-canada": [
+        ("/check-my-numbers.html", "Check your own numbers against every published draw"),
+        ("/how-to-claim-lottery-prize-bc.html", "How real lottery prizes are claimed in BC and Western Canada"),
+        ("/are-lottery-winnings-taxed-canada.html", "Are lottery winnings taxed in Canada?")],
+    "odds": [
+        ("/lotto-odds-calculator.html", "Try the lotto odds calculator with your own spending"),
+        ("/check-my-numbers.html", "See how your line would have done in every past draw"),
+        ("/hot-cold-explained.html", "Why hot and cold numbers do not change the odds")],
+    "hot-cold-explained": [
+        ("/lotto-max-results.html#stats", "Explore Lotto Max hot and cold numbers by window"),
+        ("/lotto-649-results.html#stats", "Explore Lotto 6/49 number frequency since 1982"),
+        ("/odds.html", "Lotto Max and Lotto 6/49 odds explained")],
+    "how-canada-lotto-works": [
+        ("/lotto-max-results.html", "Lotto Max results and draw history since 2009"),
+        ("/lotto-649-results.html", "Lotto 6/49 results and draw history since 1982"),
+        ("/how-to-claim-lottery-prize-bc.html", "How to claim a prize in BC and Western Canada")],
+}
+
+
+def guide_tools_box(slug):
+    links = GUIDE_TOOL_LINKS.get(slug)
+    if not links:
+        return ""
+    lis = "".join(f'<li><a href="{h}">{esc(t)}</a></li>' for h, t in links)
+    return f'<aside class="callout"><p class="font-bold">Put this guide to use</p><ul>{lis}</ul></aside>'
 
 
 def related_guides(slug):
@@ -714,18 +843,48 @@ def related_guides(slug):
     lis = "".join(f'<li><a href="/{g[0]}.html">{g[3]} {esc(g[1])}</a></li>' for g in items)
     return (f'<aside class="card card-violet mt-8"><h2 class="section-title mb-2">More guides</h2>'
             f'<ul class="space-y-2">{lis}</ul>'
-            f'<p class="mt-3 text-sm"><a href="/guides.html">See all guides →</a> · <a href="/check-my-numbers.html">Check my numbers</a> · <a href="/lotto-odds-calculator.html">Odds calculator</a></p></aside>')
+            f'<p class="mt-3 text-sm"><a href="/guides.html">See all lotto guides →</a> · <a href="/check-my-numbers.html">Check my lotto numbers</a> · <a href="/lotto-odds-calculator.html">Lotto odds calculator</a></p></aside>')
+
+
+def page_title(meta):
+    return meta.get("seo_title") or f'{meta["title"]} | {SITE_NAME}'
+
+
+def ld_article(path, meta, body):
+    m = re.search(r"<h1[^>]*>(.*?)</h1>", body, re.S)
+    headline = plain(m.group(1)) if m else meta["title"]
+    return {
+        "@context": "https://schema.org", "@type": "Article",
+        "headline": headline[:110], "description": meta["description"],
+        "author": {"@type": "Person", "name": "NextGen", "url": SITE + "/about.html"},
+        "publisher": ld_org(full=False),
+        "datePublished": meta.get("published", "2026-10-06"),
+        "dateModified": meta.get("modified", meta.get("published", "2026-10-06")),
+        "mainEntityOfPage": {"@type": "WebPage", "@id": SITE + path},
+        "image": OG_IMAGE, "inLanguage": "en-CA",
+    }
 
 
 def render_content_page(slug, meta, body):
-    if meta.get("kind") == "guide":
-        body = body.replace("</h1>", "</h1>\n" + guide_byline(meta), 1)
-        inner = f'<article class="card card-violet prose-lh">{body}</article>{related_guides(slug)}'
-    else:
-        inner = f'<article class="card card-violet prose-lh">{body}</article>'
     path = f"/{slug}.html"
-    page = f'<div class="wrap py-8"><div class="max-w-3xl mx-auto">{inner}</div></div>'
-    return layout(path, meta["title"], meta["description"], page, active=meta.get("nav", path))
+    crumb = meta.get("crumb", meta["title"])
+    jsonld = []
+    if meta.get("kind") == "guide":
+        crumbs = [("Home", "/"), ("Guides", "/guides.html"), (crumb, path)]
+        body = body.replace("</h1>", "</h1>\n" + guide_byline(meta), 1)
+        box = guide_tools_box(slug)
+        sm = re.search(r'<(p|div|section|aside) class="sources"', body)
+        body = (body[:sm.start()] + box + body[sm.start():]) if sm else body + box
+        inner = f'<article class="card card-violet prose-lh">{body}</article>{related_guides(slug)}'
+        jsonld.append(ld_article(path, meta, body))
+        og_type = "article"
+    else:
+        crumbs = [("Home", "/"), (crumb, path)]
+        inner = f'<article class="card card-violet prose-lh">{body}</article>'
+        og_type = "website"
+    page = f'<div class="wrap py-6"><div class="max-w-3xl mx-auto">{crumbs_html(crumbs)}<div class="mt-3">{inner}</div></div></div>'
+    return layout(path, page_title(meta), meta["description"], page, active=meta.get("nav", path),
+                  crumbs=crumbs, jsonld=jsonld, og_type=og_type)
 
 
 def guide_cards(heading_tag="h3"):
@@ -740,18 +899,21 @@ def guide_cards(heading_tag="h3"):
 
 def render_guides_index():
     body = f"""<div class="wrap py-8">
-<section class="card card-violet prose-lh max-w-3xl mx-auto">
-<h1>Guides</h1>
-<p class="byline">Written by NextGen, British Columbia · Last updated October 2026</p>
-<p>These guides explain how Canada's national lotto games actually work: what you are buying, how prizes are paid, how to claim, what is taxed, and how to avoid the scams that circulate after every big jackpot. They are written for players in British Columbia and Western Canada first, with notes where Ontario, Quebec or Atlantic Canada differ.</p>
+<div class="max-w-3xl mx-auto">{crumbs_html([("Home", "/"), ("Guides", "/guides.html")])}</div>
+<section class="card card-violet prose-lh max-w-3xl mx-auto mt-3">
+<h1>Lotto guides for Canadian players</h1>
+<p class="byline">Written by <a href="/about.html">NextGen</a>, British Columbia · Last updated October 2026</p>
+<p>These lotto guides explain how Canada's national lotto games actually work: what you are buying, how prizes are paid, how to claim, what is taxed, and how to avoid the scams that circulate after every big jackpot. They are written for players in British Columbia and Western Canada first, with notes where Ontario, Quebec or Atlantic Canada differ.</p>
 <p>Every factual claim is checked against the operator or government page linked inside each guide (BCLC, WCLC, OLG, the Canada Revenue Agency or the Canadian Anti-Fraud Centre). Game rules change — Lotto Max changed format in April 2026 — so when a guide and an official page disagree, follow the official page and <a href="/contact.html">tell us</a> so we can fix it.</p>
 <p>None of these guides will tell you which numbers to pick. No guide can: every draw is independent, and the odds on a ticket are fixed by the game design.</p>
 </section>
 <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mt-8">{guide_cards("h2")}</section>
+<section class="card card-violet prose-lh max-w-3xl mx-auto mt-8"><h2>Tools that go with the guides</h2>
+<p>Read about the odds, then <a href="/lotto-odds-calculator.html">calculate your own lotto odds for a year of play</a>. Read why hot numbers do not predict anything, then explore the <a href="/lotto-max-results.html#stats">Lotto Max hot and cold numbers</a> and <a href="/lotto-649-results.html#stats">Lotto 6/49 number frequency</a> yourself. And if you play the same line every week, <a href="/check-my-numbers.html">check your numbers against every past draw</a>.</p></section>
 </div>"""
-    return layout("/guides.html", "Lotto guides for Canadian players",
-                  "Plain-language guides to Lotto Max, Lotto 6/49, Gold Ball, MaxMillions, Extra, Encore, prize claims in BC, taxes and lottery scams in Canada.",
-                  body, active="/guides.html")
+    return layout("/guides.html", "Lotto Guides for Canada: Lotto Max, 6/49, Prizes & Taxes",
+                  "Plain-language lotto guides for Canadian players: Lotto Max and MaxMillions, the 6/49 Gold Ball, odds, claiming a prize in BC, taxes and scams.",
+                  body, active="/guides.html", crumbs=[("Home", "/"), ("Guides", "/guides.html")])
 
 
 def render_404():
@@ -762,7 +924,7 @@ def render_404():
 <p><a href="/lotto-max-results.html">Lotto Max results</a> · <a href="/lotto-649-results.html">Lotto 6/49 results</a> · <a href="/check-my-numbers.html">Check my numbers</a> · <a href="/guides.html">Guides</a> · <a href="/">Home</a></p>
 <p>If you followed a broken link on this site, please let us know through the <a href="/contact.html">contact page</a>.</p>
 </section></div>"""
-    return layout("/404.html", "Page not found", "This page could not be found on lottohelper.ca.", body,
+    return layout("/404.html", "Page not found | lottohelper.ca", "This page could not be found on lottohelper.ca.", body,
                   active="", noindex=True)
 
 
@@ -996,8 +1158,8 @@ def render_index(history, prep, today, jhist):
     body = f"""<section class="hero">
   <div class="wrap pt-6 pb-10">
     <p class="stamp"><i></i>Results verified nightly · {esc(lc)}</p>
-    <h1 class="mt-3">Lotto Max &amp; Lotto 6/49 tonight: jackpots, results and number stats</h1>
-    <p class="sub mt-2 max-w-3xl text-sm sm:text-base">Every draw since 1982 in one place, plus tools the official sites don't have: check your regular line against all of history, explore hot and cold numbers, and see what the odds really mean. Independent, unofficial and free.</p>
+    <h1 class="mt-3">Lotto Max &amp; Lotto 6/49 results tonight: winning numbers, jackpots and stats</h1>
+    <p class="sub mt-2 max-w-3xl text-sm sm:text-base">The latest Lotto Max and Lotto 6/49 winning numbers and jackpots, every draw since 1982, and tools the official sites don't have: check your regular line against all of history, explore hot and cold numbers, and see what the odds really mean. Independent, unofficial and free.</p>
     <div class="grid gap-4 lg:grid-cols-2 mt-5">
 {home_game_card("lotto_max", prep, nds["lotto_max"], st["lotto_max"])}
 {home_game_card("lotto_649", prep, nds["lotto_649"], st["lotto_649"])}
@@ -1044,9 +1206,10 @@ def render_index(history, prep, today, jhist):
     <p>We are not affiliated with BCLC, WCLC, OLG, Loto-Québec, Atlantic Lottery or the Interprovincial Lottery Corporation. Game names belong to their owners and are used only to identify the draws. Questions or corrections: see the <a href="/contact.html">contact page</a> or read more <a href="/about.html">about the project</a>.</p>
   </section>
 </div>"""
-    return layout("/", "Lotto Max & Lotto 6/49 results, jackpots and stats for Canada | lottohelper.ca",
-                  "Lotto Max and Lotto 6/49 results with every draw since 1982, live jackpot and Gold Ball trackers, a number checker, hot and cold stats and an odds calculator. Independent, no predictions, no ticket sales.",
-                  body, active="/", scripts=("/assets/js/common.js", "/assets/js/home.js"))
+    return layout("/", "Lotto Max & 6/49 Winning Numbers, Jackpots & Stats – Canada",
+                  "Latest Lotto Max and Lotto 6/49 winning numbers, jackpot and Gold Ball trackers, every draw since 1982, a number checker and a lotto odds calculator.",
+                  body, active="/", scripts=("/assets/js/common.js", "/assets/js/home.js"),
+                  crumbs=[("Home", "/")], jsonld=[ld_org(), ld_website()])
 
 
 # ---------------------------------------------------------------------------
@@ -1229,6 +1392,53 @@ def archive_about(game_key, prep, history):
 <p>How it is built: draws since October 2025 come from the Western Canada Lottery Corporation's public winning-number pages and are added automatically after each draw night, once the date, weekday and numbers pass validation. Older draws were added in October 2026 from Loto-Québec's public results archive and cross-checked against WCLC. Gold Ball results are shown where they were published with the draw (August 2026 onward). Confirm any ticket with <a href="{GAMES[game_key]["official"]}" rel="noopener">WCLC</a> or your provincial lottery.</p>"""
 
 
+def nums_words(nums):
+    return ", ".join(str(n) for n in nums[:-1]) + f" and {nums[-1]}"
+
+
+def archive_faqs(game_key, latest, nd, recs):
+    cfg = GAMES[game_key]
+    when = long_date(latest["dt"])
+    nums = nums_words(latest["numbers"])
+    if game_key == "lotto_max":
+        jp = nd["up"].get("jackpot")
+        nxt = f" The next draw is on {long_date(datetime.combine(nd['date'], datetime.min.time()))}" + (f" with an advertised jackpot of {money(jp)}." if jp else ".")
+        return [
+            ("What were the latest Lotto Max winning numbers?",
+             f"The Lotto Max winning numbers for {when} were {nums}, with bonus number {latest.get('bonus')}.{nxt} Always confirm a ticket with your provincial lottery."),
+            ("What time is the Lotto Max draw?",
+             "Lotto Max is drawn every Tuesday and Friday. Ticket sales close at 10:30 p.m. ET (7:30 p.m. PT) and the draw follows. This page adds the winning numbers after the Western Canada Lottery Corporation publishes them, normally overnight."),
+            ("How many numbers do you need to win a Lotto Max prize?",
+             'Three numbers on one line wins a Free Play, and 3 numbers plus the bonus or 4 numbers win $20. Bigger tiers are shares of the prize pool, and all seven numbers on one line wins or shares the jackpot, which runs from $10 million to $90 million. Every tier and its odds are in our <a href="/lotto-odds-calculator.html">lotto odds calculator</a>.'),
+            ("What are hot and cold Lotto Max numbers?",
+             'They are simply the numbers drawn most and least often in a chosen window of past draws, shown in the stats explorer above. They describe the past only: every number has the same chance in every draw. Our guide explains <a href="/hot-cold-explained.html">why hot and cold numbers do not predict the next draw</a>.'),
+            ("Are Lotto Max winnings taxed in Canada?",
+             'Lottery prizes are generally not taxable income in Canada, but interest or investment income you earn on the money afterwards is. See <a href="/are-lottery-winnings-taxed-canada.html">are lottery winnings taxed in Canada?</a> for the details and exceptions.'),
+            ("How do I claim a Lotto Max prize in BC?",
+             'Sign your ticket and claim it from the lottery corporation that sold it, within one year of the draw: small prizes at a retailer, larger ones online or at a BCLC office. Our step-by-step guide covers <a href="/how-to-claim-lottery-prize-bc.html">how to claim a lottery prize in BC and Western Canada</a>.'),
+        ]
+    gb = latest.get("gold_ball") or {}
+    gb_txt = ""
+    if gb.get("ball"):
+        gb_txt = f" The Gold Ball draw produced a {'gold' if gb['ball'] == 'Gold' else 'white'} ball, worth {money(gb.get('prize'))}."
+    left = nd["up"].get("balls_remaining")
+    gjp = nd["up"].get("gold_ball_jackpot")
+    drum = (f" Right now {left} balls are left in the drum and the Gold Ball jackpot is {money(gjp)}, so the next ticket drawn has a 1 in {left} chance of the jackpot."
+            if left and gjp else "")
+    return [
+        ("What were the latest Lotto 6/49 winning numbers?",
+         f"The Lotto 6/49 Classic Draw numbers for {when} were {nums}, with bonus number {latest.get('bonus')}.{gb_txt} Always confirm a ticket with your provincial lottery."),
+        ("What time is the Lotto 6/49 draw?",
+         "Lotto 6/49 is drawn every Wednesday and Saturday. Ticket sales close at 10:30 p.m. ET (7:30 p.m. PT) and the draw follows. Results appear on this page after the Western Canada Lottery Corporation publishes them, normally overnight."),
+        ("How does the Lotto 6/49 Gold Ball draw work?",
+         'Every $3 play carries a 10-digit Gold Ball number and one number is drawn each time. If a white ball comes out of the drum, that ticket wins $1 million and the Gold Ball jackpot grows by $2 million; if the gold ball comes out, it wins the jackpot, which then resets to $10 million.' + drum + ' More in our <a href="/lotto-649-gold-ball-explained.html">Gold Ball guide</a>.'),
+        ("What are the odds of winning Lotto 6/49?",
+         'Matching all six Classic Draw numbers is 1 in 13,983,816 per play, and the chance of any prize is about 1 in 6.6. You can see every tier and a year of play in the <a href="/lotto-odds-calculator.html">lotto odds calculator</a>.'),
+        ("Are Lotto 6/49 winnings taxed in Canada?",
+         'Lottery prizes are generally not taxable in Canada, but income you earn on the money afterwards is. See <a href="/are-lottery-winnings-taxed-canada.html">are lottery winnings taxed in Canada?</a>'),
+    ]
+
+
 def render_archive(game_key, history, prep, today, jhist):
     cfg = GAMES[game_key]
     recs = prep[game_key]
@@ -1272,11 +1482,23 @@ def render_archive(game_key, history, prep, today, jhist):
             months.append((k, r["dt"].strftime("%b %Y")))
     jump_months = "".join(f'<a class="m" href="#m-{k}">{esc(lbl)}</a>' for k, lbl in months[:6])
 
+    crumbs = [("Home", "/"), (f"{name} results", cfg["path"])]
+    when_long = long_date(latest["dt"])
+    if game_key == "lotto_max":
+        h1 = "Lotto Max Winning Numbers &amp; Results"
+        opening = (f"The latest Lotto Max winning numbers are {nums_words(latest['numbers'])}, bonus {latest.get('bonus')}, from the {when_long} draw. "
+                   f"Below: the jackpot tracker, hot and cold number stats and all {len(recs):,} draws since {recs[0]['dt'].year}.")
+    else:
+        h1 = "Lotto 6/49 Results &amp; Winning Numbers"
+        opening = (f"The latest Lotto 6/49 results: {nums_words(latest['numbers'])}, bonus {latest.get('bonus')}, from the {when_long} draw. "
+                   f"Below: the Gold Ball tracker, hot and cold number stats and all {len(recs):,} draws since {recs[0]['dt'].year}.")
+    faqs = archive_faqs(game_key, latest, nd, recs)
     hero = f"""<section class="hero {cfg['hero']}">
   <div class="wrap pt-6 pb-8">
-    <div class="flex flex-wrap items-center gap-2"><span class="badge {cfg['badge']}">{name}</span><span class="stamp"><i></i>{esc(last_check_label(history))}</span></div>
-    <h1 class="mt-3">{name} results, number stats and full draw history</h1>
-    <p class="sub mt-2 max-w-3xl">Latest numbers, jackpot tracker and an interactive stats explorer covering all {len(recs):,} draws since {recs[0]["dt"].year}.</p>
+    {crumbs_html(crumbs, dark=True)}
+    <div class="flex flex-wrap items-center gap-2 mt-2"><span class="badge {cfg['badge']}">{name}</span><span class="stamp"><i></i>{esc(last_check_label(history))}</span></div>
+    <h1 class="mt-3">{h1}</h1>
+    <p class="sub mt-2 max-w-3xl">{opening}</p>
     <div class="grid gap-4 lg:grid-cols-5 mt-5">
       <div class="glass gcard {cfg['gcard']} lg:col-span-3">{latest_block(game_key, latest)}{stale}
         <div class="flex flex-wrap gap-3 mt-5"><a class="btn-gold" href="/check-my-numbers.html">🎯 Check my numbers</a><a class="btn-ghost" href="#stats">📊 Stats explorer</a></div></div>
@@ -1290,7 +1512,7 @@ def render_archive(game_key, history, prep, today, jhist):
 
     body = f"""{hero}
 <div class="wrap mt-4">
-  <nav class="jump" aria-label="On this page"><a href="#about">About</a><a href="#stats">📊 Stats</a><a href="#tracker">{"💰 Jackpot" if game_key == "lotto_max" else "🟡 Gold Ball"}</a><a href="#patterns">Patterns</a><a href="#draws">All draws</a><a href="#years">By year</a>{jump_months}</nav>
+  <nav class="jump" aria-label="On this page"><a href="#about">About</a><a href="#stats">📊 Stats</a><a href="#tracker">{"💰 Jackpot" if game_key == "lotto_max" else "🟡 Gold Ball"}</a><a href="#patterns">Patterns</a><a href="#draws">All draws</a><a href="#years">By year</a><a href="#faq">FAQ</a>{jump_months}</nav>
   <section id="about" class="card card-violet prose-lh mt-4">{archive_about(game_key, prep, history)}</section>
 </div>
 {ad_slot("A1")}
@@ -1333,13 +1555,28 @@ def render_archive(game_key, history, prep, today, jhist):
     <h2>What this page cannot tell you</h2>
     <p>It cannot tell you which numbers will come up next. Lotto draws use certified random equipment, and each draw is independent of every draw before it. A number that has not appeared for {max((w["st"]["since"][i] or 0) for w in wins[:1] for i in range(1, w["st"]["N"] + 1))} draws has exactly the same chance as the number drawn last night. Over thousands of draws, the counts drift toward the expected value, but in any short window some numbers will always look hot and others cold.</p>
     <p>It also cannot tell you whether a ticket won. Prize amounts depend on how many people matched, and official records are the only basis for a claim. Use your ticket checker or <a href="{cfg["official"]}" rel="noopener">WCLC's winning numbers</a> to confirm, and see our guide on <a href="/how-to-claim-lottery-prize-bc.html">claiming a prize in BC and Western Canada</a>.</p>
-    <p>What it can do: show you the complete record honestly, let you <a href="/check-my-numbers.html">check your own line against all {len(recs):,} draws</a>, and put the odds in context with the <a href="/lotto-odds-calculator.html">odds calculator</a>. Sources: WCLC (draws since October 2025 and all jackpot and Gold Ball data) and Loto-Québec (earlier draws).</p>
+    <p>What it can do: show you the complete record honestly, let you <a href="/check-my-numbers.html">check your own line against all {len(recs):,} draws</a>, and put the odds in context with the <a href="/lotto-odds-calculator.html">lotto odds calculator</a>. Sources: WCLC (draws since October 2025 and all jackpot and Gold Ball data) and Loto-Québec (earlier draws).</p>
   </section>
+  <div class="mt-8">{faq_section(faqs, name + " questions", cfg["card"])}</div>
 </div>"""
-    title = f"{name} results, stats & every draw since {recs[0]['dt'].year}"
-    desc = (f"Latest {name} winning numbers, jackpot tracker, hot and cold number stats with a window picker, "
-            f"and all {len(recs):,} draws since {recs[0]['dt'].year}. Independent and unofficial.")
-    return layout(cfg["path"], title, desc, body, scripts=("/assets/js/common.js", "/assets/js/archive.js"))
+    dshort = f"{latest['dt'].strftime('%a %b')} {latest['dt'].day}, {latest['dt'].year}"
+    dmid = f"{latest['dt'].strftime('%a, %b')} {latest['dt'].day}, {latest['dt'].year}"
+    line = "-".join(str(n) for n in latest["numbers"])
+    if game_key == "lotto_max":
+        title = f"Lotto Max Winning Numbers – {dshort} Results & Stats"
+        head = f"Lotto Max winning numbers for {dmid}: {line}, bonus {latest.get('bonus')}. "
+        tails = ["Jackpot and MaxMillions tracker, hot and cold numbers and every draw since 2009.",
+                 "Jackpot tracker, hot and cold numbers and every draw since 2009.",
+                 "Jackpot tracker, hot and cold stats, draws since 2009."]
+    else:
+        title = f"Lotto 6/49 Results – {dshort} Winning Numbers"
+        head = f"Lotto 6/49 results for {dmid}: {line}, bonus {latest.get('bonus')}. "
+        tails = ["Gold Ball results, jackpot tracker, hot and cold numbers and every draw since 1982.",
+                 "Gold Ball tracker, hot and cold numbers and every draw since 1982.",
+                 "Gold Ball tracker, hot and cold stats, draws since 1982."]
+    desc = next((head + t for t in tails if len(head + t) <= 155), head + tails[-1])
+    return layout(cfg["path"], title, desc, body, scripts=("/assets/js/common.js", "/assets/js/archive.js"),
+                  crumbs=crumbs, jsonld=[ld_faq(faqs)])
 
 
 # ---------------------------------------------------------------------------
@@ -1352,9 +1589,10 @@ def render_checker(prep):
     picks = "".join(f'<button type="button" class="pick" data-n="{i}" aria-pressed="false">{i}</button>' for i in range(1, 53))
     body = f"""<section class="hero hero-tool">
   <div class="wrap pt-6 pb-8">
-    <p class="stamp"><i></i>{nmax:,} Lotto Max + {n649:,} Lotto 6/49 draws</p>
-    <h1 class="mt-3">🎯 Check my numbers against every draw</h1>
-    <p class="sub mt-2 max-w-3xl">Enter the line you always play and see every time it would have matched 3 or more numbers — back to 1982 for Lotto 6/49 and 2009 for Lotto Max — plus your best result ever and a count for each prize tier.</p>
+    {crumbs_html([("Home", "/"), ("Check my numbers", "/check-my-numbers.html")], dark=True)}
+    <p class="stamp mt-2"><i></i>{nmax:,} Lotto Max + {n649:,} Lotto 6/49 draws</p>
+    <h1 class="mt-3">🎯 Check My Lotto Numbers Against Every Draw</h1>
+    <p class="sub mt-2 max-w-3xl">Check your lotto numbers the easy way: enter the Lotto Max or Lotto 6/49 line you always play and see every time it would have matched 3 or more numbers — back to 1982 for Lotto 6/49 and 2009 for Lotto Max — plus your best result ever and a count for each prize tier.</p>
   </div>
 </section>
 <div class="wrap mt-6">
@@ -1392,12 +1630,13 @@ def render_checker(prep):
     <p>If your line has matched 4 numbers a few times since 2009, that is about what chance alone produces: the odds of 4 of 7 on one line are roughly 1 in 72 per draw in today's format. A line that has never matched 5 is not "due"; every draw is a fresh draw. You can compare your counts with what to expect in the <a href="/lotto-odds-calculator.html">odds calculator</a>, and read why streaks appear in <a href="/hot-cold-explained.html">our hot and cold guide</a>.</p>
     <h3>Privacy</h3>
     <p>Your numbers never leave your device. If you tick "Save this line", it is stored in your browser's local storage so the home page can show how it did in the latest draw; untick it or press Clear to remove it. See the <a href="/privacy.html">privacy policy</a>.</p>
-    <p class="text-sm">Always confirm a real ticket with your provincial lottery's ticket checker. This tool is for curiosity and fun only.</p>
+    <p class="text-sm">Always confirm a real ticket with your provincial lottery's ticket checker. This tool is for curiosity and fun only. If a real ticket does win, our guide explains <a href="/how-to-claim-lottery-prize-bc.html">how to claim a lottery prize in BC and Western Canada</a>, and why <a href="/are-lottery-winnings-taxed-canada.html">lottery winnings are generally not taxed in Canada</a>.</p>
   </section>
 </div>"""
-    return layout("/check-my-numbers.html", "Check my numbers: Lotto Max & 6/49 history checker",
-                  "Enter your regular Lotto Max or Lotto 6/49 line and see every past draw it matched 3+, 4+ or 5+ numbers, your best result ever and a count per prize tier.",
-                  body, scripts=("/assets/js/common.js", "/assets/js/checker.js"))
+    return layout("/check-my-numbers.html", "Check My Lotto Numbers – Lotto Max & 6/49 History Checker",
+                  "Check your Lotto Max or Lotto 6/49 numbers against every draw since 1982: see each 3+, 4+ or 5+ match, your best result and a count per prize tier.",
+                  body, scripts=("/assets/js/common.js", "/assets/js/checker.js"),
+                  crumbs=[("Home", "/"), ("Check my numbers", "/check-my-numbers.html")])
 
 
 # ---------------------------------------------------------------------------
@@ -1426,9 +1665,10 @@ def render_odds_calc():
     flips = math.log2(ODDS["lotto_max"]["tiers"][0][2])
     body = f"""<section class="hero hero-tool">
   <div class="wrap pt-6 pb-8">
-    <p class="stamp"><i></i>Official odds per play · Lotto Max 2026 format</p>
-    <h1 class="mt-3">🧮 Lotto odds calculator</h1>
-    <p class="sub mt-2 max-w-3xl">Tell it how you play and it shows your real chances for every prize tier over a year, what that year costs, and comparisons that make 1 in 33 million feel like a real number.</p>
+    {crumbs_html([("Home", "/"), ("Lotto odds calculator", "/lotto-odds-calculator.html")], dark=True)}
+    <p class="stamp mt-2"><i></i>Official odds per play · Lotto Max 2026 format</p>
+    <h1 class="mt-3">🧮 Lotto Odds Calculator for Lotto Max and Lotto 6/49</h1>
+    <p class="sub mt-2 max-w-3xl">This lotto odds calculator turns the official Lotto Max and Lotto 6/49 odds into your odds. Tell it how you play and it shows your real chances for every prize tier over a year, what that year costs, and comparisons that make 1 in 33 million feel like a real number.</p>
   </div>
 </section>
 <div class="wrap mt-6">
@@ -1457,12 +1697,27 @@ def render_odds_calc():
     <p>The yearly numbers use simple probability. If one play has a chance <em>p</em> of winning a tier, then <em>n</em> independent plays have a chance of 1 − (1 − <em>p</em>)<sup>n</sup> of winning it at least once. For rare prizes that is almost exactly <em>n</em> × <em>p</em>: doubling your spend doubles your chance, but double a tiny number is still tiny. Buying 104 Lotto Max plays a year — one at every draw — gives about a 1 in 322,000 chance of a jackpot that year.</p>
     <h3>What the calculator leaves out</h3>
     <p>It shows chances, not expected winnings. Most Lotto Max and Lotto 6/49 prizes are shares of a pool, so the amount depends on ticket sales and on how many people match. It also ignores MaxMillions, MaxPlus, Gold Ball and Extra or Encore add-ons, which have their own rules; see our <a href="/lotto-max-maxmillions-explained.html">Lotto Max guide</a>, <a href="/lotto-649-gold-ball-explained.html">Gold Ball guide</a> and <a href="/extra-and-encore-explained.html">Extra and Encore guide</a>. And no pattern, frequency chart or "system" changes any number in the table. Every combination, including 1-2-3-4-5-6, has exactly the same chance. Choosing unusual numbers only changes how many people you might share a jackpot with.</p>
-    <p>If the cost-per-year line makes you wince, that is useful information. Set a budget you would happily spend on any other entertainment, and see our <a href="/responsible-play.html">responsible play page</a> for free, confidential help lines in every province. The full derivation of the jackpot odds is in our <a href="/odds.html">odds guide</a>.</p>
+    <p>If the cost-per-year line makes you wince, that is useful information. Set a budget you would happily spend on any other entertainment, and see our <a href="/responsible-play.html">responsible play page</a> for free, confidential help lines in every province. The full derivation of the jackpot odds is in our <a href="/odds.html">Lotto Max and Lotto 6/49 odds guide</a>.</p>
   </section>
+  <!--FAQ-->
 </div>"""
-    return layout("/lotto-odds-calculator.html", "Lotto odds calculator: Lotto Max & 6/49 chances per year",
-                  "Work out your real chances of every Lotto Max and Lotto 6/49 prize tier over a year of play, what that year costs, and plain-English comparisons.",
-                  body, scripts=("/assets/js/odds.js",))
+    faqs = [
+        ("What are the odds of winning the Lotto Max jackpot?",
+         "The official odds are 1 in 33,446,140 per $6 play. A play is four selections of seven numbers from 1 to 52; a single selection has 1 chance in 133,784,560. The odds of winning any Lotto Max prize are about 1 in 5.8 per play."),
+        ("What are the odds of winning Lotto 6/49?",
+         "Matching all six Classic Draw numbers is 1 in 13,983,816 per $3 play, and any prize is about 1 in 6.6. The Gold Ball draw is separate: one ticket number always wins, and its jackpot odds depend on how many balls are left in the drum."),
+        ("Which is easier to win, Lotto Max or Lotto 6/49?",
+         "Per play, the Lotto 6/49 jackpot (1 in 13,983,816) is about 2.4 times easier than the Lotto Max jackpot (1 in 33,446,140), and per dollar spent it is about 4.8 times easier, because a 6/49 play costs $3 and a Lotto Max play costs $6. The trade-off is size: the 6/49 Classic jackpot is a fixed $5 million, while Lotto Max runs from $10 million to $90 million."),
+        ("Does buying more tickets improve my odds?",
+         "Yes, in direct proportion: ten plays give ten times the chance of one play. But ten times a tiny number is still tiny. One Lotto Max play at every draw for a year (104 plays) gives about a 1 in 322,000 chance of a jackpot that year, for $624."),
+        ("Do hot numbers or patterns change the odds?",
+         'No. Every combination has exactly the same chance in every draw, whatever happened before. Unusual combinations can only reduce how many people you might share a jackpot with. See <a href="/hot-cold-explained.html">why hot and cold numbers do not predict the next draw</a>.'),
+    ]
+    body = body.replace("<!--FAQ-->", '<div class="mt-8">' + faq_section(faqs, "Lotto odds questions") + "</div>")
+    return layout("/lotto-odds-calculator.html", "Lotto Odds Calculator – Lotto Max & 6/49 Chances per Year",
+                  "Free lotto odds calculator for Lotto Max and Lotto 6/49: your chances for every prize tier over a year of play, what it costs and plain comparisons.",
+                  body, scripts=("/assets/js/odds.js",),
+                  crumbs=[("Home", "/"), ("Lotto odds calculator", "/lotto-odds-calculator.html")], jsonld=[ld_faq(faqs)])
 
 
 # ---------------------------------------------------------------------------

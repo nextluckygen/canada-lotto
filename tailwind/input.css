@@ -299,6 +299,13 @@ a.lift:hover { transform: translateY(-2px); box-shadow: 0 14px 28px -14px rgba(1
   .draw-table tr.newest { box-shadow: 0 0 0 2px var(--gold); }
 }
 
+/* ---------- breadcrumbs ---------- */
+.crumbs ol { display:flex; flex-wrap:wrap; align-items:center; gap:.35rem; font-size:13px; color:#475569; }
+.crumbs li + li::before { content:"›"; margin-right:.35rem; color:#94A3B8; }
+.crumbs a { color:#4C1D95; }
+.crumbs-dark ol { color:#C7D2FE; }
+.crumbs-dark li + li::before { color:#A5B4FC; }
+
 /* ---------- ads (neutral, reserved, never animated) ---------- */
 .ad-slot { min-height:300px; margin:40px auto; background:#F1F5F9; border-radius:12px; padding:8px 12px 12px; max-width:72rem; }
 .ad-label { font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#64748B; margin:0 0 6px; }
