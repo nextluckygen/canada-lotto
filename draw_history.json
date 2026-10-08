@@ -5733,7 +5733,8 @@
     {"date":"Wednesday, September 23, 2026","numbers":[11,20,32,35,38,45],"bonus":9,"gold_ball":{"ball":"White","prize":1000000}},
     {"date":"Saturday, September 26, 2026","numbers":[11,12,18,19,45,46],"bonus":38,"gold_ball":{"ball":"White","prize":1000000}},
     {"date":"Wednesday, September 30, 2026","numbers":[4,9,12,39,43,46],"bonus":28,"gold_ball":{"ball":"White","prize":1000000}},
-    {"date":"Saturday, October 03, 2026","numbers":[1,4,7,23,28,37],"bonus":38,"gold_ball":{"ball":"White","prize":1000000}}
+    {"date":"Saturday, October 03, 2026","numbers":[1,4,7,23,28,37],"bonus":38,"gold_ball":{"ball":"White","prize":1000000}},
+    {"date":"Wednesday, October 07, 2026","numbers":[3,8,11,20,33,49],"bonus":14,"gold_ball":{"ball":"White","prize":1000000},"gold_ball_jackpot":18000000}
   ],
   "upcoming": {
     "lotto_max": {
@@ -5741,13 +5742,13 @@
       "jackpot": 80000000,
       "maxmillions": 14,
       "maxplus": 80,
-      "fetched": "2026-10-07"
+      "fetched": "2026-10-08"
     },
     "lotto_649": {
-      "date": "2026-10-07",
-      "gold_ball_jackpot": 18000000,
-      "balls_remaining": 26,
-      "fetched": "2026-10-07"
+      "date": "2026-10-10",
+      "gold_ball_jackpot": 20000000,
+      "balls_remaining": 25,
+      "fetched": "2026-10-08"
     }
   },
   "meta": {
@@ -5758,6 +5759,7 @@
         "WCLC past winning numbers (wclc.com), October 2025 - October 2026"
       ],
       "note": "Cross-checked: both sources agree on all overlapping draws; draw counts match WCLC draw numbers."
-    }
+    },
+    "last_checked": "2026-10-08T07:25-07:00"
   }
 }
