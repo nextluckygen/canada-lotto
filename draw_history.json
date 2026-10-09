@@ -5742,13 +5742,13 @@
       "jackpot": 80000000,
       "maxmillions": 14,
       "maxplus": 80,
-      "fetched": "2026-10-08"
+      "fetched": "2026-10-09"
     },
     "lotto_649": {
       "date": "2026-10-10",
       "gold_ball_jackpot": 20000000,
       "balls_remaining": 25,
-      "fetched": "2026-10-08"
+      "fetched": "2026-10-09"
     }
   },
   "meta": {
@@ -5760,6 +5760,6 @@
       ],
       "note": "Cross-checked: both sources agree on all overlapping draws; draw counts match WCLC draw numbers."
     },
-    "last_checked": "2026-10-08T07:25-07:00"
+    "last_checked": "2026-10-09T07:12-07:00"
   }
 }
