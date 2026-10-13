@@ -88,12 +88,18 @@ a:hover { color: #4C1D95; }
 .ball-md { --s:40px; }
 .ball-sm { --s:28px; box-shadow: inset -2px -3px 5px rgba(0,0,0,.25), 0 2px 4px rgba(11,16,51,.2); }
 .ball-xs { --s:24px; box-shadow: inset -2px -2px 4px rgba(0,0,0,.25); }
-.ball-r1 { --c:#FACC15; color:#1F2937; }
-.ball-r2 { --c:#2563EB; }
-.ball-r3 { --c:#DC2626; }
-.ball-r4 { --c:#15803D; }
-.ball-r5 { --c:#7C3AED; }
-.ball-r6 { --c:#BE185D; }
+/* hot / warm / cold status over the last 50 draws (build.py HWC_CLASS). Text contrast on the base colour:
+   hot white on #C81E1E 5.7:1 · warm #1C1917 on #F97316 6.2:1 · cold white on #1D4ED8 6.7:1 (WCAG AA) */
+.ball-hot { --c:#C81E1E; }
+.ball-warm { --c:#F97316; color:#1C1917; }
+.ball-cold { --c:#1D4ED8; }
+.ball-plain { --c:#475569; }
+.hwc-legend { display:flex; flex-wrap:wrap; align-items:center; gap:.25rem .8rem; margin-top:.6rem; font-size:12px; font-weight:700; color:#E0E7FF; }
+.hwc-legend > span { display:inline-flex; align-items:center; gap:.3rem; }
+.hwc-legend .lg-note { font-weight:500; color:#C7D2FE; }
+.hwc-legend-light { color:#334155; }
+.hwc-legend-light .lg-note { color:#64748B; }
+.lg-dot { width:12px; height:12px; border-radius:99px; display:inline-block; background:var(--c); box-shadow: inset -1px -1px 2px rgba(0,0,0,.25); }
 .ball-blank { --c:#94A3B8; color:#0F172A; }
 .ball-bonus { --c:#111827; color: var(--gold); outline:2px solid var(--gold); outline-offset:2px; }
 .ball-lg.ball-bonus > span { background:transparent; color: var(--gold); box-shadow:none; }

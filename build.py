@@ -16,7 +16,7 @@ All numbers are rendered into the HTML at build time; JavaScript only adds the c
 count-up, tab switching and the interactive tools. Nothing here touches the network, so
 `python main.py --build-only` is safe to run anywhere.
 
-Tailwind scans this file: keep class names literal (see RANGE_CLASS / HEAT_CLASS).
+Tailwind scans this file: keep class names literal (see HWC_CLASS / HEAT_CLASS).
 Python 3.10 compatible (GitHub Actions runner): no nested same-quote f-strings.
 """
 import hashlib
@@ -75,7 +75,14 @@ SHOW_EMPTY_AD_SLOTS = False  # False: an empty slot renders only its TODO commen
 HOT_WINDOW = 50          # homepage hot/warm/cold + generator hot/cold lists use the last 50 draws
 DEFAULT_WINDOW = "last50"
 
-RANGE_CLASS = ["ball-r1", "ball-r2", "ball-r3", "ball-r4", "ball-r5", "ball-r6"]
+# Ball colours = hot / warm / cold status per game over the last HOT_WINDOW draws of the current format,
+# recomputed at every (nightly) build. Count-based so equal counts always share a colour:
+#   hot  = count >= expected + 0.5 sd,  cold = count <= expected - 0.5 sd,  warm = in between.
+HWC_CLASS = {"h": "ball-hot", "w": "ball-warm", "c": "ball-cold"}
+HWC_NAME = {"h": "Hot", "w": "Warm", "c": "Cold"}
+HWC_Z = 0.5
+HWC = {}             # game_key -> {"status": [None, "h"|"w"|"c", ...], "counts": [...], "st": window_stats}
+CUR_GAME = [None]    # game whose status colours ball() uses when no game is passed
 HEAT_CLASS = ["heat-0", "heat-1", "heat-2", "heat-3", "heat-4"]
 HEAT_LABEL = ["Cold", "Cool", "Average", "Hot", "Very hot"]
 TOP_CLASS = ["top-r1", "top-r2", "top-r3", "top-r4", "top-r5", "top-r6"]
@@ -265,8 +272,44 @@ def write_file(path, text):
         f.write(text)
 
 
-def range_class(n):
-    return RANGE_CLASS[min((n - 1) // 10, 5)]
+def compute_hwc(prep):
+    """Per-number hot/warm/cold status for each game from the last HOT_WINDOW current-format draws."""
+    HWC.clear()
+    for g, cfg in GAMES.items():
+        era = cfg["eras"][0]
+        cur = era_records(prep[g], era)
+        st = window_stats(cur[-HOT_WINDOW:], cur, era["N"], cfg["k"], era["low_max"])
+        status = [None]
+        for n in range(1, era["N"] + 1):
+            z = st["z"][n]
+            status.append("h" if z >= HWC_Z else ("c" if z <= -HWC_Z else "w"))
+        HWC[g] = {"status": status, "counts": st["counts"], "st": st, "draws": st["draws"]}
+    return HWC
+
+
+def set_game(game_key):
+    CUR_GAME[0] = game_key
+
+
+def hwc_of(n, game_key=None):
+    g = HWC.get(game_key or CUR_GAME[0])
+    if not g or not (1 <= n < len(g["status"])):
+        return None, None, None
+    return g["status"][n], g["counts"][n], g["draws"]
+
+
+def hwc_attr(game_key):
+    """Compact per-number status for the browser: 'h12,w6,c3,...' (index 0 = number 1)."""
+    g = HWC.get(game_key)
+    if not g:
+        return ""
+    return ",".join(f"{g['status'][n]}{g['counts'][n]}" for n in range(1, len(g["status"])))
+
+
+def hwc_legend(dark=True):
+    cls = "hwc-legend" + ("" if dark else " hwc-legend-light")
+    return (f'<p class="{cls}"><span><i class="lg-dot ball-hot"></i>🔥 Hot</span> <span><i class="lg-dot ball-warm"></i>⚡ Warm</span> '
+            f'<span><i class="lg-dot ball-cold"></i>❄️ Cold</span> <span class="lg-note">— based on the last {HOT_WINDOW} draws</span></p>')
 
 
 def heat_index(z, count):
@@ -284,8 +327,10 @@ def heat_index(z, count):
 # ---------------------------------------------------------------------------
 # Balls
 # ---------------------------------------------------------------------------
-def ball(n, size="sm", anim=None, extra=""):
-    cls = f"ball ball-{size} {range_class(n)}"
+def ball(n, size="sm", anim=None, extra="", game=None):
+    stt, cnt, draws = hwc_of(n, game)
+    cls = f"ball ball-{size} {HWC_CLASS.get(stt, 'ball-plain')}"
+    title = f' title="{n} — {HWC_NAME[stt]}: {cnt}× in last {draws} draws"' if stt else ""
     if extra:
         cls += " " + extra
     style = ""
@@ -293,7 +338,7 @@ def ball(n, size="sm", anim=None, extra=""):
         cls += " roll"
         style = f' style="--i:{anim}"'
     inner = f"<span>{n}</span>" if size == "lg" else str(n)
-    return f'<span class="{cls}"{style}>{inner}</span>'
+    return f'<span class="{cls}"{title}{style}>{inner}</span>'
 
 
 def bonus_ball(n, size="sm", anim=None, extra=""):
@@ -740,7 +785,7 @@ def layout(path, title, description, body, active=None, noindex=False, scripts=(
   <link rel="stylesheet" href="{CSS_HREF}">
   {ADSENSE_TAG}{script_tags}{ld}
 </head>
-<body class="antialiased">
+<body class="antialiased" data-hwc-max="{hwc_attr('lotto_max')}" data-hwc-649="{hwc_attr('lotto_649')}">
   <a href="#main" class="skip">Skip to content</a>
   <div class="topbar">19+ · Unofficial independent site · Not BCLC, WCLC, OLG, Loto-Québec or ILC · We do not sell tickets · <a href="/responsible-play.html">Play responsibly</a></div>
   <header class="site-header">
@@ -931,8 +976,15 @@ def render_404():
 # ---------------------------------------------------------------------------
 # Shared widgets
 # ---------------------------------------------------------------------------
-def hwc_strip(st, light=False):
-    """Hot / warm / cold groups for one stats window (🔥 ⚡ ❄️)."""
+def hwc_strip(st, light=False, game_key=None):
+    """Hot / warm / cold groups (🔥 ⚡ ❄️). With game_key: the site-wide last-50 status groups
+    (the same status that colours every ball), six of each; otherwise rank groups for that window."""
+    if game_key and game_key in HWC:
+        stat = HWC[game_key]["status"]
+        st = HWC[game_key]["st"]
+        rank = sorted(range(1, len(stat)), key=lambda i: (-st["counts"][i], st["since"][i] if st["since"][i] is not None else 10 ** 9, i))
+        st = dict(st, hot=[i for i in rank if stat[i] == "h"][:6], warm=[i for i in rank if stat[i] == "w"][:6],
+                  cold=[i for i in reversed(rank) if stat[i] == "c"][:6])
     def group(nums):
         return "".join(f'<span class="hb">{ball(n, "xs")}<span class="hb-n">{st["counts"][n]}×</span></span>' for n in nums)
     color = ("text-red-700", "text-amber-700", "text-sky-700") if light else ("text-red-300", "text-amber-200", "text-sky-200")
@@ -1004,6 +1056,7 @@ def countdown_inline(nd):
 
 
 def latest_block(game_key, rec, size="lg", animate=True):
+    set_game(game_key)
     gb = ""
     if game_key == "lotto_649" and rec.get("gold_ball"):
         g = rec["gold_ball"]
@@ -1013,8 +1066,9 @@ def latest_block(game_key, rec, size="lg", animate=True):
             f'<div class="mt-2">{balls_row(rec["numbers"], rec.get("bonus"), size, animate, caption=(size == "lg"))}</div>{gb}')
 
 
-def generator_panel(prep_cur):
-    """Lucky Numbers Generator — just for fun. Data for both games precomputed into attributes."""
+def generator_panel(prep_cur, on_checker=False):
+    """Lucky Numbers Generator — just for fun. Data for both games precomputed into attributes.
+    On the checker page "Check this line" fills the checker in place; elsewhere it links there prefilled."""
     attrs = []
     for gk in ("lotto_max", "lotto_649"):
         cfg = GAMES[gk]
@@ -1029,8 +1083,9 @@ def generator_panel(prep_cur):
   <div class="gen-out mt-3" aria-live="polite"><span class="balls balls-md" data-gen-out>{blanks}</span></div>
   <div class="flex flex-wrap items-center gap-3 mt-3">
     <button type="button" class="btn-gold" data-gen-go>Roll a random line</button>
-    <a class="btn-ghost" data-gen-check href="/check-my-numbers.html">Check this line against history</a>
+    <a class="btn-ghost" data-gen-check href="/check-my-numbers.html"{' data-inplace="1" aria-disabled="true"' if on_checker else ''}>🎯 Check this line</a>
   </div>
+  {hwc_legend()}
   <details class="gen-opts mt-3"><summary>Options</summary>
     <div class="grid gap-3 sm:grid-cols-2 mt-2 text-indigo-100">
       <label class="field">Odd / even mix<select data-opt="oe"><option value="any">Any mix</option><option value="bal">Balanced (3–4 odd)</option><option value="odd">Mostly odd</option><option value="even">Mostly even</option></select></label>
@@ -1060,6 +1115,7 @@ def my_line_slot(prep):
 # Home page
 # ---------------------------------------------------------------------------
 def home_game_card(game_key, prep, nd, st):
+    set_game(game_key)
     cfg = GAMES[game_key]
     rec = prep[game_key][-1]
     note = ""
@@ -1067,12 +1123,13 @@ def home_game_card(game_key, prep, nd, st):
   <div class="flex items-center justify-between gap-2"><span class="badge {cfg['badge']}">{cfg['name']}</span><span class="text-xs text-indigo-200">{cfg['draw_days']} · 7:30 PM PT</span></div>
   <div class="mt-3">{next_draw_block(game_key, nd)}</div>
   <div class="mt-4">{latest_block(game_key, rec)}</div>{note}
-  <div class="mt-4"><p class="jp-label mb-1">Last {HOT_WINDOW} draws</p>{hwc_strip(st)}</div>
+  <div class="mt-4"><p class="jp-label mb-1">Last {HOT_WINDOW} draws</p>{hwc_strip(st, game_key=game_key)}</div>
   <p class="mt-3 text-sm"><a href="{cfg['path']}">All {cfg['name']} results &amp; stats →</a></p>
 </article>"""
 
 
 def recent_rows(game_key, recs, n=6):
+    set_game(game_key)
     rows = []
     for r in reversed(recs[-n:]):
         extra = ""
@@ -1164,6 +1221,7 @@ def render_index(history, prep, today, jhist):
 {home_game_card("lotto_max", prep, nds["lotto_max"], st["lotto_max"])}
 {home_game_card("lotto_649", prep, nds["lotto_649"], st["lotto_649"])}
     </div>
+    {hwc_legend()}
     {my_line_slot(prep)}
     <div class="mt-4">{generator_panel(st)}</div>
   </div>
@@ -1173,6 +1231,7 @@ def render_index(history, prep, today, jhist):
   <section aria-labelledby="recent-h">
     <p class="kicker">Recent draws</p>
     <h2 id="recent-h" class="section-title mt-1">Latest winning numbers</h2>
+    {hwc_legend(dark=False)}
     <div class="grid gap-6 lg:grid-cols-2 mt-4">
       <article class="card card-max"><div class="flex items-center justify-between"><span class="badge badge-max">Lotto Max</span><a href="/lotto-max-results.html#draws" class="text-sm">Full archive →</a></div><div class="mt-3">{recent_rows("lotto_max", prep["lotto_max"])}</div></article>
       <article class="card card-649"><div class="flex items-center justify-between"><span class="badge badge-649">Lotto 6/49</span><a href="/lotto-649-results.html#draws" class="text-sm">Full archive →</a></div><div class="mt-3">{recent_rows("lotto_649", prep["lotto_649"])}</div></article>
@@ -1208,7 +1267,7 @@ def render_index(history, prep, today, jhist):
 </div>"""
     return layout("/", "Lotto Max & 6/49 Winning Numbers, Jackpots & Stats – Canada",
                   "Latest Lotto Max and Lotto 6/49 winning numbers, jackpot and Gold Ball trackers, every draw since 1982, a number checker and a lotto odds calculator.",
-                  body, active="/", scripts=("/assets/js/common.js", "/assets/js/home.js"),
+                  body, active="/", scripts=("/assets/js/common.js", "/assets/js/home.js", "/assets/js/generator.js"),
                   crumbs=[("Home", "/")], jsonld=[ld_org(), ld_website()])
 
 
@@ -1264,7 +1323,7 @@ def window_panel_main(win, latest_set, default):
         era_note = (f'<p class="notice">Historical view: these draws used {esc(win["era"]["long"])}. '
                     f'They are kept separate because a different number range changes every frequency.</p>')
     expl = (f'Expected count for each number in {plural(st["draws"], "draw")}: <strong>{st["expected"]:.1f}</strong> '
-            f'(typical spread ±{st["sd"]:.1f}). Colours compare each count with that expectation.')
+            f'(typical spread ±{st["sd"]:.1f}). Heatmap colours compare each count with that expectation; ball colours on this site always show hot, warm or cold over the last {HOT_WINDOW} draws.')
     return f"""<div data-panel="{win['key']}"{hidden}>
   <div class="grid gap-3 sm:grid-cols-3">
     <div class="stat-tile"><p class="kicker">Window</p><p class="stat-big">{plural(st["draws"], "draw")}</p><p class="text-xs muted">{esc(span)}</p></div>
@@ -1275,7 +1334,7 @@ def window_panel_main(win, latest_set, default):
   <h3 class="font-display font-bold text-xl text-slate-900 mt-6">Heatmap: how often each number came up</h3>
   <p class="text-sm muted mb-3">{expl}</p>
   {heatmap(win, latest_set)}
-  <div class="mt-4">{hwc_strip(st, light=True)}</div>
+  <div class="mt-4">{hwc_strip(st, light=True, game_key=(CUR_GAME[0] if win["key"] == DEFAULT_WINDOW and win["live"] else None))}</div>
   <div class="grid gap-6 md:grid-cols-3 mt-6">
     <div><h3 class="font-display font-bold text-lg text-slate-900 mb-2">🔥 Drawn most often</h3>{bar_list([(n, counts[n]) for n in most], top, st["expected"], "bar-hot")}</div>
     <div><h3 class="font-display font-bold text-lg text-slate-900 mb-2">❄️ Drawn least often</h3>{bar_list([(n, counts[n]) for n in least], top, st["expected"], "bar-cold")}</div>
@@ -1348,6 +1407,7 @@ def win_picker(wins, default_key):
 
 
 def draws_table(game_key, recs, gb_values=None, newest_iso=None):
+    set_game(game_key)
     cfg = GAMES[game_key]
     head = ["Date", "Winning numbers + bonus", "Jackpot" if game_key == "lotto_max" else "Gold Ball"]
     rows = []
@@ -1440,6 +1500,7 @@ def archive_faqs(game_key, latest, nd, recs):
 
 
 def render_archive(game_key, history, prep, today, jhist):
+    set_game(game_key)
     cfg = GAMES[game_key]
     recs = prep[game_key]
     name = cfg["name"]
@@ -1500,7 +1561,7 @@ def render_archive(game_key, history, prep, today, jhist):
     <h1 class="mt-3">{h1}</h1>
     <p class="sub mt-2 max-w-3xl">{opening}</p>
     <div class="grid gap-4 lg:grid-cols-5 mt-5">
-      <div class="glass gcard {cfg['gcard']} lg:col-span-3">{latest_block(game_key, latest)}{stale}
+      <div class="glass gcard {cfg['gcard']} lg:col-span-3">{latest_block(game_key, latest)}{stale}{hwc_legend()}
         <div class="flex flex-wrap gap-3 mt-5"><a class="btn-gold" href="/check-my-numbers.html">🎯 Check my numbers</a><a class="btn-ghost" href="#stats">📊 Stats explorer</a></div></div>
       <div class="glass gcard {cfg['gcard']} lg:col-span-2">{next_draw_block(game_key, nd)}</div>
     </div>
@@ -1521,6 +1582,7 @@ def render_archive(game_key, history, prep, today, jhist):
     <p class="kicker">Stats explorer</p>
     <h2 class="section-title mt-1">{name} number frequency, hot &amp; cold</h2>
     <p class="mt-2 text-sm">{hot_msg}</p>
+    {hwc_legend(dark=False)}
     <div class="mt-4">{win_picker(wins, default_key)}</div>
     <div class="mt-5">{panels_main}</div>
   </section>
@@ -1539,6 +1601,7 @@ def render_archive(game_key, history, prep, today, jhist):
     <p class="kicker">All draws</p>
     <h2 class="section-title mt-1">{name} winning numbers: the last 6 months</h2>
     <p class="text-sm muted mt-1">{len(recent)} draws, newest first. Every older draw is one tap away in the year browser below.</p>
+    {hwc_legend(dark=False)}
     <div class="mt-4">{draws_table(game_key, recent, recent_gb, latest["iso"])}</div>
   </section>
   <section id="years" class="card {cfg['card']} mt-8" style="scroll-margin-top:70px" data-archive="{cfg['slug']}">
@@ -1592,7 +1655,8 @@ def render_checker(prep):
     {crumbs_html([("Home", "/"), ("Check my numbers", "/check-my-numbers.html")], dark=True)}
     <p class="stamp mt-2"><i></i>{nmax:,} Lotto Max + {n649:,} Lotto 6/49 draws</p>
     <h1 class="mt-3">🎯 Check My Lotto Numbers Against Every Draw</h1>
-    <p class="sub mt-2 max-w-3xl">Check your lotto numbers the easy way: enter the Lotto Max or Lotto 6/49 line you always play and see every time it would have matched 3 or more numbers — back to 1982 for Lotto 6/49 and 2009 for Lotto Max — plus your best result ever and a count for each prize tier.</p>
+    <p class="sub mt-2 max-w-3xl">Check your lotto numbers the easy way: enter the Lotto Max or Lotto 6/49 line you always play and see every time it would have matched 3 or more numbers — back to 1982 for Lotto 6/49 and 2009 for Lotto Max — plus your best result ever and a count for each prize tier. No line in mind? Roll a random one below and check it straight away.</p>
+    <div class="mt-5">{generator_panel({g: HWC[g]["st"] for g in GAMES}, on_checker=True)}</div>
   </div>
 </section>
 <div class="wrap mt-6">
@@ -1618,6 +1682,7 @@ def render_checker(prep):
     <div data-summary></div>
     <div class="grid gap-6 lg:grid-cols-2 mt-4"><div data-tiers></div><div data-best></div></div>
     <h2 class="section-title mt-6">Every draw your line matched</h2>
+    {hwc_legend(dark=False)}
     <div class="mt-3" data-list></div>
   </section>
   <section class="card card-violet prose-lh mt-8">
@@ -1635,7 +1700,7 @@ def render_checker(prep):
 </div>"""
     return layout("/check-my-numbers.html", "Check My Lotto Numbers – Lotto Max & 6/49 History Checker",
                   "Check your Lotto Max or Lotto 6/49 numbers against every draw since 1982: see each 3+, 4+ or 5+ match, your best result and a count per prize tier.",
-                  body, scripts=("/assets/js/common.js", "/assets/js/checker.js"),
+                  body, scripts=("/assets/js/common.js", "/assets/js/checker.js", "/assets/js/generator.js"),
                   crumbs=[("Home", "/"), ("Check my numbers", "/check-my-numbers.html")])
 
 
@@ -1748,6 +1813,7 @@ def page_hash(text):
 
 def build_site(history, today):
     prep = {g: prep_records(history.get(g) or []) for g in GAMES}
+    compute_hwc(prep)
     jhist = update_jackpot_history(history, prep)
     pages = {}
     pages["/"] = ("index.html", render_index(history, prep, today, jhist))

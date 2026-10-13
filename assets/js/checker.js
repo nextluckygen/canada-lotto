@@ -144,7 +144,7 @@
     function lineBalls(nums, d) {
       return '<span class="balls balls-xs">' + nums.map(function (n) {
         var hit = d[1].indexOf(n) >= 0, bon = n === d[2];
-        return LH.ballHTML(n, "xs", hit ? "hit" : (bon ? "hit" : "miss"));
+        return LH.ballHTML(n, "xs", hit ? "hit" : (bon ? "hit" : "miss"), undefined, game);
       }).join("") + "</span>";
     }
     function render(data, mine, draws, counts, hits, best, expected3, min) {
@@ -155,7 +155,7 @@
       g.tiers.forEach(function (t, i) { if (t[1] >= 3) n3 += counts[i]; });
       res.hidden = false;
       res.querySelector("[data-summary]").innerHTML =
-        '<p class="kicker">' + g.name + ' · your line</p><div class="mt-2"><span class="balls balls-md">' + mine.map(function (n) { return LH.ballHTML(n, "md"); }).join("") + "</span></div>" +
+        '<p class="kicker">' + g.name + ' · your line</p><div class="mt-2"><span class="balls balls-md">' + mine.map(function (n) { return LH.ballHTML(n, "md", "", undefined, game); }).join("") + "</span></div>" +
         '<p class="mt-3 text-lg">Checked against <strong>' + draws.length.toLocaleString("en-CA") + "</strong> draws since " + first + ". It matched 3 or more numbers in <strong>" + n3 + "</strong> draws." +
         ' <span class="muted text-base">Pure chance gives about ' + expected3.toFixed(1) + " for any line.</span></p>";
       var rows = g.tiers.map(function (t, i) {
@@ -180,6 +180,16 @@
     }
 
     // prefill: ?game=max|649&n=1-2-3 (canonical stays the base page), else a saved line
+    // the Lucky Numbers Generator on this page hands its line over here and runs the check in place
+    LH.checkLine = function (g, nums) {
+      if (!GAMES[g]) return;
+      setGame(g);
+      line = nums.filter(function (n, i, a) { return n >= 1 && n <= GAMES[g].N && a.indexOf(n) === i; }).slice(0, GAMES[g].k);
+      msg.textContent = "";
+      sync();
+      if (line.length === GAMES[g].k) run.click();
+      box.scrollIntoView({ behavior: LH.reduce ? "auto" : "smooth", block: "start" });
+    };
     var q = new URLSearchParams(location.search);
     var qg = q.get("game");
     var startGame = qg === "649" ? "649" : "max";

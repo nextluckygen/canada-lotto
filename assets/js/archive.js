@@ -41,7 +41,7 @@
       var y = +d[0].slice(0, 4), m = +d[0].slice(5, 7), day = +d[0].slice(8, 10);
       var dt = new Date(Date.UTC(y, m - 1, day));
       if (m !== month) { month = m; html.push('<tr class="mh"><th colspan="3">' + MONTHS[m - 1] + " " + y + "</th></tr>"); }
-      var balls = d[1].map(function (n) { return LH.ballHTML(n, "sm"); }).join("") + (d[2] ? '<span class="plus" aria-hidden="true">+</span>' + LH.bonusHTML(d[2], "sm") : "");
+      var balls = d[1].map(function (n) { return LH.ballHTML(n, "sm", "", undefined, isMax ? "max" : "649"); }).join("") + (d[2] ? '<span class="plus" aria-hidden="true">+</span>' + LH.bonusHTML(d[2], "sm") : "");
       var last = "—";
       if (!isMax && d[3]) last = d[3] === "G" ? '<span class="gb-ico"><span class="ball ball-xs ball-gold">G</span> Gold</span>' : '<span class="gb-ico"><span class="ball ball-xs ball-white">W</span> White</span>';
       html.push('<tr class="r"><td class="c-date" data-label="Date">' + DAYS[dt.getUTCDay()] + ", " + MONTHS[m - 1].slice(0, 3) + " " + day + ", " + y +

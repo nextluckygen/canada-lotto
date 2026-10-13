@@ -29,9 +29,10 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5048509015899303" crossorigin="anonymous"></script>
   <script src="/assets/js/common.js" defer></script>
   <script src="/assets/js/checker.js" defer></script>
+  <script src="/assets/js/generator.js" defer></script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://lottohelper.ca/"},{"@type":"ListItem","position":2,"name":"Check my numbers","item":"https://lottohelper.ca/check-my-numbers.html"}]}</script>
 </head>
-<body class="antialiased">
+<body class="antialiased" data-hwc-max="h8,c4,w6,w6,w7,h10,w6,w6,c5,w7,h9,h11,w7,c5,h8,c3,w6,h9,c4,c1,c5,h8,h8,w7,h9,c4,c3,c5,c3,w7,w6,h8,c5,w7,h8,w7,w6,w6,h8,w7,h11,w7,h11,w7,c4,c5,w7,h9,h10,h9,w6,h9" data-hwc-649="w7,c3,w7,w7,h8,w7,c4,w5,h11,w6,w6,w5,w7,h9,w6,c2,w6,w5,w5,h8,c4,c3,w6,c3,w6,c3,h9,h9,w5,h8,c3,c4,h11,w7,w6,w7,h8,w5,c4,c2,w7,h9,w5,w6,h10,h8,w6,w7,w5">
   <a href="#main" class="skip">Skip to content</a>
   <div class="topbar">19+ · Unofficial independent site · Not BCLC, WCLC, OLG, Loto-Québec or ILC · We do not sell tickets · <a href="/responsible-play.html">Play responsibly</a></div>
   <header class="site-header">
@@ -50,7 +51,29 @@
     <nav aria-label="Breadcrumb" class="crumbs crumbs-dark"><ol><li><a href="/">Home</a></li><li aria-current="page">Check my numbers</li></ol></nav>
     <p class="stamp mt-2"><i></i>1,277 Lotto Max + 4,458 Lotto 6/49 draws</p>
     <h1 class="mt-3">🎯 Check My Lotto Numbers Against Every Draw</h1>
-    <p class="sub mt-2 max-w-3xl">Check your lotto numbers the easy way: enter the Lotto Max or Lotto 6/49 line you always play and see every time it would have matched 3 or more numbers — back to 1982 for Lotto 6/49 and 2009 for Lotto Max — plus your best result ever and a count for each prize tier.</p>
+    <p class="sub mt-2 max-w-3xl">Check your lotto numbers the easy way: enter the Lotto Max or Lotto 6/49 line you always play and see every time it would have matched 3 or more numbers — back to 1982 for Lotto 6/49 and 2009 for Lotto Max — plus your best result ever and a count for each prize tier. No line in mind? Roll a random one below and check it straight away.</p>
+    <div class="mt-5"><section class="glass p-4 sm:p-5" id="generator" aria-labelledby="gen-h" data-max="52,7,12-41-43-6-49-25-50-11-52-18-48-39,20-16-27-29-26-45-2-19-33-9-21-28" data-649="49,6,33-9-45-27-28-42-14-20-37-46-5-30,40-16-22-31-2-24-26-21-32-39-7-29">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <h2 id="gen-h" class="font-display font-extrabold text-xl text-white">🎲 Lucky Numbers Generator — just for fun</h2>
+    <div class="seg seg-dark" role="group" aria-label="Game"><button type="button" data-game="max" aria-pressed="true">Lotto Max</button><button type="button" data-game="649" aria-pressed="false">Lotto 6/49</button></div>
+  </div>
+  <div class="gen-out mt-3" aria-live="polite"><span class="balls balls-md" data-gen-out><span class="ball ball-md ball-blank">?</span><span class="ball ball-md ball-blank">?</span><span class="ball ball-md ball-blank">?</span><span class="ball ball-md ball-blank">?</span><span class="ball ball-md ball-blank">?</span><span class="ball ball-md ball-blank">?</span><span class="ball ball-md ball-blank">?</span></span></div>
+  <div class="flex flex-wrap items-center gap-3 mt-3">
+    <button type="button" class="btn-gold" data-gen-go>Roll a random line</button>
+    <a class="btn-ghost" data-gen-check href="/check-my-numbers.html" data-inplace="1" aria-disabled="true">🎯 Check this line</a>
+  </div>
+  <p class="hwc-legend"><span><i class="lg-dot ball-hot"></i>🔥 Hot</span> <span><i class="lg-dot ball-warm"></i>⚡ Warm</span> <span><i class="lg-dot ball-cold"></i>❄️ Cold</span> <span class="lg-note">— based on the last 50 draws</span></p>
+  <details class="gen-opts mt-3"><summary>Options</summary>
+    <div class="grid gap-3 sm:grid-cols-2 mt-2 text-indigo-100">
+      <label class="field">Odd / even mix<select data-opt="oe"><option value="any">Any mix</option><option value="bal">Balanced (3–4 odd)</option><option value="odd">Mostly odd</option><option value="even">Mostly even</option></select></label>
+      <label class="field">Hot / cold mix (last 50 draws)<select data-opt="hc"><option value="any">Ignore stats</option><option value="hot">Lean on hot numbers</option><option value="cold">Lean on cold numbers</option><option value="mix">Half hot, half cold</option></select></label>
+      <label class="field">Always include (comma-separated)<input type="text" inputmode="numeric" data-opt="inc" placeholder="e.g. 7, 21"></label>
+      <label class="field">Never include<input type="text" inputmode="numeric" data-opt="exc" placeholder="e.g. 13"></label>
+      <label class="check sm:col-span-2"><input type="checkbox" data-opt="pop" checked> Avoid popular patterns (all birthdays ≤31, runs like 5-6-7, evenly spaced lines) — fewer people to share a jackpot with</label>
+    </div>
+  </details>
+  <p class="text-xs text-indigo-200 mt-3">Random picks for entertainment. They don't predict draws; every combination has the same odds.</p>
+</section></div>
   </div>
 </section>
 <div class="wrap mt-6">
@@ -76,6 +99,7 @@
     <div data-summary></div>
     <div class="grid gap-6 lg:grid-cols-2 mt-4"><div data-tiers></div><div data-best></div></div>
     <h2 class="section-title mt-6">Every draw your line matched</h2>
+    <p class="hwc-legend hwc-legend-light"><span><i class="lg-dot ball-hot"></i>🔥 Hot</span> <span><i class="lg-dot ball-warm"></i>⚡ Warm</span> <span><i class="lg-dot ball-cold"></i>❄️ Cold</span> <span class="lg-note">— based on the last 50 draws</span></p>
     <div class="mt-3" data-list></div>
   </section>
   <section class="card card-violet prose-lh mt-8">

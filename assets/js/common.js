@@ -2,16 +2,27 @@
 (function () {
   "use strict";
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var RANGE = ["ball-r1", "ball-r2", "ball-r3", "ball-r4", "ball-r5", "ball-r6"];
   var KEY = "lh_lines";
 
-  function rangeClass(n) { return RANGE[Math.min(Math.floor((n - 1) / 10), 5)]; }
-  function ballHTML(n, size, extra, i) {
-    var cls = "ball ball-" + (size || "sm") + " " + rangeClass(n) + (extra ? " " + extra : "");
+  // Hot / warm / cold status per game (last 50 draws, current format), precomputed at build time
+  // into <body data-hwc-max="h12,w6,c3,..."> (index 0 = number 1). Same status as the server-rendered balls.
+  var HWC = {}, HWC_CLASS = { h: "ball-hot", w: "ball-warm", c: "ball-cold" }, HWC_NAME = { h: "Hot", w: "Warm", c: "Cold" };
+  function hwc(game) {
+    if (!HWC[game]) {
+      var raw = document.body ? document.body.getAttribute("data-hwc-" + game) : "";
+      HWC[game] = (raw || "").split(",").filter(Boolean).map(function (t) { return { s: t.charAt(0), c: +t.slice(1) }; });
+    }
+    return HWC[game];
+  }
+  function status(n, game) { var l = hwc(game || "max"); return l[n - 1] || null; }
+  function ballHTML(n, size, extra, i, game) {
+    var st = game ? status(n, game) : null;
+    var cls = "ball ball-" + (size || "sm") + " " + (st ? HWC_CLASS[st.s] : "ball-plain") + (extra ? " " + extra : "");
+    var title = st ? ' title="' + n + " \u2014 " + HWC_NAME[st.s] + ": " + st.c + '\u00d7 in last 50 draws"' : "";
     var style = "";
     if (typeof i === "number") { cls += " roll"; style = ' style="--i:' + i + '"'; }
     var inner = size === "lg" ? "<span>" + n + "</span>" : String(n);
-    return '<span class="' + cls + '"' + style + ">" + inner + "</span>";
+    return '<span class="' + cls + '"' + title + style + ">" + inner + "</span>";
   }
   function bonusHTML(n, size, extra) {
     return '<span class="ball ball-' + (size || "sm") + " ball-bonus" + (extra ? " " + extra : "") + '" title="Bonus number">' + n + "</span>";
@@ -84,7 +95,7 @@
     });
   }
 
-  window.LH = { reduce: reduce, rangeClass: rangeClass, ballHTML: ballHTML, bonusHTML: bonusHTML, parseNums: parseNums,
+  window.LH = { reduce: reduce, status: status, ballHTML: ballHTML, bonusHTML: bonusHTML, parseNums: parseNums,
     getLines: getLines, setLine: setLine, money: money };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })();
