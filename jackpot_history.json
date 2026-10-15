@@ -16,7 +16,7 @@
    "balls_remaining": 24,
    "first_seen": "2026-10-11",
    "gold_ball_jackpot": 22000000,
-   "last_seen": "2026-10-13"
+   "last_seen": "2026-10-14"
   }
  },
  "lotto_max": {
@@ -38,6 +38,13 @@
    "last_seen": "2026-10-13",
    "maxmillions": 16,
    "maxplus": 85
+  },
+  "2026-10-16": {
+   "first_seen": "2026-10-14",
+   "jackpot": 90000000,
+   "last_seen": "2026-10-14",
+   "maxmillions": 18,
+   "maxplus": 90
   }
  }
 }
