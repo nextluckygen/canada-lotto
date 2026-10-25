@@ -88,6 +88,12 @@ HEAT_LABEL = ["Cold", "Cool", "Average", "Hot", "Very hot"]
 TOP_CLASS = ["top-r1", "top-r2", "top-r3", "top-r4", "top-r5", "top-r6"]
 
 GUIDES = [
+    ("lotto-max-jackpot-cap-explained", "What happens when the Lotto Max jackpot hits $90 million",
+     "The cap, MaxMillions, MaxPlus and what a capped jackpot run actually looked like in October 2026.", "🧢"),
+    ("lump-sum-vs-annuity-canada", "Lump sum vs annuity: how Canadian lottery prizes are paid",
+     "Why Lotto Max and 6/49 pay one tax-free cheque, how Daily Grand's for-life option works, and how the US differs.", "💵"),
+    ("lotto-history-by-the-numbers", "44 years of Canadian lotto draws, by the numbers",
+     "What 4,462 Lotto 6/49 draws and 1,281 Lotto Max draws actually show, from 1982 to 2026. Facts, not forecasts.", "📜"),
     ("lotto-max-maxmillions-explained", "How Lotto Max, MaxPlus and MaxMillions work",
      "The 2026 Lotto Max format: four selections from 1–52, $100,000 MaxPlus prizes and $1 million MaxMillions draws.", "💰"),
     ("lotto-649-gold-ball-explained", "How the Lotto 6/49 Gold Ball draw works",
@@ -100,8 +106,6 @@ GUIDES = [
      "The $1 add-on games: BC Extra, WCLC Extra and Ontario's Encore are different games with different odds.", "➕"),
     ("lottery-scams-canada", "Common lottery scams in Canada and how to spot them",
      "Advance-fee 'you won' messages, fake cheques, ticket-photo requests and number-selling schemes.", "🚨"),
-    ("odds", "Lotto 6/49 and Lotto Max odds explained",
-     "Where 1 in 13,983,816 and 1 in 33,446,140 come from, and what no system can change.", "🎲"),
     ("hot-cold-explained", "Why hot and cold numbers do not predict the next draw",
      "What a frequency table measures, and why short samples always look streaky.", "🌡️"),
     ("how-canada-lotto-works", "Who runs Lotto 6/49 and Lotto Max in Canada",
@@ -133,6 +137,7 @@ FOOTER_LEGAL = [
     ("/contact.html", "Contact"),
     ("/privacy.html", "Privacy policy"),
     ("/terms.html", "Terms of use"),
+    ("/editorial-policy.html", "Editorial policy"),
     ("/disclaimer.html", "Disclaimer"),
     ("/responsible-play.html", "Responsible play"),
 ]
@@ -834,6 +839,15 @@ def guide_byline(meta):
     return f'<p class="byline">Written by <a href="/about.html">NextGen</a>, British Columbia · Last updated {esc(updated)}</p>'
 
 
+def author_box(meta):
+    return ('<aside class="callout author-box"><p class="font-bold">About the author</p>'
+            '<p><strong>By NextGen</strong>, the independent publisher of lottohelper.ca, based in British Columbia. '
+            'NextGen has followed Lotto Max and Lotto 6/49 since long before this site existed and checks every guide against the '
+            'operators\' own rules and the Canada Revenue Agency. Not a lawyer, accountant or lottery employee. '
+            f'Last updated {esc(meta.get("updated", "October 2026"))}. '
+            'How we research and correct articles: <a href="/editorial-policy.html">editorial policy</a>.</p></aside>')
+
+
 # Descriptive links from each guide to the tools and results pages that put it into practice.
 GUIDE_TOOL_LINKS = {
     "lotto-max-maxmillions-explained": [
@@ -860,14 +874,22 @@ GUIDE_TOOL_LINKS = {
         ("/check-my-numbers.html", "Check your own numbers against every published draw"),
         ("/how-to-claim-lottery-prize-bc.html", "How real lottery prizes are claimed in BC and Western Canada"),
         ("/are-lottery-winnings-taxed-canada.html", "Are lottery winnings taxed in Canada?")],
-    "odds": [
-        ("/lotto-odds-calculator.html", "Try the lotto odds calculator with your own spending"),
-        ("/check-my-numbers.html", "See how your line would have done in every past draw"),
-        ("/hot-cold-explained.html", "Why hot and cold numbers do not change the odds")],
+    "lotto-max-jackpot-cap-explained": [
+        ("/lotto-max-results.html#tracker", "Current Lotto Max jackpot, MaxPlus and MaxMillions count"),
+        ("/lotto-odds-calculator.html", "Your Lotto Max odds over a year of play"),
+        ("/lotto-max-maxmillions-explained.html", "How Lotto Max, MaxPlus and MaxMillions work")],
+    "lump-sum-vs-annuity-canada": [
+        ("/are-lottery-winnings-taxed-canada.html", "Are lottery winnings taxed in Canada?"),
+        ("/how-to-claim-lottery-prize-bc.html", "How to claim a prize in BC and Western Canada"),
+        ("/lottery-scams-canada.html", "Scams that target new winners")],
+    "lotto-history-by-the-numbers": [
+        ("/lotto-649-results.html#stats", "Explore Lotto 6/49 number frequency since 1982"),
+        ("/lotto-max-results.html#stats", "Explore Lotto Max statistics by number range era"),
+        ("/check-my-numbers.html", "Check your own line against every past draw")],
     "hot-cold-explained": [
         ("/lotto-max-results.html#stats", "Explore Lotto Max hot and cold numbers by window"),
         ("/lotto-649-results.html#stats", "Explore Lotto 6/49 number frequency since 1982"),
-        ("/odds.html", "Lotto Max and Lotto 6/49 odds explained")],
+        ("/lotto-odds-calculator.html#derivation", "Where the Lotto Max and Lotto 6/49 odds come from")],
     "how-canada-lotto-works": [
         ("/lotto-max-results.html", "Lotto Max results and draw history since 2009"),
         ("/lotto-649-results.html", "Lotto 6/49 results and draw history since 1982"),
@@ -920,6 +942,8 @@ def render_content_page(slug, meta, body):
         box = guide_tools_box(slug)
         sm = re.search(r'<(p|div|section|aside) class="sources"', body)
         body = (body[:sm.start()] + box + body[sm.start():]) if sm else body + box
+        sm = re.search(r'<(p|div|section|aside) class="sources"', body)
+        body = (body[:sm.start()] + author_box(meta) + body[sm.start():]) if sm else body + author_box(meta)
         inner = f'<article class="card card-violet prose-lh">{body}</article>{related_guides(slug)}'
         jsonld.append(ld_article(path, meta, body))
         og_type = "article"
@@ -1452,6 +1476,94 @@ def archive_about(game_key, prep, history):
 <p>How it is built: draws since October 2025 come from the Western Canada Lottery Corporation's public winning-number pages and are added automatically after each draw night, once the date, weekday and numbers pass validation. Older draws were added in October 2026 from Loto-Québec's public results archive and cross-checked against WCLC. Gold Ball results are shown where they were published with the draw (August 2026 onward). Confirm any ticket with <a href="{GAMES[game_key]["official"]}" rel="noopener">WCLC</a> or your provincial lottery.</p>"""
 
 
+def archive_commentary(game_key, prep, history, jhist):
+    """Data-driven 'how to read' + 'latest draw in context' prose. Every figure is computed from the archive."""
+    cfg = GAMES[game_key]
+    recs = prep[game_key]
+    era = cfg["eras"][0]
+    cur = era_records(recs, era)
+    N, k = era["N"], cfg["k"]
+    latest, prev = recs[-1], recs[-2]
+    nums = sorted(latest["numbers"])
+    odd = sum(n % 2 for n in nums)
+    low = sum(1 for n in nums if n <= era["low_max"])
+    total = sum(nums)
+    mean = k * (N + 1) / 2
+    repeats = sorted(set(nums) & set(prev["numbers"]))
+    pairs = sum(1 for a, b in zip(nums, nums[1:]) if b - a == 1)
+    sums = [sum(r["numbers"]) for r in cur]
+    below = sum(1 for x in sums if x < total)
+    pct_below = 100 * below / len(sums)
+    rep_txt = (f"{plural(len(repeats), 'number')} ({', '.join(map(str, repeats))}) repeated from the previous draw on {long_date(prev['dt'])}"
+               if repeats else f"no numbers repeated from the previous draw on {long_date(prev['dt'])}")
+    shared_prev = sum(1 for a, b in zip(cur, cur[1:]) if set(a["numbers"]) & set(b["numbers"]))
+    share_rep = 100 * shared_prev / max(1, len(cur) - 1)
+    exp_rep = 100 * (1 - comb(N - k, k) / comb(N, k))
+    ctx = (f"<p>The {long_date(latest['dt'])} draw had {odd} odd and {k - odd} even numbers, {low} low (1–{era['low_max']}) and {k - low} high, "
+           f"and {plural(pairs, 'consecutive pair') if pairs else 'no consecutive pairs'}. Its numbers add up to {total}; the long-run average for {k} numbers from 1 to {N} is {mean:g}, "
+           f"and {pct_below:.0f}% of {len(cur):,} draws ({re.sub(r' [(](since[^)]*)[)]', r', \1', era['long']).replace('every draw', 'all draws')}) had a lower total. {rep_txt[0].upper() + rep_txt[1:]}. "
+           f"Repeats like that are normal: so far {share_rep:.0f}% of draws in this format have shared at least one number with the draw before, "
+           f"and pure chance predicts about {exp_rep:.0f}%.</p>")
+    if game_key == "lotto_max":
+        jh = jhist.get("lotto_max") or {}
+        series = [(d, e["jackpot"]) for d, e in sorted(jh.items()) if e.get("jackpot")]
+        up = (history.get("upcoming") or {}).get("lotto_max") or {}
+        if up.get("date") and up.get("jackpot") and (not series or series[-1][0] < up["date"]):
+            series.append((up["date"], up["jackpot"]))
+        run = 0
+        for (d0, a), (d1, b) in zip(series[::-1][1:], series[::-1]):
+            if b > a or b == a == 90_000_000:
+                run += 1
+            else:
+                break
+        jp, mm, mp = up.get("jackpot"), up.get("maxmillions") or 0, up.get("maxplus") or 0
+        if jp:
+            nxt = long_date(datetime.strptime(up["date"], "%Y-%m-%d"))
+            jtxt = (f"<p>The advertised jackpot for {nxt} is <strong>{money(jp)}</strong>, with {mp} MaxPlus prizes of $100,000"
+                    + (f" and {mm} MaxMillions prizes of $1 million" if mm else "; MaxMillions prizes only appear once the jackpot passes $50 million")
+                    + ". ")
+            if run:
+                jtxt += ("The jackpot has rolled over " + ("once" if run == 1 else f"{run} times in a row") + " since it was last won, based on the draws we have recorded. ")
+            else:
+                jtxt += "The jackpot reset recently, so this run is just starting. "
+            peak = max(series, key=lambda x: x[1]) if series else None
+            if peak:
+                jtxt += (f"Since we started recording advertised jackpots in October 2026, the highest was {money(peak[1])} "
+                         f"(first on {long_date(datetime.strptime(peak[0], '%Y-%m-%d'))}). ")
+            jtxt += 'What happens at the $90 million ceiling is explained in <a href="/lotto-max-jackpot-cap-explained.html">our guide to the Lotto Max jackpot cap</a>.</p>'
+        else:
+            jtxt = ""
+        how = ("<p><strong>How to read this page.</strong> The coloured balls are the seven main numbers, sorted from low to high; the black ball "
+               "with a gold ring is the bonus, which only counts for some second-tier prizes. Ball colours show each number's status over the last 50 draws in the "
+               "current format: red means it came up more than chance would suggest, blue less, orange about as expected. The stats explorer lets you switch windows, "
+               "and the older 1–49 and 1–50 eras are kept separate because a different number range changes every number's expected share. "
+               "The draws table lists six months of results, and the year browser loads anything older. None of this changes the odds of the next draw.</p>")
+    else:
+        up = (history.get("upcoming") or {}).get("lotto_649") or {}
+        jp, left = up.get("gold_ball_jackpot"), up.get("balls_remaining")
+        gb = [r for r in recs if (r.get("gold_ball") or {}).get("ball")]
+        whites = 0
+        for r in reversed(gb):
+            if str(r["gold_ball"]["ball"]).lower().startswith("white"):
+                whites += 1
+            else:
+                break
+        jtxt = ""
+        if jp and left:
+            jtxt = (f"<p>The Gold Ball jackpot for {long_date(datetime.strptime(up['date'], '%Y-%m-%d'))} is <strong>{money(jp)}</strong>, "
+                    f"with {left} balls left in the drum: one gold and {left - 1} white. That means the chance that the Gold Ball draw pays the jackpot "
+                    f"this time is 1 in {left}, while somebody wins at least the guaranteed $1 million either way. ")
+            if gb:
+                jtxt += f"Our records show {plural(whites, 'white ball')} in a row since the last gold ball we recorded. "
+            jtxt += ('Separately, the Classic Draw jackpot is always a fixed $5 million. More in our <a href="/lotto-649-gold-ball-explained.html">Gold Ball guide</a>.</p>')
+        how = ("<p><strong>How to read this page.</strong> The six coloured balls are the Classic Draw numbers sorted from low to high; the black ball with a gold ring "
+               "is the bonus, which matters only for the 5-plus-bonus and 2-plus-bonus prizes. The gold or white icon shows the Gold Ball result where it was published. "
+               "Ball colours show each number's status over the last 50 draws: red came up more than chance would suggest, blue less, orange about as expected. "
+               "Because 6/49 has always used 1 to 49, the stats explorer can compare a short window with the full record back to 1982. "
+               "None of this changes the odds of the next draw.</p>")
+    return f'<h2>How to read these {cfg["name"]} results</h2>{how}<h3>The latest draw in context</h3>{ctx}{jtxt}'
+
+
 def nums_words(nums):
     return ", ".join(str(n) for n in nums[:-1]) + f" and {nums[-1]}"
 
@@ -1574,6 +1686,7 @@ def render_archive(game_key, history, prep, today, jhist):
     body = f"""{hero}
 <div class="wrap mt-4">
   <nav class="jump" aria-label="On this page"><a href="#about">About</a><a href="#stats">📊 Stats</a><a href="#tracker">{"💰 Jackpot" if game_key == "lotto_max" else "🟡 Gold Ball"}</a><a href="#patterns">Patterns</a><a href="#draws">All draws</a><a href="#years">By year</a><a href="#faq">FAQ</a>{jump_months}</nav>
+  <section id="read" class="card card-violet prose-lh mt-4">{archive_commentary(game_key, prep, history, jhist)}</section>
   <section id="about" class="card card-violet prose-lh mt-4">{archive_about(game_key, prep, history)}</section>
 </div>
 {ad_slot("A1")}
@@ -1722,6 +1835,11 @@ def odds_rows(game_key, plays):
     return "".join(rows)
 
 
+def read_partial(name):
+    with open(os.path.join(CONTENT_DIR, "partials", name), encoding="utf-8") as f:
+        return f.read()
+
+
 def render_odds_calc():
     plays = 104
     odds_js = json.dumps({g: {"per": v["per"], "any": v["any"], "price": GAMES[g]["price"], "tiers": [[t[0], t[1], t[2]] for t in v["tiers"]]} for g, v in ODDS.items()}, separators=(",", ":"))
@@ -1762,7 +1880,13 @@ def render_odds_calc():
     <p>The yearly numbers use simple probability. If one play has a chance <em>p</em> of winning a tier, then <em>n</em> independent plays have a chance of 1 − (1 − <em>p</em>)<sup>n</sup> of winning it at least once. For rare prizes that is almost exactly <em>n</em> × <em>p</em>: doubling your spend doubles your chance, but double a tiny number is still tiny. Buying 104 Lotto Max plays a year — one at every draw — gives about a 1 in 322,000 chance of a jackpot that year.</p>
     <h3>What the calculator leaves out</h3>
     <p>It shows chances, not expected winnings. Most Lotto Max and Lotto 6/49 prizes are shares of a pool, so the amount depends on ticket sales and on how many people match. It also ignores MaxMillions, MaxPlus, Gold Ball and Extra or Encore add-ons, which have their own rules; see our <a href="/lotto-max-maxmillions-explained.html">Lotto Max guide</a>, <a href="/lotto-649-gold-ball-explained.html">Gold Ball guide</a> and <a href="/extra-and-encore-explained.html">Extra and Encore guide</a>. And no pattern, frequency chart or "system" changes any number in the table. Every combination, including 1-2-3-4-5-6, has exactly the same chance. Choosing unusual numbers only changes how many people you might share a jackpot with.</p>
-    <p>If the cost-per-year line makes you wince, that is useful information. Set a budget you would happily spend on any other entertainment, and see our <a href="/responsible-play.html">responsible play page</a> for free, confidential help lines in every province. The full derivation of the jackpot odds is in our <a href="/odds.html">Lotto Max and Lotto 6/49 odds guide</a>.</p>
+    <p>If the cost-per-year line makes you wince, that is useful information. Set a budget you would happily spend on any other entertainment, and see our <a href="/responsible-play.html">responsible play page</a> for free, confidential help lines in every province. The step-by-step derivation of the jackpot odds is just below.</p>
+  </section>
+  <section class="card card-violet prose-lh mt-8" id="derivation" style="scroll-margin-top:70px">
+    <h2>Where 1 in 13,983,816 and 1 in 33,446,140 come from</h2>
+    <p>Many lotto sites hint that a strategy exists. There is a strategy for not <em>sharing</em> a jackpot. There is no strategy that makes a jackpot more likely. Here is where the official odds come from, using nothing more than counting.</p>
+    {read_partial("odds-derivation.html")}
+    {read_partial("odds-sources.html")}
   </section>
   <!--FAQ-->
 </div>"""
