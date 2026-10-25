@@ -1,86 +1,98 @@
 {
   "/": {
     "date": "2026-10-25",
-    "sha256": "08fc2aa82597a77168fad87e837d981c83825f8868339dbacfaec4f54d59514a"
+    "sha256": "57f0dd0f909d8ea1f75941e321da79f0e601b4c11837360c8c52654a8989b398"
   },
   "/about.html": {
     "date": "2026-10-25",
-    "sha256": "339cc8ae000a64fc3830751fa6970a605be75f692fd439cc0a375907f06950a6"
+    "sha256": "61fe9281f01a797ae36e682cf3e21bbf4fa6de2b932b83e856844151fbb31669"
   },
   "/are-lottery-winnings-taxed-canada.html": {
     "date": "2026-10-25",
-    "sha256": "603df15d8a3cc95e00d77be775342421b8a33605180bd6433107751bf503fd77"
+    "sha256": "47e7d1fc60725d7342189bd4da3a3966568c7798edd5e10fce0f4eaf133890ad"
   },
   "/check-my-numbers.html": {
     "date": "2026-10-25",
-    "sha256": "46a46e5c358d77d2da428c8fd42e71a29c1b1eb1cde737c2465342dcee3d806b"
+    "sha256": "a853424af13039f33faf0022bfa1d435a611270069f63bddfdcf2c87f61e5c6a"
   },
   "/contact.html": {
     "date": "2026-10-25",
-    "sha256": "f6aeedc4fab1324b0af7a474f5c7edf1a5d5acfcdb27e381de10d28ab22184b8"
+    "sha256": "65349b2b45c4d4793ec2ff118ae2e7d4fd1574a3a23d4044b3d4153313333d8b"
   },
   "/disclaimer.html": {
     "date": "2026-10-25",
-    "sha256": "27c173e25688f8b49f7ebfe4f32c289aff8e5082c325346275e3520d52570435"
+    "sha256": "f11ea581454afc4acd8b333272763dde7e66a04593c5f5187841d0b6b498b111"
+  },
+  "/editorial-policy.html": {
+    "date": "2026-10-25",
+    "sha256": "68139b1771a42cc1dde78bbcae08aa66d303ed65206c27fbb851ebbd87449600"
   },
   "/extra-and-encore-explained.html": {
     "date": "2026-10-25",
-    "sha256": "034ca8246a9e022d96d75d606434df8aff6d11ec95474da61a61477924e0b8c5"
+    "sha256": "f8b42d6b4acab9be0ff992327cc0ef66697dfe91746019fe2911ac5ec5dcf61c"
   },
   "/guides.html": {
     "date": "2026-10-25",
-    "sha256": "e3a603225353f828bb88e38024c622a1820570f3b43afd81ce7c42244bd53382"
+    "sha256": "f7d93fdb4c691366baf33bff87bf64bf294d5e64eb6e656299cae621d552e8f4"
   },
   "/hot-cold-explained.html": {
     "date": "2026-10-25",
-    "sha256": "5bf55406de7aa60f2ae7d4675381f64a722037bdefd767fe3a81f72dfc8a4b65"
+    "sha256": "4d011dd5ea11ece2e3ffd2766fa9c42a85c554d0e708d6a16985571e8f5d0c40"
   },
   "/how-canada-lotto-works.html": {
     "date": "2026-10-25",
-    "sha256": "5829e24d694f94282ec3f71647fadf39bbbf2f9847ee513a13b1af06ea5fb02f"
+    "sha256": "8ae012bc132ae2aed419f1d235ac09c578645ccc8fc381601c1b8a21f672afb8"
   },
   "/how-to-claim-lottery-prize-bc.html": {
     "date": "2026-10-25",
-    "sha256": "1d3866e80160d14731c0c4534d95ab718833b3f3751438ab94cf3b46a61f49c3"
+    "sha256": "0583d8715c1699069ef5b888ea56c1c83723da967fbdf9c0d97cb878b116155b"
   },
   "/lottery-scams-canada.html": {
     "date": "2026-10-25",
-    "sha256": "493876068af3b9eeb910a25570664b61c694e454b616550357dbb2773d4790b2"
+    "sha256": "a556ee1e2101bd50644c9d3fda473c3c37e819649c020782ab92f1fa3cae5ac7"
   },
   "/lotto-649-gold-ball-explained.html": {
     "date": "2026-10-25",
-    "sha256": "a3e068ad774baa8323c242b4efaab71aea849d056c87816708f20d08b0cb125a"
+    "sha256": "5af1b22e1e671ff879d2fd929f2a78538fbeebc2c248a10a43f50516ba15d21a"
   },
   "/lotto-649-results.html": {
     "date": "2026-10-25",
-    "sha256": "c1cef0be16e87eaaebf23e89f1ef383b786568f61e1ee48ca468f1083e5c117f"
+    "sha256": "0b3729b735233bcc3a95d9603a34cca4e6f8998661b226d86f011361e40e6f36"
+  },
+  "/lotto-history-by-the-numbers.html": {
+    "date": "2026-10-25",
+    "sha256": "8a6a5356e6374b86711b827f00b45cd9c985e6a8ae051282a2e12a4b72dc3113"
+  },
+  "/lotto-max-jackpot-cap-explained.html": {
+    "date": "2026-10-25",
+    "sha256": "aeb9464e003e498766546a55da6721eee2ec4edeefd040127bdb9e0008277f61"
   },
   "/lotto-max-maxmillions-explained.html": {
     "date": "2026-10-25",
-    "sha256": "5873f165a514516905642ce1536411ff7467731370d5e30b30622c6827bb3f14"
+    "sha256": "02dcffe6047b0474a79840a57d122008281d55991f2ea8a7fcf014e48461e5a4"
   },
   "/lotto-max-results.html": {
     "date": "2026-10-25",
-    "sha256": "66db81b54f583318bf127458a4df1d9265710a5f7a6e81be612b391a7720d574"
+    "sha256": "bf2e12a2586996c4697c91eca15b8b816167a29ce8b9b1a772d7bda33d9cc7b4"
   },
   "/lotto-odds-calculator.html": {
     "date": "2026-10-25",
-    "sha256": "0fce15dbd6ccc1a48f2ae0fe0253df44d77df1c50819f3be8702938e437220ed"
+    "sha256": "a71d41a10585598625639e37c8befeda405b5e2efb36c9ff2b80ef7930d2203c"
   },
-  "/odds.html": {
+  "/lump-sum-vs-annuity-canada.html": {
     "date": "2026-10-25",
-    "sha256": "7b2f036a7efe9d823ede2ca2ff6ed49dcef976cca62191f15c60d9739fdb0c09"
+    "sha256": "49677d21949a34e952f2071be3c5a2ee0f9327669237fe48abf8ae0876f20f42"
   },
   "/privacy.html": {
     "date": "2026-10-25",
-    "sha256": "b7012b51bdd4b4dd7f6c482ac1e4166b968f373c27ef066e06139624df2570f5"
+    "sha256": "ca1b5ed15650c92baa968b9fc3f05c0e1fc1be18ce33ce475e34a78299f8002b"
   },
   "/responsible-play.html": {
     "date": "2026-10-25",
-    "sha256": "f2ebd6c3e0caa86c4a1739fcba148f9f48c9fd07110b2c5011f3a74fe12eed9a"
+    "sha256": "5074ef0830ab4638cb42a41738ee13ca8b753e2bb6275abd07ea2d5de8dd60b7"
   },
   "/terms.html": {
     "date": "2026-10-25",
-    "sha256": "1bc63a1083ff35112b7f8b8d8eaafd88d3d3226812feac733c9fa42a545c35cf"
+    "sha256": "ad57d7babd8d8a96253b7aed32b49351889fc243c9fc98482adec2933182290a"
   }
 }
