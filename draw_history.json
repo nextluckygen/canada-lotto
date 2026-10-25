@@ -5743,7 +5743,8 @@
     {"date":"Saturday, October 10, 2026","numbers":[12,18,23,27,28,45],"bonus":32,"gold_ball":{"ball":"White","prize":1000000},"gold_ball_jackpot":20000000},
     {"date":"Wednesday, October 14, 2026","numbers":[5,25,26,27,29,46],"bonus":16,"gold_ball":{"ball":"White","prize":1000000},"gold_ball_jackpot":22000000},
     {"date":"Saturday, October 17, 2026","numbers":[5,22,23,26,29,37],"bonus":48,"gold_ball":{"ball":"White","prize":1000000},"gold_ball_jackpot":24000000},
-    {"date":"Wednesday, October 21, 2026","numbers":[1,10,18,22,33,37],"bonus":47,"gold_ball":{"ball":"White","prize":1000000},"gold_ball_jackpot":26000000}
+    {"date":"Wednesday, October 21, 2026","numbers":[1,10,18,22,33,37],"bonus":47,"gold_ball":{"ball":"White","prize":1000000},"gold_ball_jackpot":26000000},
+    {"date":"Saturday, October 24, 2026","numbers":[9,20,22,29,37,47],"bonus":32,"gold_ball":{"ball":"White","prize":1000000},"gold_ball_jackpot":28000000}
   ],
   "upcoming": {
     "lotto_max": {
@@ -5751,13 +5752,13 @@
       "jackpot": 25000000,
       "maxmillions": 0,
       "maxplus": 25,
-      "fetched": "2026-10-24"
+      "fetched": "2026-10-25"
     },
     "lotto_649": {
-      "date": "2026-10-24",
-      "gold_ball_jackpot": 28000000,
-      "balls_remaining": 21,
-      "fetched": "2026-10-24"
+      "date": "2026-10-28",
+      "gold_ball_jackpot": 30000000,
+      "balls_remaining": 20,
+      "fetched": "2026-10-25"
     }
   },
   "meta": {
@@ -5769,6 +5770,6 @@
       ],
       "note": "Cross-checked: both sources agree on all overlapping draws; draw counts match WCLC draw numbers."
     },
-    "last_checked": "2026-10-24T04:52-07:00"
+    "last_checked": "2026-10-25T05:23-07:00"
   }
 }
