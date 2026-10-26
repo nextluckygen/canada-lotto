@@ -1499,9 +1499,10 @@ def archive_commentary(game_key, prep, history, jhist):
     shared_prev = sum(1 for a, b in zip(cur, cur[1:]) if set(a["numbers"]) & set(b["numbers"]))
     share_rep = 100 * shared_prev / max(1, len(cur) - 1)
     exp_rep = 100 * (1 - comb(N - k, k) / comb(N, k))
+    era_label = re.sub(r' [(](since[^)]*)[)]', r', \1', era['long']).replace('every draw', 'all draws')
     ctx = (f"<p>The {long_date(latest['dt'])} draw had {odd} odd and {k - odd} even numbers, {low} low (1–{era['low_max']}) and {k - low} high, "
            f"and {plural(pairs, 'consecutive pair') if pairs else 'no consecutive pairs'}. Its numbers add up to {total}; the long-run average for {k} numbers from 1 to {N} is {mean:g}, "
-           f"and {pct_below:.0f}% of {len(cur):,} draws ({re.sub(r' [(](since[^)]*)[)]', r', \1', era['long']).replace('every draw', 'all draws')}) had a lower total. {rep_txt[0].upper() + rep_txt[1:]}. "
+           f"and {pct_below:.0f}% of {len(cur):,} draws ({era_label}) had a lower total. {rep_txt[0].upper() + rep_txt[1:]}. "
            f"Repeats like that are normal: so far {share_rep:.0f}% of draws in this format have shared at least one number with the draw before, "
            f"and pure chance predicts about {exp_rep:.0f}%.</p>")
     if game_key == "lotto_max":
