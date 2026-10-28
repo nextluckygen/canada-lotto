@@ -88,6 +88,10 @@ HEAT_LABEL = ["Cold", "Cool", "Average", "Hot", "Very hot"]
 TOP_CLASS = ["top-r1", "top-r2", "top-r3", "top-r4", "top-r5", "top-r6"]
 
 GUIDES = [
+    ("biggest-canadian-lottery-wins", "Biggest Canadian lottery wins, with sources",
+     "Every $70 million-plus Lotto Max jackpot and the largest 6/49 wins, each row cited to an official release or news report.", "🏆"),
+    ("how-to-claim-lottery-prize-by-province", "Claiming a lottery prize, province by province",
+     "OLG, Loto-Québec, WCLC and Atlantic Lottery: where to claim, ID, group rules and deadlines.", "🗺️"),
     ("lotto-max-jackpot-cap-explained", "What happens when the Lotto Max jackpot hits $90 million",
      "The cap, MaxMillions, MaxPlus and what a capped jackpot run actually looked like in October 2026.", "🧢"),
     ("lump-sum-vs-annuity-canada", "Lump sum vs annuity: how Canadian lottery prizes are paid",
@@ -893,6 +897,12 @@ GUIDE_TOOL_LINKS = {
     "how-canada-lotto-works": [
         ("/lotto-max-results.html", "Lotto Max results and draw history since 2009"),
         ("/lotto-649-results.html", "Lotto 6/49 results and draw history since 1982"),
+        ("/how-to-claim-lottery-prize-bc.html", "How to claim a prize in BC and Western Canada")],
+    "biggest-canadian-lottery-wins": [
+        ("/lotto-max-results.html", "Lotto Max results and draw history"),
+        ("/how-to-claim-lottery-prize-by-province.html", "Claiming a prize, province by province")],
+    "how-to-claim-lottery-prize-by-province": [
+        ("/check-my-numbers.html", "Check your line against every past draw"),
         ("/how-to-claim-lottery-prize-bc.html", "How to claim a prize in BC and Western Canada")],
 }
 
