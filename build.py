@@ -92,6 +92,10 @@ GUIDES = [
      "Every $70 million-plus Lotto Max jackpot and the largest 6/49 wins, each row cited to an official release or news report.", "🏆"),
     ("how-to-claim-lottery-prize-by-province", "Claiming a lottery prize, province by province",
      "OLG, Loto-Québec, WCLC and Atlantic Lottery: where to claim, ID, group rules and deadlines.", "🗺️"),
+    ("unclaimed-lottery-prizes-canada", "Unclaimed lottery prizes and ticket expiry in Canada",
+     "Deadlines by region, where unclaimed money goes, and the $70 million Scarborough ticket.", "⏳"),
+    ("lottery-pools-canada", "Office and group lottery pools in Canada",
+     "Group claim rules, a B.C. court case on informal pools, and a sample pool agreement.", "🤝"),
     ("lotto-max-jackpot-cap-explained", "What happens when the Lotto Max jackpot hits $90 million",
      "The cap, MaxMillions, MaxPlus and what a capped jackpot run actually looked like in October 2026.", "🧢"),
     ("lump-sum-vs-annuity-canada", "Lump sum vs annuity: how Canadian lottery prizes are paid",
@@ -900,10 +904,16 @@ GUIDE_TOOL_LINKS = {
         ("/how-to-claim-lottery-prize-bc.html", "How to claim a prize in BC and Western Canada")],
     "biggest-canadian-lottery-wins": [
         ("/lotto-max-results.html", "Lotto Max results and draw history"),
-        ("/how-to-claim-lottery-prize-by-province.html", "Claiming a prize, province by province")],
+        ("/unclaimed-lottery-prizes-canada.html", "Unclaimed prizes and ticket expiry")],
     "how-to-claim-lottery-prize-by-province": [
         ("/check-my-numbers.html", "Check your line against every past draw"),
-        ("/how-to-claim-lottery-prize-bc.html", "How to claim a prize in BC and Western Canada")],
+        ("/lottery-pools-canada.html", "Group and office pools")],
+    "unclaimed-lottery-prizes-canada": [
+        ("/check-my-numbers.html", "Check an old ticket against every past draw"),
+        ("/how-to-claim-lottery-prize-by-province.html", "Claiming a prize, province by province")],
+    "lottery-pools-canada": [
+        ("/lotto-odds-calculator.html", "Lotto odds calculator"),
+        ("/how-to-claim-lottery-prize-by-province.html", "Claiming a prize, province by province")],
 }
 
 

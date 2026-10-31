@@ -1,106 +1,114 @@
 {
   "/": {
     "date": "2026-10-31",
-    "sha256": "52d8144030a56be54b4704f158500ade5a8ec49ed07f268fdc71a5ea54985b8c"
+    "sha256": "222bbaaeb20c47f3f23bd6f8c7adaab6d88054651e2ded7b9a759fa0e12c055b"
   },
   "/about.html": {
     "date": "2026-10-31",
-    "sha256": "d31484bfc27635aa3ad9555d83d18720484281d7da02506747a04961e3b5acb3"
+    "sha256": "ad00eb93b7d7380a46aa792b75e3def9073223541b872be7933165fbb5148081"
   },
   "/are-lottery-winnings-taxed-canada.html": {
     "date": "2026-10-31",
-    "sha256": "1a427d17a4ba593442e0b698ac5aa398c9e84562ba5f9b8921feca248246607b"
+    "sha256": "0800c014e07731742a97e960bc334a9c124ce9d22d69f5e8873d28de38f9aafa"
   },
   "/biggest-canadian-lottery-wins.html": {
     "date": "2026-10-31",
-    "sha256": "af2096fe2fb725026c8631a1dd9e81539753ab560c511ba137ad02e05109826a"
+    "sha256": "bedabafc6ed61db6098db8cad6e78b84dc1d769769d7813f9ec53481cc80ec08"
   },
   "/check-my-numbers.html": {
     "date": "2026-10-31",
-    "sha256": "fbc268361f5ff0c92785a252e0e3ff8dd3b65f8f96fbc0574490f63f9c15c3f2"
+    "sha256": "3dac299490b837f45ebb2b0697a5527546a805b1cfd09896aa9084a83cc1d258"
   },
   "/contact.html": {
     "date": "2026-10-31",
-    "sha256": "8e4686e2c5fc6006842797e07366519dbc116970991a76e5e8faf0155e8001e0"
+    "sha256": "358733633618f52dca82c3ccc214b0960bd137ff87aad1e4fddeec48adf538d2"
   },
   "/disclaimer.html": {
     "date": "2026-10-31",
-    "sha256": "e55b8ffe3f0ca07aa06376b089df6da963ca2039b99e2f5d6831faa17b69162d"
+    "sha256": "b19ea5f89c628e2a89e932572ae7dbc406e8cd391e942cca47757e0253fc5a46"
   },
   "/editorial-policy.html": {
     "date": "2026-10-31",
-    "sha256": "076aa24bf5558bf212f3cbb1272294dfefda6fd4008514d0c903dbeb041b258f"
+    "sha256": "7f4d1ad22e65656eaf1643372bf58d2e960dac892030bf6180619f473adc2402"
   },
   "/extra-and-encore-explained.html": {
     "date": "2026-10-31",
-    "sha256": "78f8821c088cba5f7585d5d6a76350aba679ea86f377c883f79bb2d2b478d083"
+    "sha256": "252876819d553d985cdc6f3ed924fb725c68c316f4024e70af6a4d2e6c015d32"
   },
   "/guides.html": {
     "date": "2026-10-31",
-    "sha256": "d00ecb5524b78616089d01487606e8210cb6bcf79c3588caa173c98dab661db0"
+    "sha256": "18c47b2f1fdabe712f5630be723e9bf3457b0ff22b8c4bd47cbcb97ed16bc616"
   },
   "/hot-cold-explained.html": {
     "date": "2026-10-31",
-    "sha256": "a629f6455cc7e5b67616693776d5c44ad365084c24729103fd16820afd3b7b93"
+    "sha256": "2bffd2c65f5075484be3f2bba69e5c003eb23206689b2cfac5087a145c651a1c"
   },
   "/how-canada-lotto-works.html": {
     "date": "2026-10-31",
-    "sha256": "6e42eab4c57f10b02f2aa238c4612a05994cacfbc5b658f743c9877d3c3542e8"
+    "sha256": "a764c18467b4c3e0b79526a657bfa85b67d612dbec41225768ff811975636805"
   },
   "/how-to-claim-lottery-prize-bc.html": {
     "date": "2026-10-31",
-    "sha256": "eee7ae6a312e6ef9d00aea26d0c40d229ae1aeb2a82863569453301134b77df7"
+    "sha256": "9247af805894c9d8d55d73f8f9f95f7ae792d5c724495ffcd1e2c1edd3d64a48"
   },
   "/how-to-claim-lottery-prize-by-province.html": {
     "date": "2026-10-31",
-    "sha256": "b52633a0676577a3ac0e9e37e583b2de82f5b7c0c8821c54b0a88db98f25bcd7"
+    "sha256": "2342271a43db6804a3a1d41fcf8a7fe2f7b352645c10dc14f2d7c10a033bb67e"
+  },
+  "/lottery-pools-canada.html": {
+    "date": "2026-10-31",
+    "sha256": "fde2304f9ac7b76fa5e27eccb6bd4fe03b8713f7bab125c87545f888cb71b615"
   },
   "/lottery-scams-canada.html": {
     "date": "2026-10-31",
-    "sha256": "dccb21667416650912d0446f0a732a6d7244b1a63fcb98a3dfafa49a4905f2a3"
+    "sha256": "c51adc8b319f6d082e3696ecfc91180da559b914733d062ab74eeb13aa83d7de"
   },
   "/lotto-649-gold-ball-explained.html": {
     "date": "2026-10-31",
-    "sha256": "c25344f1e26b35f0cd1a7a4d012c204a3200445323b4b8b1e8c0e94d3147b8b9"
+    "sha256": "716a433ebcf2bcbdc6c7bae3bf8d001486104968e9b30adbe7e78a883c12a828"
   },
   "/lotto-649-results.html": {
     "date": "2026-10-31",
-    "sha256": "0313ff20f7a7d2defb19a29afe04bcf7a3cb1a45ea5f0a2c7c77ab101d0e7c0e"
+    "sha256": "25fe12ea33bb9d372b6eb91addb48412d9b1207ff0d7fc3ac7f50cefcde66ba6"
   },
   "/lotto-history-by-the-numbers.html": {
     "date": "2026-10-31",
-    "sha256": "65573025b79ff82da2dab3df71f6aee08a1fbaf64416e828f7b770c6a81759dc"
+    "sha256": "5cb0a86ebd381e06218712f526880dd3c7f0e384914d0b3a8029d25f4dfd8293"
   },
   "/lotto-max-jackpot-cap-explained.html": {
     "date": "2026-10-31",
-    "sha256": "9ed2fcec8608aac84f16b37e35c0560a5a2c07c73a32be3062e6388d781faa3a"
+    "sha256": "21c183e183c3db2aa8aea68984d7e0186914d428ecdf248f4f1051a8f5868fb2"
   },
   "/lotto-max-maxmillions-explained.html": {
     "date": "2026-10-31",
-    "sha256": "313dd98cd4bb3327cdfcc847ef022a8e6dd753af68a83eb16bd005d88df64822"
+    "sha256": "210c2d2e7261dab811dd51929f35ad411fa0b140c92efa4ead7fbf9152c21059"
   },
   "/lotto-max-results.html": {
     "date": "2026-10-31",
-    "sha256": "96856c75d5d91172ec2e842cedb464b06cc8abd2b3e3d56292dc6a26693f8cfe"
+    "sha256": "eac960291005caea134e57cd2f19d3b7f64f1c844dc6206f31e75f0a24085df2"
   },
   "/lotto-odds-calculator.html": {
     "date": "2026-10-31",
-    "sha256": "7a789e699cb397115290a2bbb9a353652adaeaf95ffc381fae028937ddc19fcd"
+    "sha256": "2bfb7e13e9fffcb776e10c682025861ec8d01c23f26cd8eea86af9a2e024f148"
   },
   "/lump-sum-vs-annuity-canada.html": {
     "date": "2026-10-31",
-    "sha256": "a97185c6c472cb29576d580916fad4e04bea86821f747bf99688fcd37e1e5609"
+    "sha256": "c244021cbff5e5ae0d1121f2895fc263312673655a7802a8b44ee14d9db22cd8"
   },
   "/privacy.html": {
     "date": "2026-10-31",
-    "sha256": "19b7b261ab23c7b507b49ea84a923cf537cf787e48c5d302f17cf04144e9ea55"
+    "sha256": "943c54e57261c20136896992b771ff5261ed2f8d4d4844f2583e5f61d92f2a03"
   },
   "/responsible-play.html": {
     "date": "2026-10-31",
-    "sha256": "e45949ff43d38c82b69bb9ed7aaac53f9fec8d242b8ba5ba85abef0bce7d71d1"
+    "sha256": "b2e422e03f3315fed99d55a4f006b501a2997b6ad4344dc576efd30b4f78d280"
   },
   "/terms.html": {
     "date": "2026-10-31",
-    "sha256": "be23be4d07362d13a1324668f35f4afd0d994c402f9ac2b29b9bb9a0f6cc2c6c"
+    "sha256": "cf06bbba90d1cc90ef4c077ef23b0e0bdf18d92d57553f75b335ee419fb82249"
+  },
+  "/unclaimed-lottery-prizes-canada.html": {
+    "date": "2026-10-31",
+    "sha256": "0542b9528d437bff9c94f0ec03b60b73fd86de9391f18757c4d470a652f64a8a"
   }
 }
