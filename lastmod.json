@@ -1,7 +1,7 @@
 {
   "/": {
-    "date": "2026-11-05",
-    "sha256": "53df5a77be58cf51ee2e722dbd566b9bcea5aa02ef69c4e05aeeb787706cb3cf"
+    "date": "2026-11-06",
+    "sha256": "57a590696bfd1001cf43e03bf85f68bb3e1c6d5bd09978c535df128b51fb7e78"
   },
   "/about.html": {
     "date": "2026-11-05",
@@ -68,8 +68,8 @@
     "sha256": "8b210067f1b946c7249711a8e56515148106f98ab70a9a8ea1e70347305b6250"
   },
   "/lotto-649-results.html": {
-    "date": "2026-11-05",
-    "sha256": "84804c648f93e484dd60015f1cbd716f29857c34e3d1e8bdbe0662ea8a1ab6d5"
+    "date": "2026-11-06",
+    "sha256": "d1d8654c0c0e89639cd285072f4d9089d337847c880d8e5c6b8eab601509be18"
   },
   "/lotto-history-by-the-numbers.html": {
     "date": "2026-11-05",
@@ -84,8 +84,8 @@
     "sha256": "a4261ada16c3417e3dfcafe1223f656322e280decdad6f0bbd9c2dee3dbe43c2"
   },
   "/lotto-max-results.html": {
-    "date": "2026-11-05",
-    "sha256": "f07acb9d168996e6611e62743eee351c52cda64b0c07f20c5e4f9e886ef35302"
+    "date": "2026-11-06",
+    "sha256": "fab3cd7f0286aa311b0aaca237ba75f782fd738562a067cc8e95be984da43fc3"
   },
   "/lotto-odds-calculator.html": {
     "date": "2026-11-05",
