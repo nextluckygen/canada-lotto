@@ -58,11 +58,20 @@ MAX_JACKPOT_CAP = 90_000_000
 
 PT = ZoneInfo("America/Vancouver")
 ET = ZoneInfo("America/Toronto")
-# Both games: ticket sales close at 10:30 p.m. ET (7:30 p.m. PT) on draw night and the draw follows.
+# Both games: ticket sales close at 10:30 p.m. ET on draw night and the draw follows.
 # Sources (checked Oct 7, 2026): OLG "LOTTO MAX draws take place every Tuesday and Friday after 10:30 PM ET";
 # Loto-Quebec Lotto 6/49 "Deadline for wagers: Wednesdays and Saturdays at 10:30 p.m.";
 # WCLC Lotto 6/49 + Lotto Max pages: tickets on sale "until ... 7:30 pm PT on the date of the draw".
 DRAW_TIME_ET = (22, 30)
+# B.C. stopped changing clocks in 2026 (year-round UTC-7) while Ontario still does, so the PT
+# equivalent of 10:30 p.m. ET is 7:30 p.m. from March to November and 8:30 p.m. from November to March.
+# Computed from the tz database at build time (WCLC now quotes only "10:30 pm ET", checked Nov 7, 2026).
+
+
+def draw_cutoff_phrase(on=None):
+    d = on or datetime.now(PT).date()
+    t = datetime(d.year, d.month, d.day, DRAW_TIME_ET[0], DRAW_TIME_ET[1], tzinfo=ET).astimezone(PT)
+    return f"10:30 p.m. ET ({t.hour % 12 or 12}:{t.minute:02d} p.m. PT in B.C. right now)"
 
 # ---------------------------------------------------------------------------
 # AdSense manual units. Max 3 per page, reserved grey boxes away from hero/buttons.
@@ -1498,11 +1507,11 @@ def archive_about(game_key, prep, history):
         eras = GAMES[game_key]["eras"]
         counts = {e["key"]: len(era_records(recs, e)) for e in eras}
         return f"""<h2>About Lotto Max and this archive</h2>
-<p>Lotto Max is drawn every Tuesday and Friday at about 10:30 p.m. ET (7:30 p.m. PT). Since April 14, 2026, a $6 play gives you four selections of seven numbers from 1 to 52: you choose one line (or take a Quick Pick) and the terminal adds three Quick Pick lines. Seven main numbers and a bonus number are drawn. Matching all seven on one line wins or shares the main jackpot, which starts at $10 million and is capped at $90 million. Every draw also has $100,000 MaxPlus prizes, and once the jackpot passes $50 million there are $1 million MaxMillions prizes as well. The full mechanics are in our <a href="/lotto-max-maxmillions-explained.html">Lotto Max and MaxMillions guide</a>.</p>
+<p>Lotto Max is drawn every Tuesday and Friday at about {draw_cutoff_phrase()}. Since April 14, 2026, a $6 play gives you four selections of seven numbers from 1 to 52: you choose one line (or take a Quick Pick) and the terminal adds three Quick Pick lines. Seven main numbers and a bonus number are drawn. Matching all seven on one line wins or shares the main jackpot, which starts at $10 million and is capped at $90 million. Every draw also has $100,000 MaxPlus prizes, and once the jackpot passes $50 million there are $1 million MaxMillions prizes as well. The full mechanics are in our <a href="/lotto-max-maxmillions-explained.html">Lotto Max and MaxMillions guide</a>.</p>
 <p>This archive holds all <strong>{total:,}</strong> Lotto Max draws since the first one on {first}. The number range has changed twice: {counts["r49"]} draws used 1–49 (2009–2019), {counts["r50"]} used 1–50 (May 2019 – April 2026) and {counts["r52"]} so far use 1–52. Because a bigger range lowers every number's share, the statistics below never mix formats: the default view is the current 1–52 format, and the older eras have their own clearly labelled tabs.</p>
 <p>How it is built: draws since October 2025 come from the Western Canada Lottery Corporation's public winning-number pages and are added automatically after each draw night, once the date, weekday and count of numbers pass validation. Older draws were added in October 2026 from Loto-Québec's public results archive and cross-checked against WCLC's draw numbering. The jackpot column shows the jackpot WCLC advertised for that draw; it was only recorded from October 2026, so earlier rows show a dash. Always confirm a ticket with <a href="{GAMES[game_key]["official"]}" rel="noopener">WCLC</a> or your own provincial lottery.</p>"""
     return f"""<h2>About Lotto 6/49 and this archive</h2>
-<p>Lotto 6/49 is drawn every Wednesday and Saturday at about 10:30 p.m. ET (7:30 p.m. PT). A $3 play has two parts. In the Classic Draw you pick six numbers from 1 to 49; matching all six wins or shares a fixed $5 million jackpot, and smaller prizes start at two numbers plus the bonus. Each play also carries a 10-digit Gold Ball number. One Gold Ball number is drawn every time, so somebody always wins either the guaranteed $1 million (white ball) or the Gold Ball jackpot (gold ball), which starts at $10 million and grows by $2 million after every white ball. Our <a href="/lotto-649-gold-ball-explained.html">Gold Ball guide</a> explains the drum and the odds.</p>
+<p>Lotto 6/49 is drawn every Wednesday and Saturday at about {draw_cutoff_phrase()}. A $3 play has two parts. In the Classic Draw you pick six numbers from 1 to 49; matching all six wins or shares a fixed $5 million jackpot, and the smallest prize, a Free Play, starts at two matching numbers. Each play also carries a 10-digit Gold Ball number. One Gold Ball number is drawn every time, so somebody always wins either the guaranteed $1 million (white ball) or the Gold Ball jackpot (gold ball), which starts at $10 million and grows by $2 million after every white ball. Our <a href="/lotto-649-gold-ball-explained.html">Gold Ball guide</a> explains the drum and the odds.</p>
 <p>This archive holds all <strong>{total:,}</strong> Lotto 6/49 draws since the very first one on {first}. The main numbers have always been drawn from 1 to 49, so statistics can use the whole history; the window picker lets you compare the last 10, 50 or 100 draws with the full record.</p>
 <p>How it is built: draws since October 2025 come from the Western Canada Lottery Corporation's public winning-number pages and are added automatically after each draw night, once the date, weekday and numbers pass validation. Older draws were added in October 2026 from Loto-Québec's public results archive and cross-checked against WCLC. Gold Ball results are shown where they were published with the draw (August 2026 onward). Confirm any ticket with <a href="{GAMES[game_key]["official"]}" rel="noopener">WCLC</a> or your provincial lottery.</p>"""
 
@@ -1611,7 +1620,7 @@ def archive_faqs(game_key, latest, nd, recs):
             ("What were the latest Lotto Max winning numbers?",
              f"The Lotto Max winning numbers for {when} were {nums}, with bonus number {latest.get('bonus')}.{nxt} Always confirm a ticket with your provincial lottery."),
             ("What time is the Lotto Max draw?",
-             "Lotto Max is drawn every Tuesday and Friday. Ticket sales close at 10:30 p.m. ET (7:30 p.m. PT) and the draw follows. This page adds the winning numbers after the Western Canada Lottery Corporation publishes them, normally overnight."),
+             f"Lotto Max is drawn every Tuesday and Friday. Ticket sales close at {draw_cutoff_phrase()} and the draw follows. This page adds the winning numbers after the Western Canada Lottery Corporation publishes them, normally overnight."),
             ("How many numbers do you need to win a Lotto Max prize?",
              'Three numbers on one line wins a Free Play, and 3 numbers plus the bonus or 4 numbers win $20. Bigger tiers are shares of the prize pool, and all seven numbers on one line wins or shares the jackpot, which runs from $10 million to $90 million. Every tier and its odds are in our <a href="/lotto-odds-calculator.html">lotto odds calculator</a>.'),
             ("What are hot and cold Lotto Max numbers?",
@@ -1633,7 +1642,7 @@ def archive_faqs(game_key, latest, nd, recs):
         ("What were the latest Lotto 6/49 winning numbers?",
          f"The Lotto 6/49 Classic Draw numbers for {when} were {nums}, with bonus number {latest.get('bonus')}.{gb_txt} Always confirm a ticket with your provincial lottery."),
         ("What time is the Lotto 6/49 draw?",
-         "Lotto 6/49 is drawn every Wednesday and Saturday. Ticket sales close at 10:30 p.m. ET (7:30 p.m. PT) and the draw follows. Results appear on this page after the Western Canada Lottery Corporation publishes them, normally overnight."),
+         f"Lotto 6/49 is drawn every Wednesday and Saturday. Ticket sales close at {draw_cutoff_phrase()} and the draw follows. Results appear on this page after the Western Canada Lottery Corporation publishes them, normally overnight."),
         ("How does the Lotto 6/49 Gold Ball draw work?",
          'Every $3 play carries a 10-digit Gold Ball number and one number is drawn each time. If a white ball comes out of the drum, that ticket wins $1 million and the Gold Ball jackpot grows by $2 million; if the gold ball comes out, it wins the jackpot, which then resets to $10 million.' + drum + ' More in our <a href="/lotto-649-gold-ball-explained.html">Gold Ball guide</a>.'),
         ("What are the odds of winning Lotto 6/49?",
