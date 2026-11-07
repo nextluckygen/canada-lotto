@@ -88,6 +88,10 @@ HEAT_LABEL = ["Cold", "Cool", "Average", "Hot", "Very hot"]
 TOP_CLASS = ["top-r1", "top-r2", "top-r3", "top-r4", "top-r5", "top-r6"]
 
 GUIDES = [
+    ("lotto-max-vs-649-vs-daily-grand", "Lotto Max vs Lotto 6/49 vs Daily Grand: what your money buys",
+     "Price, draw days, top-prize odds per dollar, fixed vs shared prizes, and the average return worked out from the prize tables.", "⚖️"),
+    ("buy-lottery-tickets-online-canada", "Buying lottery tickets online in Canada, by province",
+     "The one official site for each region, age and location checks, cut-off times, subscriptions and unofficial sellers.", "🛒"),
     ("biggest-canadian-lottery-wins", "Biggest Canadian lottery wins, with sources",
      "Every $70 million-plus Lotto Max jackpot and the largest 6/49 wins, each row cited to an official release or news report.", "🏆"),
     ("how-to-claim-lottery-prize-by-province", "Claiming a lottery prize, province by province",
@@ -914,6 +918,13 @@ GUIDE_TOOL_LINKS = {
     "lottery-pools-canada": [
         ("/lotto-odds-calculator.html", "Lotto odds calculator"),
         ("/how-to-claim-lottery-prize-by-province.html", "Claiming a prize, province by province")],
+    "lotto-max-vs-649-vs-daily-grand": [
+        ("/lotto-odds-calculator.html", "Your odds over a year of play"),
+        ("/lotto-max-results.html#tracker", "Current Lotto Max jackpot and MaxMillions count"),
+        ("/lotto-649-results.html", "Lotto 6/49 results and Gold Ball jackpot")],
+    "buy-lottery-tickets-online-canada": [
+        ("/check-my-numbers.html", "Check your line against every past draw"),
+        ("/lottery-scams-canada.html", "Common lottery scams in Canada")],
 }
 
 
