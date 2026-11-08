@@ -1,13 +1,27 @@
 /* Check my numbers: compares one line with every archived draw, entirely in the browser. */
 (function () {
   "use strict";
-  var LH = window.LH;
+  var LH = typeof window !== "undefined" ? window.LH : null;
   var GAMES = {
     max: { k: 7, N: 52, slug: "lotto-max", name: "Lotto Max",
       tiers: [["7 of 7", 7, 0], ["6 of 7 + bonus", 6, 1], ["6 of 7", 6, 0], ["5 of 7 + bonus", 5, 1], ["5 of 7", 5, 0], ["4 of 7 + bonus", 4, 1], ["4 of 7", 4, 0], ["3 of 7 + bonus", 3, 1], ["3 of 7", 3, 0]] },
     "649": { k: 6, N: 49, slug: "lotto-649", name: "Lotto 6/49",
       tiers: [["6 of 6", 6, 0], ["5 of 6 + bonus", 5, 1], ["5 of 6", 5, 0], ["4 of 6", 4, -1], ["3 of 6", 3, -1], ["2 of 6 + bonus", 2, 1], ["2 of 6", 2, -2]] }
   };
+  var TicketCheck = {
+    drawsBetween: function (draws, from, to) { return draws.filter(function (d) { return d[0] >= from && d[0] <= to; }); },
+    nearest: function (draws, iso) {
+      var before = null, after = null;
+      for (var i = 0; i < draws.length; i++) { if (draws[i][0] < iso) before = draws[i]; else if (draws[i][0] > iso) { after = draws[i]; break; } }
+      return { before: before, after: after };
+    },
+    match: function (mine, d) {
+      var m = 0;
+      for (var i = 0; i < d[1].length; i++) if (mine.indexOf(d[1][i]) >= 0) m++;
+      return { m: m, b: !!(d[2] && mine.indexOf(d[2]) >= 0) };
+    }
+  };
+  if (typeof module !== "undefined") { module.exports = { TicketCheck: TicketCheck, tierOf: tierOf }; return; }
   var cache = {};
   function load(g) {
     if (!cache[g]) {
@@ -54,6 +68,14 @@
     var save = box.querySelector("[data-save]");
     var msg = box.querySelector("[data-msg]");
     var label = box.querySelector("[data-count-label]");
+    var dateWrap = box.querySelector("[data-date-wrap]");
+    var dFrom = box.querySelector("[data-date-from]");
+    var dTo = box.querySelector("[data-date-to]");
+    function syncScope() {
+      var isDate = scope.value === "date";
+      if (dateWrap) dateWrap.hidden = !isDate;
+      minSel.disabled = isDate;
+    }
 
     function sync(fromTyped) {
       var g = GAMES[game];
@@ -76,14 +98,16 @@
       box.querySelectorAll("[data-game]").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-game") === g ? "true" : "false"); });
       line = line.filter(function (n) { return n <= GAMES[g].N; }).slice(0, GAMES[g].k);
       if (g === "649") {
-        scope.innerHTML = '<option value="all">All draws since 1982</option>';
+        scope.innerHTML = '<option value="all">All draws since 1982</option><option value="date">One ticket: a draw date</option>';
         minSel.querySelector('option[value="3"]').textContent = "3 or more";
       } else {
-        scope.innerHTML = '<option value="all">All draws since 2009</option><option value="cur">Current 1–52 format only</option>';
+        scope.innerHTML = '<option value="all">All draws since 2009</option><option value="cur">Current 1–52 format only</option><option value="date">One ticket: a draw date</option>';
       }
+      syncScope();
       typed.placeholder = g === "649" ? "e.g. 3 11 19 24 33 40" : "e.g. 3 11 19 24 33 40 47";
       sync();
     }
+    scope.addEventListener("change", syncScope);
     box.querySelectorAll("[data-game]").forEach(function (b) { b.addEventListener("click", function () { setGame(b.getAttribute("data-game")); }); });
     picks.forEach(function (p) {
       p.addEventListener("click", function () {
@@ -121,6 +145,7 @@
       load(game).then(function (data) {
         run.disabled = false; msg.textContent = "";
         var draws = data.draws;
+        if (scope.value === "date") { renderTicket(data, mine); return; }
         if (game === "max" && scope.value === "cur") draws = draws.filter(function (d) { return d[0] >= data.eras[0].start; });
         var min = +minSel.value;
         var counts = g.tiers.map(function () { return 0; });
@@ -176,6 +201,38 @@
       res.querySelector("[data-list]").innerHTML = (hits.length ? "" : '<p class="muted">No draws matched ' + min + " or more of your numbers in this range.</p>") +
         (hits.length ? '<p class="text-sm muted mb-2">' + hits.length + " draw" + (hits.length === 1 ? "" : "s") + " with " + min + "+ matches, newest first" + (hits.length > 200 ? " (first 200 shown)" : "") + ". Gold rings = numbers that matched.</p>" : "") +
         list;
+      res.scrollIntoView({ behavior: LH.reduce ? "auto" : "smooth", block: "start" });
+    }
+
+    // One ticket: every archived draw from the ticket's first to last draw date, with the exact match for each.
+    function renderTicket(data, mine) {
+      var g = GAMES[game], from = dFrom.value, to = dTo.value || dFrom.value;
+      if (!from) { msg.textContent = "Enter the draw date printed on your ticket."; dFrom.focus(); return; }
+      if (to < from) { var t0 = from; from = to; to = t0; }
+      var all = data.draws, inRange = TicketCheck.drawsBetween(all, from, to);
+      var lastIso = all.length ? all[all.length - 1][0] : "";
+      res.hidden = false;
+      res.querySelector("[data-tiers]").innerHTML = "";
+      res.querySelector("[data-best]").innerHTML = "";
+      var head = '<p class="kicker">' + g.name + ' · one ticket</p><div class="mt-2"><span class="balls balls-md">' + mine.map(function (n) { return LH.ballHTML(n, "md", "", undefined, game); }).join("") + "</span></div>";
+      if (!inRange.length) {
+        var near = TicketCheck.nearest(all, from);
+        var note = from > lastIso ? "Our archive runs to " + fmtDate(lastIso) + ". Results are added after the Western Canada Lottery Corporation publishes them, normally overnight." :
+          "There was no " + g.name + " draw on " + (from === to ? "that date" : "those dates") + " in our archive." +
+          (near.before ? " Closest earlier draw: " + fmtDate(near.before[0]) + "." : "") + (near.after ? " Closest later draw: " + fmtDate(near.after[0]) + "." : "");
+        res.querySelector("[data-summary]").innerHTML = head + '<p class="mt-3">' + note + "</p>";
+        res.querySelector("[data-list]").innerHTML = "";
+        res.scrollIntoView({ behavior: LH.reduce ? "auto" : "smooth", block: "start" });
+        return;
+      }
+      var rows = inRange.map(function (d) {
+        var r = TicketCheck.match(mine, d), t = tierOf(game, r.m, r.b);
+        var txt = t >= 0 ? '<span class="tier-hit">' + g.tiers[t][0] + "</span>" : '<span class="text-sm font-bold">' + r.m + " matched" + (r.b ? " + bonus" : "") + " · no prize tier</span>";
+        return '<div class="res-row"><span class="dt">' + fmtDate(d[0]) + "</span>" + lineBalls(mine, d) + txt + "</div>";
+      }).join("");
+      res.querySelector("[data-summary]").innerHTML = head + '<p class="mt-3 text-lg">Checked your line against <strong>' + inRange.length + "</strong> draw" + (inRange.length === 1 ? "" : "s") + " from " + fmtDate(inRange[0][0]) + (inRange.length > 1 ? " to " + fmtDate(inRange[inRange.length - 1][0]) : "") + ".</p>" +
+        '<p class="text-sm muted mt-2">Main numbers and bonus only. ' + (game === "649" ? "The Gold Ball number and Extra/Encore" : "Extra/Encore and the other Quick Pick lines on the same ticket") + ' are not checked here; enter each line separately. Prize amounts are not shown. This is not an official result: scan the ticket at a retailer or in your lottery app, or compare with <a href="' + (game === "649" ? "https://www.wclc.com/winning-numbers/lotto-649-extra.htm" : "https://www.wclc.com/winning-numbers/lotto-max-extra.htm") + '" rel="noopener">WCLC\'s winning numbers</a> before you rely on it.</p>';
+      res.querySelector("[data-list]").innerHTML = rows;
       res.scrollIntoView({ behavior: LH.reduce ? "auto" : "smooth", block: "start" });
     }
 

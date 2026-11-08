@@ -1822,7 +1822,12 @@ def render_checker(prep):
     <div class="pick-grid mt-4" data-picks>{picks}</div>
     <div class="grid gap-3 md:grid-cols-4 mt-4 items-end">
       <label class="field md:col-span-2">Or type your numbers<input type="text" inputmode="numeric" autocomplete="off" data-typed placeholder="e.g. 3 11 19 24 33 40 47"></label>
-      <label class="field">Draws to search<select data-scope><option value="all">All draws since 2009</option><option value="cur">Current 1–52 format only</option></select></label>
+      <label class="field">Draws to search<select data-scope><option value="all">All draws since 2009</option><option value="cur">Current 1–52 format only</option><option value="date">One ticket: a draw date</option></select></label>
+      <div class="field md:col-span-4 grid gap-3 sm:grid-cols-2" data-date-wrap hidden>
+        <label class="field">Draw date on your ticket<input type="date" data-date-from min="1982-06-12"></label>
+        <label class="field">Last draw date (multi-draw tickets, optional)<input type="date" data-date-to min="1982-06-12"></label>
+        <p class="text-xs muted sm:col-span-2" id="date-help">Enter one line at a time. This checks the main numbers and bonus only, not the Gold Ball number, Extra or Encore, and it is not an official ticket check.</p>
+      </div>
       <label class="field">Show matches of<select data-min><option value="3">3 or more</option><option value="4">4 or more</option><option value="5">5 or more</option></select></label>
     </div>
     <div class="flex flex-wrap items-center gap-3 mt-4">
