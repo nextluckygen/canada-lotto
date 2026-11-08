@@ -6,7 +6,7 @@
     max: { k: 7, N: 52, slug: "lotto-max", name: "Lotto Max",
       tiers: [["7 of 7", 7, 0], ["6 of 7 + bonus", 6, 1], ["6 of 7", 6, 0], ["5 of 7 + bonus", 5, 1], ["5 of 7", 5, 0], ["4 of 7 + bonus", 4, 1], ["4 of 7", 4, 0], ["3 of 7 + bonus", 3, 1], ["3 of 7", 3, 0]] },
     "649": { k: 6, N: 49, slug: "lotto-649", name: "Lotto 6/49",
-      tiers: [["6 of 6", 6, 0], ["5 of 6 + bonus", 5, 1], ["5 of 6", 5, 0], ["4 of 6", 4, -1], ["3 of 6", 3, -1], ["2 of 6 + bonus", 2, 1], ["2 of 6", 2, -2]] }
+      tiers: [["6 of 6", 6, 0], ["5 of 6 + bonus", 5, 1], ["5 of 6", 5, 0], ["4 of 6", 4, -1], ["3 of 6", 3, -1], ["2 of 6 + bonus", 2, 1], ["2 of 6 (Free Play)", 2, -2]] }
   };
   var TicketCheck = {
     drawsBetween: function (draws, from, to) { return draws.filter(function (d) { return d[0] >= from && d[0] <= to; }); },
@@ -74,6 +74,8 @@
     function syncScope() {
       var isDate = scope.value === "date";
       if (dateWrap) dateWrap.hidden = !isDate;
+      if (dFrom) dFrom.disabled = !isDate;
+      if (dTo) dTo.disabled = !isDate;
       minSel.disabled = isDate;
     }
 

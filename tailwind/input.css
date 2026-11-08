@@ -324,8 +324,9 @@ a.lift:hover { transform: translateY(-2px); box-shadow: 0 14px 28px -14px rgba(1
 .pick:hover { background:#EEF2FF; }
 .pick.is-on { background: var(--ink2); color:#fff; box-shadow: 0 0 0 2px var(--gold); }
 .pick[hidden] { display:none; }
+[hidden] { display:none !important; }
 .field { display:grid; gap:.3rem; font-size:14px; font-weight:700; color:#1E293B; }
-.field input[type=text], .field input[type=number], .field select { min-height:44px; border-radius:.6rem; border:1px solid #CBD5E1; padding:0 .7rem; font-weight:500; color:#0F172A; background:#fff; }
+.field input[type=text], .field input[type=number], .field input[type=date], .field select { min-height:44px; border-radius:.6rem; border:1px solid #CBD5E1; padding:0 .7rem; font-weight:500; color:#0F172A; background:#fff; }
 .hero .field { color:#E0E7FF; }
 .hero .field input, .hero .field select { border-color: rgba(255,255,255,.3); }
 .check { display:flex; align-items:center; gap:.5rem; min-height:44px; font-size:14px; }

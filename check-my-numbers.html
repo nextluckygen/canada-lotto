@@ -25,11 +25,11 @@
   <meta name="twitter:description" content="Check your Lotto Max or Lotto 6/49 numbers against every draw since 1982: see each 3+, 4+ or 5+ match, your best result and a count per prize tier.">
   <meta name="twitter:image" content="https://lottohelper.ca/assets/og/lottohelper-og.png">
   <link rel="preload" href="/assets/fonts/baloo2-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/assets/site.css">
+  <link rel="stylesheet" href="/assets/site.css?v=d12c81c56e">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5048509015899303" crossorigin="anonymous"></script>
-  <script src="/assets/js/common.js" defer></script>
-  <script src="/assets/js/checker.js" defer></script>
-  <script src="/assets/js/generator.js" defer></script>
+  <script src="/assets/js/common.js?v=949ca20d9b" defer></script>
+  <script src="/assets/js/checker.js?v=17cfa76bc3" defer></script>
+  <script src="/assets/js/generator.js?v=37b1f58397" defer></script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://lottohelper.ca/"},{"@type":"ListItem","position":2,"name":"Check my numbers","item":"https://lottohelper.ca/check-my-numbers.html"}]}</script>
 </head>
 <body class="antialiased" data-hwc-max="h10,c2,c5,c5,h8,h9,w7,w7,c2,w7,h9,h9,w7,c3,w7,c3,c5,w6,w6,c2,c5,h8,h13,w7,h8,c4,c2,h9,c2,h10,c5,h8,c4,w7,h8,h8,w6,w6,h8,w7,h11,w6,h10,w6,c3,w6,h9,h8,h10,h10,h9,h8" data-hwc-649="h10,c2,h9,h8,h9,w6,c3,w5,h12,w7,w5,w5,w5,w7,w7,c3,w6,w7,c3,h10,c4,h8,w6,c3,w6,w6,h10,w7,h8,w7,c3,c4,h11,w5,w5,w7,h11,c4,c3,c1,w7,w7,c3,c3,h9,h8,w5,w6,c4">
@@ -87,8 +87,8 @@
       <label class="field md:col-span-2">Or type your numbers<input type="text" inputmode="numeric" autocomplete="off" data-typed placeholder="e.g. 3 11 19 24 33 40 47"></label>
       <label class="field">Draws to search<select data-scope><option value="all">All draws since 2009</option><option value="cur">Current 1–52 format only</option><option value="date">One ticket: a draw date</option></select></label>
       <div class="field md:col-span-4 grid gap-3 sm:grid-cols-2" data-date-wrap hidden>
-        <label class="field">Draw date on your ticket<input type="date" data-date-from min="1982-06-12"></label>
-        <label class="field">Last draw date (multi-draw tickets, optional)<input type="date" data-date-to min="1982-06-12"></label>
+        <label class="field">Draw date on your ticket<input type="date" data-date-from min="1982-06-12" aria-describedby="date-help" disabled></label>
+        <label class="field">Last draw date (multi-draw tickets, optional)<input type="date" data-date-to min="1982-06-12" aria-describedby="date-help" disabled></label>
         <p class="text-xs muted sm:col-span-2" id="date-help">Enter one line at a time. This checks the main numbers and bonus only, not the Gold Ball number, Extra or Encore, and it is not an official ticket check.</p>
       </div>
       <label class="field">Show matches of<select data-min><option value="3">3 or more</option><option value="4">4 or more</option><option value="5">5 or more</option></select></label>
