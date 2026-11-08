@@ -34,3 +34,17 @@ for (const [data, k] of [[max, 7], [l649, 6]]) {
   data.draws.slice(-100).forEach((x) => assert.strictEqual(x[1].length, k));
 }
 console.log("ticket check tests: OK");
+
+// --- QA regressions (Nov 8, 2026) ---
+const fs = require("fs");
+const css = fs.readFileSync(__dirname + "/../assets/site.css", "utf8");
+assert.ok(/\[hidden\]\{display:none!important\}/.test(css), "global [hidden] rule must beat .field{display:grid}");
+assert.ok(/\.field\{display:grid/.test(css), "this is the rule that used to override [hidden]");
+const page = fs.readFileSync(__dirname + "/../check-my-numbers.html", "utf8");
+assert.ok(/<div[^>]*data-date-wrap hidden>/.test(page), "date fields start hidden");
+assert.strictEqual((page.match(/type="date"[^>]*disabled>/g) || []).length, 2, "both date inputs start disabled");
+assert.ok(/src="\/assets\/js\/checker\.js\?v=[0-9a-f]{10}"/.test(page), "checker.js is cache-busted");
+assert.ok(/href="\/assets\/site\.css\?v=[0-9a-f]{10}"/.test(page), "site.css is cache-busted");
+// 6/49 labels: two main numbers = Free Play; two + bonus is its own tier
+assert.ok(fs.readFileSync(__dirname + "/../assets/js/checker.js", "utf8").includes('"2 of 6 (Free Play)"'));
+console.log("QA regression tests: OK");

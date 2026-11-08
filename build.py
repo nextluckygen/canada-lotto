@@ -38,6 +38,16 @@ ADSENSE_TAG = (
     '?client=ca-pub-5048509015899303" crossorigin="anonymous"></script>'
 )
 CSS_HREF = "/assets/site.css"
+
+
+def asset_url(path):
+    """Cache-busting URL: ?v= short content hash, so a changed CSS/JS file is never served stale."""
+    import hashlib
+    try:
+        with open(path.lstrip("/"), "rb") as f:
+            return f"{path}?v={hashlib.sha256(f.read()).hexdigest()[:10]}"
+    except OSError:
+        return path
 FONT_HREF = "/assets/fonts/baloo2-latin.woff2"
 CONTENT_DIR = "content"
 LASTMOD_FILE = "lastmod.json"
@@ -777,7 +787,7 @@ def layout(path, title, description, body, active=None, noindex=False, scripts=(
     robots = '<meta name="robots" content="noindex">\n  ' if noindex else ""
     canonical_tag = "" if noindex else f'<link rel="canonical" href="{canonical}">\n  '
     act = active if active is not None else path
-    script_tags = "".join(f'\n  <script src="{s}" defer></script>' for s in scripts)
+    script_tags = "".join(f'\n  <script src="{asset_url(s)}" defer></script>' for s in scripts)
     blocks = list(jsonld)
     if crumbs and not noindex:
         blocks.append(ld_breadcrumbs(crumbs))
@@ -808,7 +818,7 @@ def layout(path, title, description, body, active=None, noindex=False, scripts=(
   <meta name="twitter:description" content="{esc(description)}">
   <meta name="twitter:image" content="{OG_IMAGE}">
   <link rel="preload" href="{FONT_HREF}" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="{CSS_HREF}">
+  <link rel="stylesheet" href="{asset_url(CSS_HREF)}">
   {ADSENSE_TAG}{script_tags}{ld}
 </head>
 <body class="antialiased" data-hwc-max="{hwc_attr('lotto_max')}" data-hwc-649="{hwc_attr('lotto_649')}">
@@ -1824,8 +1834,8 @@ def render_checker(prep):
       <label class="field md:col-span-2">Or type your numbers<input type="text" inputmode="numeric" autocomplete="off" data-typed placeholder="e.g. 3 11 19 24 33 40 47"></label>
       <label class="field">Draws to search<select data-scope><option value="all">All draws since 2009</option><option value="cur">Current 1–52 format only</option><option value="date">One ticket: a draw date</option></select></label>
       <div class="field md:col-span-4 grid gap-3 sm:grid-cols-2" data-date-wrap hidden>
-        <label class="field">Draw date on your ticket<input type="date" data-date-from min="1982-06-12"></label>
-        <label class="field">Last draw date (multi-draw tickets, optional)<input type="date" data-date-to min="1982-06-12"></label>
+        <label class="field">Draw date on your ticket<input type="date" data-date-from min="1982-06-12" aria-describedby="date-help" disabled></label>
+        <label class="field">Last draw date (multi-draw tickets, optional)<input type="date" data-date-to min="1982-06-12" aria-describedby="date-help" disabled></label>
         <p class="text-xs muted sm:col-span-2" id="date-help">Enter one line at a time. This checks the main numbers and bonus only, not the Gold Ball number, Extra or Encore, and it is not an official ticket check.</p>
       </div>
       <label class="field">Show matches of<select data-min><option value="3">3 or more</option><option value="4">4 or more</option><option value="5">5 or more</option></select></label>
