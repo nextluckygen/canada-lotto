@@ -107,6 +107,10 @@ HEAT_LABEL = ["Cold", "Cool", "Average", "Hot", "Very hot"]
 TOP_CLASS = ["top-r1", "top-r2", "top-r3", "top-r4", "top-r5", "top-r6"]
 
 GUIDES = [
+    ("first-30-days-after-lottery-win-canada", "Your first 30 days after a big lottery win in Canada",
+     "Protect the ticket, get advice, what each province publishes about winners, what the CRA says about tax, and group wins.", "🗓️"),
+    ("how-lottery-draws-are-audited-canada", "How Canadian lottery draws are run, audited and checked",
+     "Who conducts the national draws, how certified random number software and independent auditors work, and what Quebec's regulation says.", "🔍"),
     ("lotto-max-vs-649-vs-daily-grand", "Lotto Max vs Lotto 6/49 vs Daily Grand: what your money buys",
      "Price, draw days, top-prize odds per dollar, fixed vs shared prizes, and the average return worked out from the prize tables.", "⚖️"),
     ("buy-lottery-tickets-online-canada", "Buying lottery tickets online in Canada, by province",
@@ -944,6 +948,13 @@ GUIDE_TOOL_LINKS = {
     "buy-lottery-tickets-online-canada": [
         ("/check-my-numbers.html", "Check your line against every past draw"),
         ("/lottery-scams-canada.html", "Common lottery scams in Canada")],
+    "first-30-days-after-lottery-win-canada": [
+        ("/how-to-claim-lottery-prize-by-province.html", "Claiming a prize, province by province"),
+        ("/are-lottery-winnings-taxed-canada.html", "Are lottery winnings taxed in Canada?"),
+        ("/lottery-pools-canada.html", "Office and group lottery pools")],
+    "how-lottery-draws-are-audited-canada": [
+        ("/hot-cold-explained.html", "What hot and cold numbers can and cannot tell you"),
+        ("/lotto-odds-calculator.html", "Lotto odds calculator")],
 }
 
 
