@@ -1284,7 +1284,8 @@
     {"date":"Tuesday, October 27, 2026","numbers":[1,20,24,26,33,36,50],"bonus":11,"jackpot":25000000,"maxmillions":0,"maxplus":25},
     {"date":"Friday, October 30, 2026","numbers":[6,19,23,24,30,35,51],"bonus":2,"jackpot":30000000,"maxmillions":0,"maxplus":30},
     {"date":"Tuesday, November 03, 2026","numbers":[5,7,16,23,28,30,47],"bonus":31,"jackpot":40000000,"maxmillions":0,"maxplus":40},
-    {"date":"Friday, November 06, 2026","numbers":[10,23,32,43,46,48,51],"bonus":30,"jackpot":50000000,"maxmillions":2,"maxplus":50}
+    {"date":"Friday, November 06, 2026","numbers":[10,23,32,43,46,48,51],"bonus":30,"jackpot":50000000,"maxmillions":2,"maxplus":50},
+    {"date":"Tuesday, November 10, 2026","numbers":[3,11,31,37,44,47,50],"bonus":17,"jackpot":10000000,"maxmillions":0,"maxplus":10}
   ],
   "lotto_649": [
     {"date":"Saturday, June 12, 1982","numbers":[3,11,12,14,41,43],"bonus":13},
@@ -5756,17 +5757,17 @@
   ],
   "upcoming": {
     "lotto_max": {
-      "date": "2026-11-10",
-      "jackpot": 10000000,
+      "date": "2026-11-13",
+      "jackpot": 15000000,
       "maxmillions": 0,
-      "maxplus": 10,
-      "fetched": "2026-11-10"
+      "maxplus": 15,
+      "fetched": "2026-11-11"
     },
     "lotto_649": {
       "date": "2026-11-11",
       "gold_ball_jackpot": 38000000,
       "balls_remaining": 16,
-      "fetched": "2026-11-10"
+      "fetched": "2026-11-11"
     }
   },
   "meta": {
@@ -5778,6 +5779,6 @@
       ],
       "note": "Cross-checked: both sources agree on all overlapping draws; draw counts match WCLC draw numbers."
     },
-    "last_checked": "2026-11-10T08:26-07:00"
+    "last_checked": "2026-11-11T07:57-07:00"
   }
 }
