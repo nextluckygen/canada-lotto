@@ -5766,13 +5766,13 @@
       "jackpot": 25000000,
       "maxmillions": 0,
       "maxplus": 25,
-      "fetched": "2026-11-19"
+      "fetched": "2026-11-20"
     },
     "lotto_649": {
       "date": "2026-11-21",
       "gold_ball_jackpot": 14000000,
       "balls_remaining": 28,
-      "fetched": "2026-11-19"
+      "fetched": "2026-11-20"
     }
   },
   "meta": {
@@ -5784,6 +5784,6 @@
       ],
       "note": "Cross-checked: both sources agree on all overlapping draws; draw counts match WCLC draw numbers."
     },
-    "last_checked": "2026-11-19T09:23-07:00"
+    "last_checked": "2026-11-20T08:56-07:00"
   }
 }
