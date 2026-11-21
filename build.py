@@ -107,6 +107,10 @@ HEAT_LABEL = ["Cold", "Cool", "Average", "Hot", "Very hot"]
 TOP_CLASS = ["top-r1", "top-r2", "top-r3", "top-r4", "top-r5", "top-r6"]
 
 GUIDES = [
+    ("who-runs-canadian-lotteries", "Who runs lotteries in Canada: the provinces, the ILC and where ticket money goes",
+     "The Criminal Code basis for provincial lotteries, the five regional corporations, what the ILC does, and what each corporation publishes about prizes, commissions and profit.", "🏛️"),
+    ("scratch-tickets-vs-lotto-draws-canada", "Scratch tickets vs lotto draws in Canada: how the odds and payouts compare",
+     "How to read overall odds and prize payout, a full prize table worked line by line, and what the prizes-remaining lists can and can't tell you.", "🎟️"),
     ("first-30-days-after-lottery-win-canada", "Your first 30 days after a big lottery win in Canada",
      "Protect the ticket, get advice, what each province publishes about winners, what the CRA says about tax, and group wins.", "🗓️"),
     ("how-lottery-draws-are-audited-canada", "How Canadian lottery draws are run, audited and checked",
@@ -885,6 +889,13 @@ def author_box(meta):
 
 # Descriptive links from each guide to the tools and results pages that put it into practice.
 GUIDE_TOOL_LINKS = {
+    "who-runs-canadian-lotteries": [
+        ("/how-lottery-draws-are-audited-canada.html", "How Canadian lottery draws are run and audited"),
+        ("/how-to-claim-lottery-prize-by-province.html", "Claiming a prize, province by province"),
+        ("/lotto-max-vs-649-vs-daily-grand.html", "Lotto Max vs 6/49 vs Daily Grand")],
+    "scratch-tickets-vs-lotto-draws-canada": [
+        ("/lotto-odds-calculator.html", "Lotto odds calculator"),
+        ("/responsible-play.html", "Responsible play and budgeting")],
     "lotto-max-maxmillions-explained": [
         ("/lotto-max-results.html#tracker", "Track the current Lotto Max jackpot and MaxMillions count"),
         ("/lotto-max-results.html", "See the latest Lotto Max winning numbers"),
