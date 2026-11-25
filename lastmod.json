@@ -1,130 +1,138 @@
 {
   "/": {
-    "date": "2026-11-24",
-    "sha256": "8b33f81c8249a82d6d724ba5d3ff960e0b4efee9a626c7d180ce9f354bae7170"
+    "date": "2026-11-25",
+    "sha256": "0aa19bac387d5916391bdefe233b5ab3f3e9e843b9d6c699a17fc12166ca61bd"
   },
   "/about.html": {
-    "date": "2026-11-22",
-    "sha256": "ca21654078af8e90cf27604cd9093ad46bfedaf9bdd1aa9013de230d46e98ac1"
+    "date": "2026-11-25",
+    "sha256": "ec3e0f700cf72d3600a9a73b9d9dbce994c3cac1ec678b73f698e349c0325bf7"
   },
   "/are-lottery-winnings-taxed-canada.html": {
-    "date": "2026-11-22",
-    "sha256": "9937f3a68ad03f0d0f92a1f1e20bf0a4826dd03214b8ee623a3d12da1065eff1"
+    "date": "2026-11-25",
+    "sha256": "224a7157d4e99deb9070d602b73fdfe9e941e7112151ab2ff598633167c8c2fe"
   },
   "/biggest-canadian-lottery-wins.html": {
-    "date": "2026-11-22",
-    "sha256": "c7e622189adf54dff513221fa296ec5381d82e85dbbd14220e2671932a851393"
+    "date": "2026-11-25",
+    "sha256": "ba46c5bcb85f7994ca942e3754bbc8c7155cba10085bc9c614c4c17c71c8592d"
   },
   "/buy-lottery-tickets-online-canada.html": {
-    "date": "2026-11-22",
-    "sha256": "8da4f349edee05016de315bca28818671e38f8393d389ad1424f6417d25788c8"
+    "date": "2026-11-25",
+    "sha256": "d25d4b479587da9d929ca50fd5ff38d330b0b2dc44b35c2665b14a82b3418708"
   },
   "/check-my-numbers.html": {
-    "date": "2026-11-22",
-    "sha256": "f9d42228ef84d50a5c349c1f3b737680325a0c69870a754488d7c3fa10bb684b"
+    "date": "2026-11-25",
+    "sha256": "7ce77534cb112e9bc503712a000816779db8babdf299117dac96e9b906908c7a"
   },
   "/contact.html": {
-    "date": "2026-11-22",
-    "sha256": "1a4f33c5c1f1eb1a33d6e69d1e86bf9a68c932217fa3dc1dcc77f46560cc7819"
+    "date": "2026-11-25",
+    "sha256": "fa8b3525fbcffabb76c00c0792c989bb774cafd12d9fc95a863c2918bfbfaee8"
   },
   "/disclaimer.html": {
-    "date": "2026-11-22",
-    "sha256": "71c5d38051a819f854f1fe737c7d78b61162ab5dda1ff17b4a13a9a8c4b47473"
+    "date": "2026-11-25",
+    "sha256": "a9c001252e988f1434654bb04bb7a48fc813d73520fc5f86916c3e4289cce9e2"
   },
   "/editorial-policy.html": {
-    "date": "2026-11-22",
-    "sha256": "1dde0d734981a328da70aec7c543fec75d3b56a6a9882c54f42936e73a5acb3d"
+    "date": "2026-11-25",
+    "sha256": "931b081ba654856d7da6f2c9d82da6c6ba132b743f47be00a8604fb2c28e7917"
   },
   "/extra-and-encore-explained.html": {
-    "date": "2026-11-22",
-    "sha256": "7cc0a0d415729945cd0d0cfc2ce0eec050c73cfcab332e90253a410cc37d44d6"
+    "date": "2026-11-25",
+    "sha256": "dadb44da8d6ae4033a089db0e20d3f9bfeed50aad8f109b4b368b6a327e6edec"
   },
   "/first-30-days-after-lottery-win-canada.html": {
-    "date": "2026-11-22",
-    "sha256": "de4e1a57de51e2aaf5f14f514c9da474a19bf3ce9c0887a1a248c54d8ee336bd"
+    "date": "2026-11-25",
+    "sha256": "7898b5e5f31011baca7fc05df3dd9e77bad49ce189e623631f365295dc4c8678"
   },
   "/guides.html": {
-    "date": "2026-11-22",
-    "sha256": "6596e28e333cbd4436e449a80634734da6d6f8c5fae3c0763df6f50b1834e29b"
+    "date": "2026-11-25",
+    "sha256": "a989aeda04eb7e565096069459a91477e1d1d94ed5bdf32aba542021f0e23212"
   },
   "/hot-cold-explained.html": {
-    "date": "2026-11-22",
-    "sha256": "db8d7919cd4ae7b5ac007b3818fcac1109716bb27ba7845649c2e3ebcffcf336"
+    "date": "2026-11-25",
+    "sha256": "0acc88a0c73c8f6e27d5226960369c84f69182aaa76c8328f15d1bc379a823cb"
   },
   "/how-canada-lotto-works.html": {
-    "date": "2026-11-22",
-    "sha256": "5b4d7d4bda2945ddf06d96882eb703fc52b1b597088f31c0373171998d8c4a97"
+    "date": "2026-11-25",
+    "sha256": "a32e4969ac36f7504dc5650bc2295f53cd38397ab2fc976a0161d41f1fb2eeaa"
   },
   "/how-lottery-draws-are-audited-canada.html": {
-    "date": "2026-11-22",
-    "sha256": "48121ec121c1b55eb38cb850c16fe76ba01b6a1664fe61370872ea2d4006dd5a"
+    "date": "2026-11-25",
+    "sha256": "87b4f737da20b06c8e347698f440b0066c85dd807fe44f1603dd1470a5d09aa8"
   },
   "/how-to-claim-lottery-prize-bc.html": {
-    "date": "2026-11-22",
-    "sha256": "f1e6f2402276ccde1f10d303b90036ccb1cd22a08c887e23e0dacb09eaeaef70"
+    "date": "2026-11-25",
+    "sha256": "a9f05386297e089f344c642bc101971887f373a215cd1d64be59a7c4fd31974f"
   },
   "/how-to-claim-lottery-prize-by-province.html": {
-    "date": "2026-11-22",
-    "sha256": "ce0cac4deec08c291f5eb19fc9687a6ac949f322cbc1bb3d02f2887d0042e84a"
+    "date": "2026-11-25",
+    "sha256": "09d7f486955fa958980b26d708adb94014810b1d1e2a7c840b67e23b09205933"
   },
   "/lottery-pools-canada.html": {
-    "date": "2026-11-22",
-    "sha256": "607db6a71dd6c13d0d958f4cfc62e28593ba662e32e3cb05f6c0ca21c9c12f6f"
+    "date": "2026-11-25",
+    "sha256": "1827eb1c5c21f800a4a6f94a9804d3d6e853c415854c08b5099fc22984aa76d7"
   },
   "/lottery-scams-canada.html": {
-    "date": "2026-11-22",
-    "sha256": "934262a0cc7a9cabc93c13b85c521ad9a5fa847841586345c7061617fcebc59a"
+    "date": "2026-11-25",
+    "sha256": "aa6a6b7fb2b5806e2ec65dbc0bb063e8644107e0a2501fe78d959547606da24a"
   },
   "/lotto-649-gold-ball-explained.html": {
-    "date": "2026-11-22",
-    "sha256": "ee05af7de23bb6aa663bee1383e4f2f94c10c978464675cc589c42e304e731df"
+    "date": "2026-11-25",
+    "sha256": "f8ac33291d0b6365501c948b91a02f232da979d525a6237b790123bf514f6135"
   },
   "/lotto-649-results.html": {
-    "date": "2026-11-24",
-    "sha256": "adf53e2faad7418517dd2d9b23b0556137ff1c49fbc1ea2b547c3fff0d943e8d"
+    "date": "2026-11-25",
+    "sha256": "3b677a0b10344e0586a9a851fec257b42c89a3a346bfe10eae06ae3b3e7d3e0f"
   },
   "/lotto-history-by-the-numbers.html": {
-    "date": "2026-11-22",
-    "sha256": "e321a717647f5ada16f991c1b5f12723be61fabb5607c1aa2a350cce80b60e17"
+    "date": "2026-11-25",
+    "sha256": "3032a95e6092e45b7a708c119baa554b1c774d9a8574f0a2b01632f907f58819"
   },
   "/lotto-max-jackpot-cap-explained.html": {
-    "date": "2026-11-22",
-    "sha256": "3615f0a1f325345175097b24e966baa51b83d2108861115878194a6350dd532e"
+    "date": "2026-11-25",
+    "sha256": "600648805e98f840cd5833d372da07432efc08ba37930ab00deb37dd9fbc2e47"
   },
   "/lotto-max-maxmillions-explained.html": {
-    "date": "2026-11-22",
-    "sha256": "9c6357fce90b932e79ff8f1fdf85722501c08fca3f2cbfe605bdedbc7fb00f5d"
+    "date": "2026-11-25",
+    "sha256": "57fe9c29f1d430b91272e6acffebf7b70a75bfff29c737bd690235b250ac9cab"
   },
   "/lotto-max-results.html": {
-    "date": "2026-11-24",
-    "sha256": "aef3451f556b80ae33518fabd001490a025db5a5aac2abdfa8a19aed499dc831"
+    "date": "2026-11-25",
+    "sha256": "9077abb5dca28b4b58c1c450978258f80f2f904e3076cdf8bdfcd5d71664fb5e"
   },
   "/lotto-max-vs-649-vs-daily-grand.html": {
-    "date": "2026-11-22",
-    "sha256": "c94f8190c07470ab5bbb78758abcdf96385d34cff8ef2e4cf37856e01c535f13"
+    "date": "2026-11-25",
+    "sha256": "55cc24b1f95ff73ddcf3c5b89bdabaebdc2c312f691a0b2256b50a151f8c1447"
   },
   "/lotto-odds-calculator.html": {
-    "date": "2026-11-22",
-    "sha256": "c116d40098d80fe17ffeee2ef01f86b96d75669a674ed1d234b4952b1f6a7cad"
+    "date": "2026-11-25",
+    "sha256": "1883ae4e6221d4ce2cec441669bccf7ad4a4a2b4675f453274e5acad06e3e8ca"
   },
   "/lump-sum-vs-annuity-canada.html": {
-    "date": "2026-11-22",
-    "sha256": "28c889d0a2f8c36d1eae888d5b616cd6380a1edb2a06f409ffe2a666a5ba6805"
+    "date": "2026-11-25",
+    "sha256": "7a8abc7cbac012043ed2ee62523a8889f6a325fa7d54782bf664a66118f6a808"
   },
   "/privacy.html": {
-    "date": "2026-11-22",
-    "sha256": "eee72939481d7d36a639ed86e8590e4db4049f540200347188e0769defeeb9d3"
+    "date": "2026-11-25",
+    "sha256": "706f66b22046d1db4b2ccc46232f8318d18aad0587f51fc81ac9df39cafbc3e6"
   },
   "/responsible-play.html": {
-    "date": "2026-11-22",
-    "sha256": "2785a7211b8762d59da334e0feb1567f5dae64367736c7e75457b998c942c4dc"
+    "date": "2026-11-25",
+    "sha256": "a9c5337ad92b13ad7f2fc2f908687b0d9c8e522a5b5a687841a7adaff99028dd"
+  },
+  "/scratch-tickets-vs-lotto-draws-canada.html": {
+    "date": "2026-11-25",
+    "sha256": "8387e70466041a7de02d66acc971eda3a7ebbf20b5bd7cfaedc6f63773ee5980"
   },
   "/terms.html": {
-    "date": "2026-11-22",
-    "sha256": "d4dc96d9eb8b165696c521540fb3cc844de1ab448a11f12fce4e1b92f40dc784"
+    "date": "2026-11-25",
+    "sha256": "8dabc1ba3a53b3d0bd18c083f2fadd81bee69c12198a3055585c5f242ac862a9"
   },
   "/unclaimed-lottery-prizes-canada.html": {
-    "date": "2026-11-22",
-    "sha256": "34c2d51267d697c59682685ee6c2a9c4162a0bf4fb314214c2d4535a7d53ee33"
+    "date": "2026-11-25",
+    "sha256": "c66774c9537fd567a83dcec282366b63cf1209b1ae155eb9e11680187a673988"
+  },
+  "/who-runs-canadian-lotteries.html": {
+    "date": "2026-11-25",
+    "sha256": "1ab010868611ac778bccc141397cf9eb6916e711e3f356ce2412a5b3326d2ebe"
   }
 }
