@@ -1,7 +1,7 @@
 {
   "/": {
-    "date": "2026-11-26",
-    "sha256": "bf8022a6245a70df0e9f67f4c62bdd7480fe19fcc23bcc02aa67e7bdd53bc035"
+    "date": "2026-11-27",
+    "sha256": "9946143a9399e8857fef631df7251f70d0293faefd7b6663ff612b018ca01680"
   },
   "/about.html": {
     "date": "2026-11-26",
@@ -80,8 +80,8 @@
     "sha256": "d0554821635eb1a476e36b6b54f952bd691936b6a9f4f5e409e6ea37401adcaf"
   },
   "/lotto-649-results.html": {
-    "date": "2026-11-26",
-    "sha256": "73e59f3277f0415adb57f5607998e9ab7572a8b465989a230cf245f7919f0b5d"
+    "date": "2026-11-27",
+    "sha256": "b90352c883f734e596b84fa71eed54b65653786c5dd4ca6f3a6a55665d8cdde8"
   },
   "/lotto-history-by-the-numbers.html": {
     "date": "2026-11-26",
@@ -96,8 +96,8 @@
     "sha256": "0a168a702db30353da800a26a4d7fbf1ae4d50d9ff762b958d1e3e2f4005140d"
   },
   "/lotto-max-results.html": {
-    "date": "2026-11-26",
-    "sha256": "e824818a3534753862c5f4b9df29d3d90b43a5606d8eeebfc04d1a76a7db7a23"
+    "date": "2026-11-27",
+    "sha256": "32cf099bf93c6bfface56d871844d04978649d04ee72af4187980c78e18fe565"
   },
   "/lotto-max-vs-649-vs-daily-grand.html": {
     "date": "2026-11-26",
